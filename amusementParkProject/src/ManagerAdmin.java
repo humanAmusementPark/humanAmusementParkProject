@@ -1,21 +1,21 @@
 import DAO.AttractionDAO;
-import DAO.FacilitiesDAO;
+import DAO.EatingHouseDAO;
 import DTO.AttractionDTO;
-import DTO.FacilitiesDTO;
+import DTO.EatingHouseDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ManagerAdmin {
     private String managerId;
     private List<AttractionDTO> attractionDTOList;
-    private List<FacilitiesDTO> facilitiesDTOList;
+    private Map<String, EatingHouseDTO> eatingHouseDTOMap;
     private AttractionDAO attractionDAO = new AttractionDAO();
-    private FacilitiesDAO facilitiesDAO = new FacilitiesDAO();
+    private EatingHouseDAO eatingHouseDAO = new EatingHouseDAO();
 
     public ManagerAdmin(String managerId) throws SQLException {
         this.managerId = managerId;
@@ -40,7 +40,7 @@ public class ManagerAdmin {
                             attracionMenu();
                             break;
                         case 2:
-                            facilitiesMenu();
+                            eatingHouseMenu();
                             break;
                     }
                     break;
@@ -86,7 +86,7 @@ public class ManagerAdmin {
         }
     }
 
-    public void prtList(int choice) throws IOException, SQLException {
+    public void prt(int choice) throws IOException, SQLException {
         //attration prt
         if (choice == 1) {
             attractionDTOList.stream().forEach(attractionDTO -> {
@@ -95,11 +95,14 @@ public class ManagerAdmin {
                 System.out.println(attractionDTO.getAttractionURL());
             });
         }else if (choice == 2) {     //facilities prt
-            facilitiesDTOList.stream().forEach(facilitiesDTO -> {
-                System.out.println("getFacilityID() = " + facilitiesDTO.getFacilityID());
-                System.out.println(facilitiesDTO.getFacilityName());
-                System.out.println(facilitiesDTO.getFacilityURL());
+            eatingHouseDTOMap.forEach((name, dto) -> {
+                System.out.println("식당 이름: " + dto.getEatingHouseName());
+                System.out.println("식당 URL: " + dto.getEatingHouseURL());
+                System.out.println("메뉴 목록:");
 
+                dto.getMenuDTOList().forEach(menu ->
+                        System.out.println(" - 메뉴 이름: " + menu.getMenuName() + ", 가격: " + menu.getMenuPrice())
+                );
             });
         }
     }
@@ -107,7 +110,7 @@ public class ManagerAdmin {
 
     public void attrationDelete() throws IOException, SQLException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        prtList(1);
+        prt(1);
         System.out.println("삭제하고 싶은 어트랙션ID를 입력하세요.");
         int choice = Integer.parseInt(br.readLine());
         attractionDAO.delete(choice);
@@ -120,7 +123,7 @@ public class ManagerAdmin {
     public void attractionUpdate() throws IOException, SQLException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
        //우선 한번 출력
-        prtList(1);
+        prt(1);
 
         System.out.println("수정하고 싶은 것을 고르세요.");
         System.out.println(" 1. 어트랙션 이름 2. 어트랙션 URL");
@@ -129,9 +132,8 @@ public class ManagerAdmin {
         attractionDAO.update(choiceNum);
     }
 
-    public void facilitiesMenu() throws IOException, SQLException {
+    public void eatingHouseMenu() throws IOException, SQLException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        FacilitiesDAO facilitiesDAO = new FacilitiesDAO();
 
         boolean flag = true;
         while (flag) {
@@ -139,17 +141,16 @@ public class ManagerAdmin {
             int choice = Integer.parseInt(br.readLine());
             switch (choice) {
                 case 1:
-                    this.facilitiesDTOList = facilitiesDAO.selectAll();
+                    this.eatingHouseDTOMap = eatingHouseDAO.select();
                     break;
                 case 2:
-                    facilitiesDAO.insert();
+                    eatingHouseInsert();
                     break;
                 case 3:
-                    int choice2 = Integer.parseInt(br.readLine());
-                    facilitiesDAO.update(choice2);
+                    eatingHouseUpdate();
                     break;
                 case 4:
-                    facilitiesDAO.delete(2);
+                    eatingHouseDelete();
                     break;
                 case 5:
                     flag = false;
@@ -157,4 +158,28 @@ public class ManagerAdmin {
             }
         }
     }
+    public void eatingHouseInsert() throws IOException, SQLException {
+
+        prt(2);
+        eatingHouseDAO.insert();
+    }
+
+    public void eatingHouseDelete() throws IOException, SQLException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        prt(2);
+        System.out.println(" 삭제하고 싶은 음식점 id을 입력하세요.");
+        eatingHouseDAO.delete(Integer.parseInt(br.readLine()));
+    }
+
+    public void eatingHouseUpdate() throws IOException, SQLException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        prt(2);
+        System.out.println("수정하고 싶은 것을 고르세요.");
+        System.out.println(" 1. 음식점 이름 2. 음식점 URL 3. 메뉴 이름 4. 메뉴 URL 5. 메뉴 가격");
+        int choice2 = Integer.parseInt(br.readLine());
+        eatingHouseDAO.update(choice2);
+    }
+
+
 }

@@ -3,7 +3,8 @@ import lombok.*;
 
 @Getter
 @Builder
-public class FacilitiesMenuDTO {
+public class MenuDTO {
     private String menuName;
-    private String menuPrice;
+    private String menuURL;
+    private int menuPrice;
 }

@@ -1,9 +1,12 @@
 package DAO;
 
+import DTO.EatingHouseDTO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class SuperDAO<T> {
     private String url = "jdbc:mariadb://localhost:3306/amusementPark";
