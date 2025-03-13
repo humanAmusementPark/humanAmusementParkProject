@@ -4,6 +4,8 @@ import DAO.TimeTableDAO;
 import DTO.TimeTableDTO;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -15,6 +17,8 @@ import java.util.List;
 
 public class TimeTable extends JFrame {
     private List<TimeTableDTO> timeTableDTOList;
+    private GridBagConstraints gbc;
+    private GridBagLayout grid;
 
     public TimeTable() {
         init();
@@ -38,16 +42,38 @@ public class TimeTable extends JFrame {
         }
     }
 
-    private void setDisplay() {
+    // jcomponent인 jbutton의 객체에 x,y의 좌표의 시작점에서 w,h 크기의 단추를 만듭니다
+    public void make(JComponent c,int x, int y, int w, int h){
+        gbc.gridx = x;
+        gbc.gridy = y;
+        gbc.gridwidth = w;
+        gbc.gridheight = h;
+        //gridBagLayout의 GridBagConstraintsDML set하는 방법
+        grid.setConstraints(c,gbc);
+    }
+
+    public void setDisplay() {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3,7,10,10));
+//        panel.setLayout(new GridLayout(2,7,10,10));
+        grid = new GridBagLayout();
+        panel.setLayout(grid);
+        gbc = new GridBagConstraints();
+
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+
 
 
         //요일 라벨만들기
         String[] days = {"월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"};
 
+        int x = 0;
         for (String day : days) {
             JLabel label = new JLabel(day,SwingConstants.CENTER);
+//            label.setBorder(new LineBorder(Color.BLACK));
+
+            make(label, x++ , 0,1,1);
             panel.add(label);
         }
 
@@ -77,16 +103,22 @@ public class TimeTable extends JFrame {
                     dayPanel.add(contentLabel);
 
                     // 행사 시간 표시
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-                    JLabel timeLabel = new JLabel(dto.getTiTime().format(formatter));
+                    JLabel timeLabel = new JLabel(String.valueOf(dto.getTiTime()));
                     timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     dayPanel.add(timeLabel);
+//                    dayPanel.setBorder(new LineBorder(Color.BLACK));
+                    //gridBag 부분
+                    make(dayPanel,  i - 1,1,1,4);
                 }
             } else {
                 JLabel noContentLabel = new JLabel("");
                 noContentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//                noContentLabel.setBorder(new LineBorder(Color.BLACK));
+                //gridBag 부분
+                make(noContentLabel,  i - 1,1,1,4);
                 dayPanel.add(noContentLabel);
             }
+
 
             // 요일별로 패널에 추가
             panel.add(dayPanel);
@@ -96,12 +128,12 @@ public class TimeTable extends JFrame {
 
     }
 
-    private void showFrame() {
+    public void showFrame() {
         setTitle("Banner");
-        setBounds(100, 100, 700, 300);
+        setBounds(100, 100, 800, 400);
         setVisible(true);
         //이거 실행하면 전체 JFrame가 꺼짐 그래서 베너만 없에애되니까
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     //임시 메인

@@ -2,6 +2,7 @@ package DTO;
 
 import lombok.*;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -10,6 +11,6 @@ import java.time.LocalTime;
 public class TimeTableDTO {
     private String tiId;
     private int tiDay;
-    private LocalTime tiTime;
+    private Time tiTime;
     private String tiContent;
 }
