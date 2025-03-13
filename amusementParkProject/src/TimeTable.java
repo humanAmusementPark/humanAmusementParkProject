@@ -1,16 +1,8 @@
-package test;
-
 import DAO.TimeTableDAO;
 import DTO.TimeTableDTO;
-
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +12,17 @@ public class TimeTable extends JFrame {
     private GridBagConstraints gbc;
     private GridBagLayout grid;
 
+    //배경
+    private Image backgroundImage;
+
     public TimeTable() {
-        init();
+
+        // 배경 이미지 로드
+        backgroundImage = new ImageIcon("src/images/background.jpg").getImage(); // 이미지 파일 경로
+
         getTimeTableInfo();
         setDisplay();
         showFrame();
-
-    }
-
-    public void init() {
-
-
     }
 
     public void getTimeTableInfo()  {
@@ -53,8 +45,13 @@ public class TimeTable extends JFrame {
     }
 
     public void setDisplay() {
-        JPanel panel = new JPanel();
-//        panel.setLayout(new GridLayout(2,7,10,10));
+
+
+        // 배경 패널 생성
+        BackgroundPanel panel = new BackgroundPanel(backgroundImage);
+
+        //JPanel panel = new JPanel();  //기존 판넬
+
         grid = new GridBagLayout();
         panel.setLayout(grid);
         gbc = new GridBagConstraints();
@@ -63,15 +60,14 @@ public class TimeTable extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-
-
         //요일 라벨만들기
         String[] days = {"월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"};
 
         int x = 0;
         for (String day : days) {
             JLabel label = new JLabel(day,SwingConstants.CENTER);
-//            label.setBorder(new LineBorder(Color.BLACK));
+
+            label.setForeground(Color.WHITE); // 배경이 어두우면 글씨색 변경
 
             make(label, x++ , 0,1,1);
             panel.add(label);
@@ -91,6 +87,9 @@ public class TimeTable extends JFrame {
         // 요일별로 내용과 시간을 세로로 나열
         for (int i = 1; i <= 7; i++) {
             JPanel dayPanel = new JPanel();
+
+            dayPanel.setOpaque(false); // 배경을 투명하게 설정
+
             dayPanel.setLayout(new BoxLayout(dayPanel, BoxLayout.Y_AXIS)); // 세로로 배치
 
             // 해당 요일의 행사들을 표시
@@ -99,33 +98,37 @@ public class TimeTable extends JFrame {
                 for (TimeTableDTO dto : dtos) {
                     // 행사 내용 표시
                     JLabel contentLabel = new JLabel(dto.getTiContent());
+
+                    contentLabel.setForeground(Color.WHITE); // 글씨색 변경
+
                     contentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     dayPanel.add(contentLabel);
 
                     // 행사 시간 표시
                     JLabel timeLabel = new JLabel(String.valueOf(dto.getTiTime()));
+
+                    timeLabel.setForeground(Color.LIGHT_GRAY); // 시간은 연하게
+
                     timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     dayPanel.add(timeLabel);
-//                    dayPanel.setBorder(new LineBorder(Color.BLACK));
-                    //gridBag 부분
+
+                    //gridBag 부분    배경 넣을거면 생략?
                     make(dayPanel,  i - 1,1,1,4);
                 }
             } else {
                 JLabel noContentLabel = new JLabel("");
                 noContentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//                noContentLabel.setBorder(new LineBorder(Color.BLACK));
-                //gridBag 부분
+
+                //gridBag 부분     배경넣을거면 생략?
                 make(noContentLabel,  i - 1,1,1,4);
+
                 dayPanel.add(noContentLabel);
             }
-
-
             // 요일별로 패널에 추가
             panel.add(dayPanel);
         }
 
         add(panel);
-
     }
 
     public void showFrame() {
@@ -135,11 +138,19 @@ public class TimeTable extends JFrame {
         //이거 실행하면 전체 JFrame가 꺼짐 그래서 베너만 없에애되니까
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+    // 배경 패널을 위한 내부 클래스
+    class BackgroundPanel extends JPanel {
+        private Image image;
 
-    //임시 메인
-    public static void main(String[] args) {
+        public BackgroundPanel(Image image) {
+            this.image = image;
+        }
 
-        // TimeTable 객체 생성 및 실행
-        new TimeTable();
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // 패널의 크기에 맞게 이미지 그리기
+            g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+        }
     }
 }

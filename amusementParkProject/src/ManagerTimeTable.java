@@ -1,10 +1,7 @@
-package test;
-
 import DAO.TimeTableDAO;
 import DTO.TimeTableDTO;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,12 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
-import java.util.SimpleTimeZone;
-import java.util.Vector;
 
 public class ManagerTimeTable extends JFrame implements MouseListener {
     private TimeTableDAO timeTableDAO;
@@ -38,15 +30,11 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
     private JFrame newFrame;
 
     public ManagerTimeTable() throws SQLException {
-
-        init();
         getTimeTableInfo();
         setDisplay();
         showFrame();
     }
 
-    public void init() {
-    }
 
     public void getTimeTableInfo() {
         try {
@@ -59,62 +47,32 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
 
     public String changeDay(int dayNum) {
         String day = "";
-        switch (dayNum) {
-            case 1:
-                day = "월요일";
+        String[] dayList = {"월요일","화요일","수요일","목요일","금요일","토요일","일요일"};
+
+        for (int i = 1; i < dayList.length + 1; i++) {
+            if (i == dayNum) {
+                day = dayList[i - 1];
                 break;
-            case 2:
-                day = "화요일";
-                break;
-            case 3:
-                day = "수요일";
-                break;
-            case 4:
-                day = "목요일";
-                break;
-            case 5:
-                day = "금요일";
-                break;
-            case 6:
-                day = "토요일";
-                break;
-            case 7:
-                day = "일요일";
-                break;
+            }
         }
+
         return day;
     }
 
     public int changeDayToInt(String day) {
         int dayNum = 0;
-        switch (day) {
-            case "월요일":
-                dayNum = 1;
-                break;
-            case "화요일":
-                dayNum = 2;
-                break;
-            case "수요일":
-                dayNum = 3;
-                break;
-            case "목요일":
-                dayNum = 4;
-                break;
-            case "금요일":
-                dayNum = 5;
-                break;
-            case "토요일":
-                dayNum = 6;
-                break;
-            case "일요일":
-                dayNum = 7;
-                break;
+        String[] dayList = {"월요일","화요일","수요일","목요일","금요일","토요일","일요일"};
+
+        for (int i = 0; i < dayList.length + 1; i++) {
+            if (dayList[i].equals(day)) {
+                dayNum = i + 1;
+            }
         }
+
         return dayNum;
     }
 
     public void setDisplay() {
-
 
         String[] columnType = {"Id", "요일", "시간", "퍼레이드이름"};
 
@@ -145,15 +103,14 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
         JPanel panel = new JPanel(new GridLayout(3, 3));
 
         //아래 위로 빈칸 넣기
-
         for (int i = 0; i < 4; i++) {
             JLabel noContentLabel = new JLabel("");
             panel.add(noContentLabel);
         }
 
-
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
+        //검색 -----------------------------------------------------------------------------------------
         JButton searchBtn = new JButton("검색");
         combo = new JComboBox<>(items);
         searchTextField = new JTextField(10);
@@ -179,6 +136,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
         centerPanel.add(searchBtn);
         centerPanel.add(prtAll);
 
+        //등록 ----------------------------------------------------------------------------------------
         JButton insertBtn = new JButton("등록");
         insertBtn.addActionListener(new ActionListener() {
 
@@ -234,6 +192,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
 
         centerPanel.add(insertBtn);
 
+        //삭제 ----------------------------------------------------------------------------------------
         JButton deleteBtn = new JButton("삭제");
         deleteBtn.addActionListener(new ActionListener() {
 
@@ -245,6 +204,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
         });
         centerPanel.add(deleteBtn);
 
+        //수정 ---------------------------------------------------------------------------------------
         JButton updateBtn = new JButton("수정");
         updateBtn.addActionListener(new ActionListener() {
 
@@ -275,12 +235,6 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-
-    //임시 메인
-    public static void main(String[] args) throws SQLException {
-        new ManagerTimeTable();
-    }
-
     public void updateTable() {
         // 테이블 데이터 갱신
         String[][] updatedDataList = new String[timeTableDTOList.size()][4];
@@ -291,7 +245,6 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
             updatedDataList[i][2] = timeTableDTO.getTiTime() + "";
             updatedDataList[i][3] = timeTableDTO.getTiContent();
         }
-
 
         // 기존 데이터를 새로 갱신된 데이터로 교체
         model.setDataVector(updatedDataList, new String[]{"Id", "요일", "시간", "퍼레이드이름"});
@@ -495,7 +448,6 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
                     break;
             }
         }
-
 
         timeTableDTOList.set(rowIndex,newTimeTableDTO);
     }

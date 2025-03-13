@@ -1,3 +1,5 @@
+package test;
+
 import DAO.AttractionDAO;
 import DAO.EatingHouseDAO;
 import DTO.AttractionDTO;
