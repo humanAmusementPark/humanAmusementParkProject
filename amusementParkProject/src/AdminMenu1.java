@@ -20,8 +20,9 @@ public class AdminMenu1 extends JFrame {
     JButton ticket = new JButton("티켓");
     JButton update = new JButton("관리자정보수정/로그아웃");
     LoginG LoginG;
-
-    public AdminMenu1(LoginG loginG) {
+    String id;
+    public AdminMenu1(LoginG loginG,String id) {
+        this.id = id;
         this.LoginG = loginG;
         this.setSize(1000, 650);
         this.setLocation(0, 0);
@@ -93,6 +94,7 @@ public class AdminMenu1 extends JFrame {
 
     private void attractClick() {
         System.out.println("연결");
+        new AttractionManager(this);
 
     }
 
@@ -124,7 +126,7 @@ public class AdminMenu1 extends JFrame {
 
     private void adminUpdate() {
         System.out.println("연결");
-        // 만들어야함
+         new AdG(id);
     }
 
 

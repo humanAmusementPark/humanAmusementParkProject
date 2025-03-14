@@ -13,6 +13,29 @@ public class TicketDAO extends SuperDAO {
     public TicketDAO() throws SQLException {
         this.conn = super.getConnection();
     }
+    public TicketDTO selectti(String id){
+
+        String query = "SELECT * FROM ticket where tPass='"+ id +"'";
+
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                TicketDTO ticketDTO = TicketDTO .builder()
+                        .tPass(rs.getString("tPass"))
+                        .tName(rs.getString("tName"))
+                        .tPrice(rs.getInt("tPrice"))
+                        .build();
+
+                return ticketDTO;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return null;
+    }
+
 
     public List<TicketDTO> select(){
         List<TicketDTO> ticketDTOList = new ArrayList<>();

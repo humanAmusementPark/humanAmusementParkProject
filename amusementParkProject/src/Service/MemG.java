@@ -28,8 +28,9 @@ public class MemG extends JFrame implements ActionListener {
     private JLabel mId = new JLabel();
     private JTextField mPass = new JTextField();
     private JTextField mName = new JTextField();
-
-    public MemG() {
+    String id;
+    public MemG(String id) {
+        this.id = id;
         setTitle("회원정보");
         setBounds(10, 10, 400, 300);
         setLayout(null);
@@ -70,7 +71,7 @@ public class MemG extends JFrame implements ActionListener {
     private void setTextFieldsJPanel() { // 테스트용 id = "M1001"
         textFJPanel.setLayout(new GridLayout(6, 1));
         MemDAO memDAO = new MemDAO();
-        MemDTO memDTO = memDAO.select("M1002");
+        MemDTO memDTO = memDAO.select(id);
         mId = new JLabel(memDTO.getMId());
         textFJPanel.add(mId);
         mPass = new JTextField(memDTO.getMPass(), 10);
@@ -175,13 +176,13 @@ public class MemG extends JFrame implements ActionListener {
             String newPass = mPass.getText();
             memDAO.edit(1, newPass, newId);
             dispose();
-            new MemG();
+            new MemG(id);
         }
         if (e.getSource() == editName) {
             String newName = mName.getText();
             memDAO.edit(2, newName,newId);
             dispose();
-            new MemG();
+            new MemG(id);
         }
         if (e.getSource() == editGender) {
             if (radioMan.isSelected()) {
@@ -190,14 +191,14 @@ public class MemG extends JFrame implements ActionListener {
                 memDAO.edit(3, "1", newId);
             }
             dispose();
-            new MemG();
+            new MemG(id);
         }
         if (e.getSource() == editBirth) {
             String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString() + "-" + dayCom.getSelectedItem().toString();
             System.out.println(newBirth);
             memDAO.edit(4, newBirth, newId);
             dispose();
-            new MemG();
+            new MemG(id);
         }
     }
 }

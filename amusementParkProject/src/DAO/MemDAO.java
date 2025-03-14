@@ -82,6 +82,9 @@ public class MemDAO extends SuperDAO {
             case 4:
                 sql = "update member set mBirth = ? where mId = ?";
                 break;
+            case 5:
+                sql = "update member set tPass = ? where mId = ?";
+                break;
             default:
                 break;
         }
@@ -91,6 +94,7 @@ public class MemDAO extends SuperDAO {
             switch (num) {
                 case 1:
                 case 2:
+                case 5:
                     pstmt.setString(1, text);
                     break;
                 case 3:
@@ -158,7 +162,7 @@ public class MemDAO extends SuperDAO {
                 sql = "select count(*) from administer where aId = ? and aPass = ?";
                 break;
             case 2:
-                sql = "select count(*) from member where mName = ? and mId = ?";
+                sql = "select count(*) from member where mId= ? and mPass = ?";
                 break;
             default:
                 break;

@@ -10,7 +10,7 @@ public class SuperDAO<T> {
     private String driver = "org.mariadb.jdbc.Driver";
     private String url = "jdbc:mariadb://localhost:3306/mysql";
     private String user = "root";
-    private String password = "1111";
+    private String password = "park1676";
     private Connection conn;
 
     public SuperDAO() {
@@ -34,6 +34,11 @@ public class SuperDAO<T> {
     }
 
     public Connection getConnection() {
+        try {
+            this.conn = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return conn;
     }
 

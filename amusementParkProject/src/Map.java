@@ -2,12 +2,15 @@ package javaproject;
 
 import javaproject.Service.LoginG;
 import javaproject.Service.MemG;
+import javaproject.Service.Reservation;
 import javaproject.Service.ReservationG;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class Map extends JFrame implements ActionListener {
@@ -23,8 +26,9 @@ public class Map extends JFrame implements ActionListener {
             super.paintComponents(g);
         }
     };
+    Map m =this;
 
-    public Map(String  id, LoginG loginG) {
+    public Map(String id,LoginG loginG) {
 //        //정규형꺼 일정표
 //        new TimeTable();
         this.LoginG = loginG;
@@ -32,8 +36,9 @@ public class Map extends JFrame implements ActionListener {
         this.setTitle("정규랜드 지도");
         this.setSize(1200, 7000);
         this.setLocation(0, 0);
-//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(jpImage);
+        jpImage.setLayout(null);
 
         reservationBnt();
         logManageBnt();
@@ -41,10 +46,11 @@ public class Map extends JFrame implements ActionListener {
         logoutBnt();
         this.setVisible(true);
         add();
-//        mouseCheck();
+        mouseCheck();
 
     }
     public void add(){
+        System.out.println("oooooo");
         addButton2("",0,0,1,1);
         addButton2("",2,2,1,1);
         addButton2("",3,3,1,1);
@@ -54,8 +60,8 @@ public class Map extends JFrame implements ActionListener {
 
 
 
-        addButton2("티익스프레스",396,81,130,195);
-        addButton2("롤링멕스트레인",707,380,67,120);
+        addButton2("롤러코스터",396,81,130,195);
+        addButton2("롤링엑스트레인",707,380,67,120);
         addButton2("콜롬버스",950,366,94,120);
         addButton2("범퍼카",712,284,60,50);
         addButton2("이솝빌리지",828,343,80,70);
@@ -69,14 +75,11 @@ public class Map extends JFrame implements ActionListener {
         addButton2("씨라이언스타디움",449,675,57,57);
         addButton2("애니멀원더스테이지",504,456,56,100);
         addButton2("카니발광장",479,381,62,57);
-        addButton2("food1",625,63,80,49);
-        addButton2("food2",657,137,90,57);
-        addButton2("food3",605,203,80,34);
-        addButton2("food4",547,266,93,42);
+
     }
     public void reservationBnt(){
         JButton rbnt = new JButton("예약현황");
-        rbnt.setBounds(300,6,398-300,39-6);
+        rbnt.setBounds(400,10,100,26);
 
 
         rbnt.addActionListener(new ActionListener() {
@@ -90,21 +93,21 @@ public class Map extends JFrame implements ActionListener {
     }
     public void logManageBnt(){
         JButton lbnt = new JButton("회원정보수정");
-        lbnt.setBounds(910,45,570-533,36-6);
+        lbnt.setBounds(500,10,110,26);
 
         lbnt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
-                new MemG();
-            }
+                new MemG(id);
+            };
         });
 
         jpImage.add(lbnt);
     }
     public void logoutBnt(){
         JButton lobnt = new JButton("로그아웃");
-        lobnt.setBounds(1000,45,620-533,36-6);
+        lobnt.setBounds(610,10,100,26);
 
         lobnt.addActionListener(new ActionListener() {
             @Override
@@ -119,7 +122,7 @@ public class Map extends JFrame implements ActionListener {
     }
     public void ticketBnt(){
         JButton tbnt = new JButton("티켓구매");
-        tbnt.setBounds(33,813,234-33,922-813);
+        tbnt.setBounds(710,10,100,26);
         tbnt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -136,18 +139,19 @@ public class Map extends JFrame implements ActionListener {
     }
 
 
-//    public void mouseCheck(){
-//        jpImage.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//                int mouseX = e.getX();
-//                int mouseY = e.getY();
-//                System.out.println("마우스 클릭 좌표: X = " + mouseX + ", Y = " + mouseY);
-//            }
-//        });
-//    }
+    public void mouseCheck(){
+        jpImage.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+                System.out.println("마우스 클릭 좌표: X = " + mouseX + ", Y = " + mouseY);
+            }
+        });
+    }
 
     public void addButton2(String name , int x , int y , int width , int height){
+        System.out.println("111111111");
         JButton jbnt = new JButton();
         jbnt.setText("");
         jbnt.setBounds(x,y,width,height);
@@ -167,7 +171,11 @@ public class Map extends JFrame implements ActionListener {
                 System.out.println("클릭된 버튼: " + clickedButton);  // 버튼 객체
 
                 System.out.println("놀이기구 이름: " + rideName );
-
+                try {
+                    new Reservation(m,rideName,id);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
 
 //               임시 sendDataToTeamMember(rideName, rideId, clickedButton);  // 정진형한테 전달
             }
@@ -180,7 +188,7 @@ public class Map extends JFrame implements ActionListener {
 
     }
 
-//    public static void main(String[] args) {
-//        new Map();
-//    }
+    public static void main(String[] args) {
+        new Map("ddd", new LoginG());
+    }
 }

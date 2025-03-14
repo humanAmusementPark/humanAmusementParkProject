@@ -122,11 +122,11 @@ public class LoginG extends JFrame implements ActionListener {
 
         if (success && s_flag) {
             this.setVisible(false);
-            new Map(id, this);
-            new TimeTable();
+            new AdminMenu1(this,id);
         } else if (success) {
             this.setVisible(false);
-            new AdminMenu1(this);
+            new Map(id,this);
+            new TimeTable();
         } else {
             JOptionPane.showMessageDialog(submit, "로그인 실패");
         }
