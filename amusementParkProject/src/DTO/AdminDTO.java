@@ -31,4 +31,18 @@ public class AdminDTO {
         }
     }
 
+    public String getYear() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        return sdf.format(aBirth);
+    }
+
+    public String getMonth() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        return sdf.format(aBirth);
+    }
+
+    public String getDay() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        return sdf.format(aBirth);
+    }
 }
