@@ -12,13 +12,7 @@ public class TimeTable extends JFrame {
     private GridBagConstraints gbc;
     private GridBagLayout grid;
 
-    //배경
-    private Image backgroundImage;
-
     public TimeTable() {
-
-        // 배경 이미지 로드
-        backgroundImage = new ImageIcon("src/images/background.jpg").getImage(); // 이미지 파일 경로
 
         getTimeTableInfo();
         setDisplay();
@@ -47,10 +41,7 @@ public class TimeTable extends JFrame {
     public void setDisplay() {
 
 
-        // 배경 패널 생성
-        BackgroundPanel panel = new BackgroundPanel(backgroundImage);
-
-        //JPanel panel = new JPanel();  //기존 판넬
+        JPanel panel = new JPanel();  //기존 판넬
 
         grid = new GridBagLayout();
         panel.setLayout(grid);
@@ -66,8 +57,6 @@ public class TimeTable extends JFrame {
         int x = 0;
         for (String day : days) {
             JLabel label = new JLabel(day,SwingConstants.CENTER);
-
-            label.setForeground(Color.WHITE); // 배경이 어두우면 글씨색 변경
 
             make(label, x++ , 0,1,1);
             panel.add(label);
@@ -88,8 +77,6 @@ public class TimeTable extends JFrame {
         for (int i = 1; i <= 7; i++) {
             JPanel dayPanel = new JPanel();
 
-            dayPanel.setOpaque(false); // 배경을 투명하게 설정
-
             dayPanel.setLayout(new BoxLayout(dayPanel, BoxLayout.Y_AXIS)); // 세로로 배치
 
             // 해당 요일의 행사들을 표시
@@ -99,15 +86,11 @@ public class TimeTable extends JFrame {
                     // 행사 내용 표시
                     JLabel contentLabel = new JLabel(dto.getTiContent());
 
-                    contentLabel.setForeground(Color.WHITE); // 글씨색 변경
-
                     contentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     dayPanel.add(contentLabel);
 
                     // 행사 시간 표시
                     JLabel timeLabel = new JLabel(String.valueOf(dto.getTiTime()));
-
-                    timeLabel.setForeground(Color.LIGHT_GRAY); // 시간은 연하게
 
                     timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     dayPanel.add(timeLabel);
@@ -135,22 +118,8 @@ public class TimeTable extends JFrame {
         setTitle("Banner");
         setBounds(100, 100, 800, 400);
         setVisible(true);
-        //이거 실행하면 전체 JFrame가 꺼짐 그래서 베너만 없에애되니까
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        //이거 실행하면 전체 JFrame가 꺼짐 그래서 베너만 없에애되니까
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    // 배경 패널을 위한 내부 클래스
-    class BackgroundPanel extends JPanel {
-        private Image image;
 
-        public BackgroundPanel(Image image) {
-            this.image = image;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            // 패널의 크기에 맞게 이미지 그리기
-            g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-        }
-    }
 }

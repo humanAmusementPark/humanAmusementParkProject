@@ -39,7 +39,7 @@ public class TicketDAO extends SuperDAO {
     }
 
     public void insert(TicketDTO ticketDTO){
-        String query = "INSERT INTO ticket  VALUES(?,?,?,?)";
+        String query = "INSERT INTO ticket  VALUES(?,?,?)";
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
 

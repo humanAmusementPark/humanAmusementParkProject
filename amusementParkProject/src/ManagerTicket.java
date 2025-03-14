@@ -297,7 +297,6 @@ public class ManagerTicket extends JFrame implements MouseListener {
         setTitle("티켓-관리자");
         setBounds(100, 100, 900, 500);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     @Override
