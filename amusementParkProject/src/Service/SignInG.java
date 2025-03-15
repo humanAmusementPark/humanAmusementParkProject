@@ -89,6 +89,10 @@ public class SignInG extends JFrame implements ActionListener {
         c.gridwidth = 1;
         center.add(p_field, c);
 
+        c.gridx = 2;
+        c.gridy = 2;
+        center.add(ad_button, c); 
+
         //c.fill = 0;
         c.gridx = 0;
         c.gridy = 3;
@@ -100,6 +104,10 @@ public class SignInG extends JFrame implements ActionListener {
         c.gridy = 3;
         c.gridwidth = 1;
         center.add(n_field, c);
+
+        c.gridx = 2;
+        c.gridy = 3;
+        center.add(mm_button, c);
 
         //c.fill = 0;
         c.gridx = 0;
