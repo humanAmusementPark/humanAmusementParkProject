@@ -9,10 +9,52 @@ import java.util.List;
 
 public class TicketDAO extends SuperDAO {
     private Connection conn;
+    private static TicketDAO tinstance;
+    private List<TicketDTO> ticketList = new ArrayList<>(); //여기 추가요12!@!@!@!@!@!@
+
 
     public TicketDAO() throws SQLException {
         this.conn = super.getConnection();
+        loadTickets(); //여기추가요!@!@!@
     }
+    public static TicketDAO getInstance()  { //여기 추가했어요!@!@!@
+        try{
+            if (tinstance == null) {
+                tinstance = new TicketDAO();
+            }
+            return tinstance;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return tinstance;
+    }
+    public List<TicketDTO> getTicketList() {
+        return new ArrayList<>(ticketList); // 리스트 복사하여 반환
+    }
+    private void loadTickets() { //여기 추가요!@!@!@!@!@!@!@!@!@!@
+        ticketList.clear();
+        String sql = " SELECT * FROM ticket";
+        try{
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                String tPass = rs.getString("tPass");
+                String tName = rs.getString("tName");
+                int tPrice = rs.getInt("tPrice");
+                ticketList.add(TicketDTO.builder().
+                        tPass(tPass)
+                        .tName(tName)
+                        .tPrice(tPrice)
+                        .build());
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public TicketDTO selectti(String id){
 
         String query = "SELECT * FROM ticket where tPass='"+ id +"'";
@@ -98,7 +140,7 @@ public class TicketDAO extends SuperDAO {
         try {
             PreparedStatement cursor = conn.prepareStatement(query);
 
-            //sql 파라미터 설정
+
             cursor.setString(1, ticketDTO.getTPass());
             cursor.setString(2, ticketDTO.getTName());
             cursor.setInt(3, ticketDTO.getTPrice());
@@ -111,4 +153,5 @@ public class TicketDAO extends SuperDAO {
             e.printStackTrace();
         }
     }
+
 }
