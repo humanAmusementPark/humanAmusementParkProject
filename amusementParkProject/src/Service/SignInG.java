@@ -41,7 +41,7 @@ public class SignInG extends JFrame implements ActionListener {
     JRadioButton ad_button = new JRadioButton("관리자");
     JRadioButton mm_button = new JRadioButton("회원");
     ButtonGroup p_radio = new ButtonGroup();
-
+//abcd
     public SignInG(JFrame before) {
         this.setSize(400, 300);
         this.setVisible(true);
