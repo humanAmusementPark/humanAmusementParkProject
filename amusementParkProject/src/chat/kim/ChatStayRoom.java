@@ -11,9 +11,11 @@ public class ChatStayRoom extends JFrame{
     private JButton foodButton;
     private JButton ticketButton;
     private JPanel mainPanel;
-    private Boolean[] flag = {true,true,true};
+    private boolean[] flagList;
 
     public ChatStayRoom(ChatServerObject chatServerObject){
+        flagList = chatServerObject.getFlagList();
+
         mainPanel = new JPanel();
         mainPanel.setLayout(null);
 
@@ -22,8 +24,8 @@ public class ChatStayRoom extends JFrame{
         attractionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (flag[0]) {
-                    new ChatClientObject().service(1004);
+                if (flagList[0]) {
+                    new ChatClientObject().service(1004,false,chatServerObject);
                 }else{
                     JOptionPane.showMessageDialog(mainPanel,"방풀입니다.","gg",JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -37,8 +39,8 @@ public class ChatStayRoom extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (flag[1]) {
-                    new ChatClientObject().service(1005);
+                if (flagList[1]) {
+                    new ChatClientObject().service(1005, false,chatServerObject);
                 }else{
                     JOptionPane.showMessageDialog(mainPanel,"방풀입니다.","gg",JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -51,8 +53,8 @@ public class ChatStayRoom extends JFrame{
         ticketButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (flag[2]) {
-                    new ChatClientObject().service(1006);
+                if (flagList[2]) {
+                    new ChatClientObject().service(1006,false,chatServerObject);
                 }else{
                     JOptionPane.showMessageDialog(mainPanel,"방풀입니다.","gg",JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -72,13 +74,4 @@ public class ChatStayRoom extends JFrame{
 
     }
 
-    public void setFlag(int port,boolean flag){
-        if (port == 1004){
-            this.flag[0] = flag;
-        }else if (port == 1005){
-            this.flag[1] = flag;
-        }else if (port == 1006){
-            this.flag[2] = flag;
-        }
-    }
 }

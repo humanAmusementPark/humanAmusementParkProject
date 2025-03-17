@@ -21,6 +21,9 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
     private ObjectOutputStream writer = null;
     private String nickName;
 
+    private boolean checkAdmin;
+    private ChatServerObject chatServer;
+
     public ChatClientObject() {
         //센터 TextArea만들기
         output = new JTextArea();
@@ -71,7 +74,7 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
 
 
 
-    public void service(int portNum){
+    public void service(int portNum,boolean checkAdmin,ChatServerObject chatServerObject){
         //서버 IP 입력받기
         //String serverIP = JOptionPane.showInputDialog(this, "서버IP를 입력하세요","서버IP",JOptionPane.INFORMATION_MESSAGE);
 //        String serverIP= JOptionPane.showInputDialog(this,"서버IP를 입력하세요","192.168.0.8");  //기본적으로 아이피 값이 입력되어 들어가게 됨
@@ -79,6 +82,9 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
 //            System.out.println("서버 IP가 입력되지 않았습니다.");
 //            System.exit(0);
 //        }
+        this.checkAdmin = checkAdmin;
+        this.chatServer = chatServerObject;
+
         //닉네임 받기
         nickName= JOptionPane.showInputDialog(this,"닉네임을 입력하세요","닉네임" ,JOptionPane.INFORMATION_MESSAGE);
         if(nickName == null || nickName.length()==0){
@@ -161,6 +167,9 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
                     reader.close();
                     writer.close();
                     socket.close();
+                    if (checkAdmin){
+                        chatServer.setCheckAdmin(false);
+                    }
                     return ;
                 } else if(dto.getCommand()==Info.SEND){
                     output.append(dto.getMessage()+"\n");
