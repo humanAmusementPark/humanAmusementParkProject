@@ -42,7 +42,7 @@ public class Reservation extends JFrame{
 		
 		
 		this.setTitle("기구 예약");
-
+		System.out.println("atname =  " + atname);
 		AttractionDTO attract=adao.getAttract(atname);
 		
 		if(attract==null) {
