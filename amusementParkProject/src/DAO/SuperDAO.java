@@ -1,37 +1,60 @@
-package DAO;
+package javaproject.DAO;
 
-import DTO.EatingHouseDTO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public class SuperDAO<T> {
-    private String url = "jdbc:mariadb://localhost:3306/amusementPark";
+    private String driver = "org.mariadb.jdbc.Driver";
+    private String url = "jdbc:mariadb://localhost:3306/mysql";
     private String user = "root";
-    private String password = "1234";
+    private String password = "park1676";
     private Connection conn;
 
-    public SuperDAO() throws SQLException {
-        this.conn = DriverManager.getConnection(url, user, password);
+    public SuperDAO() {
+        try {
+            this.conn = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        init();
+    }
+
+
+
+    private void init() {
+        try {
+            Class.forName(driver);
+            System.out.println("클래스 load");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Connection getConnection() {
+        try {
+            this.conn = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return conn;
     }
 
-    public List<T> selectAll(){
+    public List<T> selectAll() {
         return null;
     }
-    public void insert(){
+
+    public void insert() {
 
     }
-    public void update(int choiceNum){
+
+    public void update(int choiceNum) {
 
     }
-    public void delete(int choiceNum){
+
+    public void delete(int choiceNum) {
 
     }
 

@@ -1,7 +1,7 @@
-package DAO;
+package javaproject.DAO;
 
-import DTO.AttractionDTO;
-import DTO.TimeTableDTO;
+
+import javaproject.DTO.TimeTableDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,11 +1,14 @@
-package DTO;
+package javaproject.DTO;
+
 
 import lombok.*;
 
 @Getter
 @Builder
 public class AttractionDTO {
-    private int attractionID;
-    private String AttractionName;
-    private String AttractionURL;
+    String atId;
+    String atName;
+    String atUrl;
+    int atMax;
+    int atOnoff;
 }
