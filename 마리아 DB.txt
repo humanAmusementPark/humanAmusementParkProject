@@ -1,8 +1,8 @@
 use mysql;
 
-drop table if exists member;
 drop table if exists reservation;
-drop table if exists  administer;
+drop table if exists member;
+drop table if exists administer;
 drop table if exists ticket;
 drop table if exists foodmenu, food, attraction, timetable; # 테이블 초기화
 
