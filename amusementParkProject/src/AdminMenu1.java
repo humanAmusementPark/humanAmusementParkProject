@@ -1,10 +1,14 @@
 package javaproject;
 
 import javaproject.Service.*;
+import javaproject.chat.ChatAdG;
+import javaproject.chat.ChatMemG;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 public class AdminMenu1 extends JFrame {
@@ -12,15 +16,18 @@ public class AdminMenu1 extends JFrame {
     JPanel jp2 = new JPanel();
     JPanel jp3 = new JPanel();
     JPanel jp4 = new JPanel();
-    JButton food = new JButton("음식점관리");
+    JButton talk = new JButton("고객상담");
     JButton attraction = new JButton("어트랙션");
     JButton reservation = new JButton("예약관리");
     JButton schedule = new JButton("일정표 관리");
     JButton member = new JButton("회원");
     JButton ticket = new JButton("티켓");
-    JButton update = new JButton("관리자정보수정/로그아웃");
+    JButton update = new JButton("관리자정보수정");
+    JButton logout = new JButton("로그아웃");
     LoginG LoginG;
     String id;
+
+
     public AdminMenu1(LoginG loginG,String id) {
         this.id = id;
         this.LoginG = loginG;
@@ -31,7 +38,12 @@ public class AdminMenu1 extends JFrame {
 
 
         this.setVisible(true);
-
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                LoginG.setVisible(true);
+            }
+        });
 
     }
 
@@ -40,7 +52,7 @@ public class AdminMenu1 extends JFrame {
         this.add(jp);
         this.add(jp2);
         jp.setLayout(new GridLayout(1, 2));
-        jp.add(food);
+        jp.add(talk);
         jp.add(attraction);
         jp2.setLayout(new GridLayout(1, 3));
         jp2.add(jp3);
@@ -51,15 +63,20 @@ public class AdminMenu1 extends JFrame {
         jp3.add(member);
         jp3.add(ticket);
         jp4.add(schedule);
-        jp4.add(update);
+        JPanel jp5 = new JPanel();
+        jp5.setLayout(new GridLayout(1, 2));
+        jp5.add(update);
+        jp5.add(logout);
+        jp4.add(jp5);
 
-        styleButton(food, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 25), Color.BLACK);
+        styleButton(talk, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 25), Color.BLACK);
         styleButton(attraction, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 25), Color.BLACK);
         styleButton(reservation, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 25), Color.BLACK);
         styleButton(schedule, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 25), Color.BLACK);
         styleButton(member, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 25), Color.BLACK);
         styleButton(ticket, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 25), Color.BLACK);
         styleButton(update, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 18), Color.BLACK);
+        styleButton(logout, Color.LIGHT_GRAY, new Font("Serif", Font.BOLD, 18), Color.BLACK);
         seting2();
         this.setVisible(true);
     }
@@ -74,7 +91,7 @@ public class AdminMenu1 extends JFrame {
     }
 
     public void seting2() {
-        food.addActionListener(e -> FoodClick());
+        talk.addActionListener(e -> TalkClick());
         attraction.addActionListener(e -> attractClick());
         reservation.addActionListener(e -> resCLick());
         schedule.addActionListener(e -> {
@@ -85,11 +102,17 @@ public class AdminMenu1 extends JFrame {
             ticketClick();
         });
         update.addActionListener(e -> adminUpdate());
+        logout.addActionListener(e->logoutClick());
     }
 
-    private void FoodClick() {
-        System.out.println("연결");
+    private void logoutClick() {
+        dispose();
+        LoginG.setVisible(true);
+    }
 
+    private void TalkClick() {
+        System.out.println("연결");
+        new ChatAdG(id);
     }
 
     private void attractClick() {

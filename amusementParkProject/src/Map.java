@@ -4,13 +4,11 @@ import javaproject.Service.LoginG;
 import javaproject.Service.MemG;
 import javaproject.Service.Reservation;
 import javaproject.Service.ReservationG;
+import javaproject.chat.ChatMemG;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.net.URL;
 import java.sql.SQLException;
 
@@ -35,7 +33,6 @@ public class Map extends JFrame implements ActionListener {
         this.setTitle("정규랜드 지도");
         this.setSize(1200, 7000);
         this.setLocation(0, 0);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(jpImage);
         jpImage.setLayout(null);
 
@@ -43,11 +40,19 @@ public class Map extends JFrame implements ActionListener {
         logManageBnt();
         ticketBnt();
         logoutBnt();
+        TalkBut();
         this.setVisible(true);
         add();
         mouseCheck();
 
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                LoginG.setVisible(true);
+            }
+        });
     }
+
     public void add(){
         System.out.println("oooooo");
         addButton2("",0,0,1,1);
@@ -75,6 +80,18 @@ public class Map extends JFrame implements ActionListener {
         addButton2("애니멀원더 스테이지",504,456,56,100);
         addButton2("카니발광장",479,381,62,57);
 
+    }
+
+    private void TalkBut() {
+        JButton tbnt = new JButton("고객상담");
+        tbnt.setBounds(810,10,100,26);
+        tbnt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ChatMemG(id);
+            }
+        });
+        jpImage.add(tbnt);
     }
     public void reservationBnt(){
         JButton rbnt = new JButton("예약현황");
