@@ -2,13 +2,12 @@ package javaproject.chat.kim;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class ChatServerObject  {
    private ServerSocket[] serverSocket;
-   private boolean[] flagList = {true,true,true};
-   private AtomicBoolean checkAdmin = new AtomicBoolean(false);
+   private boolean[] flagList = {true,true,true};    //고객센터 채팅방 상태 확인용
+   private boolean[] checkAdmin = {false,false,false};  //관리자가 들어왔는지 안들어왔는지 확인용
 
     public ChatServerObject() throws IOException {
         serverSocket = new ServerSocket[3];
@@ -20,10 +19,6 @@ public class ChatServerObject  {
             port++;
         }
     }
-    public boolean[] getFlagList() {
-        return flagList;
-    }
-    public void setCheckAdmin(boolean checkAdmin) {
-        this.checkAdmin.set(checkAdmin);
-    }
+
+
 }

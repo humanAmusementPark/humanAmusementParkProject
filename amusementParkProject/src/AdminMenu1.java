@@ -1,10 +1,13 @@
 package javaproject;
 
 import javaproject.Service.*;
+import javaproject.chat.kim.ChatAdminister;
+import javaproject.chat.kim.ChatServerObject;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class AdminMenu1 extends JFrame {
@@ -12,7 +15,7 @@ public class AdminMenu1 extends JFrame {
     JPanel jp2 = new JPanel();
     JPanel jp3 = new JPanel();
     JPanel jp4 = new JPanel();
-    JButton food = new JButton("음식점관리");
+    JButton food = new JButton("고객센터");
     JButton attraction = new JButton("어트랙션");
     JButton reservation = new JButton("예약관리");
     JButton schedule = new JButton("일정표 관리");
@@ -21,6 +24,10 @@ public class AdminMenu1 extends JFrame {
     JButton update = new JButton("관리자정보수정/로그아웃");
     LoginG LoginG;
     String id;
+
+    //채팅
+    private ChatServerObject chatServerObject;
+
     public AdminMenu1(LoginG loginG,String id) {
         this.id = id;
         this.LoginG = loginG;
@@ -29,6 +36,8 @@ public class AdminMenu1 extends JFrame {
         this.setTitle("관리자 메뉴");
         setting();
 
+        //chat부분
+        chatServerObject = chatServerObject;
 
         this.setVisible(true);
 
@@ -74,8 +83,16 @@ public class AdminMenu1 extends JFrame {
     }
 
     public void seting2() {
-        food.addActionListener(e -> FoodClick());
-        attraction.addActionListener(e -> attractClick());
+        food.addActionListener(e -> {
+            try {
+                FoodClick();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        attraction.addActionListener(_ -> attractClick());
         reservation.addActionListener(e -> resCLick());
         schedule.addActionListener(e -> {
             scheduleClick();
@@ -87,8 +104,9 @@ public class AdminMenu1 extends JFrame {
         update.addActionListener(e -> adminUpdate());
     }
 
-    private void FoodClick() {
-        System.out.println("연결");
+    private void FoodClick() throws IOException, ClassNotFoundException {
+        System.out.println("고객센터 연결");
+        new ChatAdminister(id);
 
     }
 

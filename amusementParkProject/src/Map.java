@@ -4,6 +4,8 @@ import javaproject.Service.LoginG;
 import javaproject.Service.MemG;
 import javaproject.Service.Reservation;
 import javaproject.Service.ReservationG;
+import javaproject.chat.kim.ChatServerObject;
+import javaproject.chat.kim.ChatStayRoom;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 
@@ -29,7 +32,9 @@ public class Map extends JFrame implements ActionListener {
     };
     Map m =this;
 
-    public Map(String id,LoginG loginG) {
+
+
+    public Map(String id,LoginG loginG) throws IOException {
         this.LoginG = loginG;
         this.id = id;
         this.setTitle("정규랜드 지도");
@@ -43,6 +48,7 @@ public class Map extends JFrame implements ActionListener {
         logManageBnt();
         ticketBnt();
         logoutBnt();
+        chatBnt();
         this.setVisible(true);
         add();
         mouseCheck();
@@ -136,6 +142,23 @@ public class Map extends JFrame implements ActionListener {
         });
         jpImage.add(tbnt);
     }
+    //chat 임시 만들기 --------------------------------------------------------
+    public void chatBnt(){
+        JButton cbnt  = new JButton("고객센터");
+        cbnt.setBounds(810,10,100,26);
+        cbnt.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    new ChatStayRoom(id);
+                } catch (IOException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        jpImage.add(cbnt);
+    }
 
 
     public void mouseCheck(){
@@ -188,7 +211,7 @@ public class Map extends JFrame implements ActionListener {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Map("ddd", new LoginG());
     }
 }

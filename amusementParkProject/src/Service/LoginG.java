@@ -3,11 +3,13 @@ package javaproject.Service;
 import javaproject.AdminMenu1;
 import javaproject.DAO.MemDAO;
 import javaproject.Map;
+import javaproject.chat.kim.ChatServerObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 public class LoginG extends JFrame implements ActionListener {
@@ -25,9 +27,12 @@ public class LoginG extends JFrame implements ActionListener {
     JPanel center = new JPanel();
 
 
-    public LoginG() {
+
+    public LoginG() throws IOException {
         this.setTitle("놀이공원 예약 시스템");
         this.add("Center", center);
+
+
 
         center.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -102,7 +107,11 @@ public class LoginG extends JFrame implements ActionListener {
                 s_flag = false;
             }
         } else if (arg0.getSource() == submit) {
-            submit();
+            try {
+                submit();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         } else if (arg0.getSource() == signin) {
             this.setEnabled(false);
             new SignInG(this);
@@ -110,7 +119,7 @@ public class LoginG extends JFrame implements ActionListener {
         }
     }
 
-    private void submit() {
+    private void submit() throws IOException {
         String id = idField.getText();
         String pw = pwField.getText();
         boolean success = false;

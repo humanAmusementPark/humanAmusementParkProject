@@ -3,13 +3,49 @@ package javaproject.chat.kim;
 import java.io.Serializable;
 
 enum Info {
-    JOIN, EXIT, SEND
+    JOIN, EXIT, SEND,GET_FLAG,SET_FLAG;
 }
 
 class ChatDTO implements Serializable {
     private String nickName;
     private String message;
     private Info command;
+    private boolean[] flag;
+    private boolean[] checkAdmin;
+    private int flagIndex;
+    private int checkAdminIndex;
+
+    public int getFlagIndex() {
+        return flagIndex;
+    }
+
+    public void setFlagIndex(int flagIndex) {
+        this.flagIndex = flagIndex;
+    }
+
+    public int getCheckAdminIndex() {
+        return checkAdminIndex;
+    }
+
+    public void setCheckAdminIndex(int checkAdminIndex) {
+        this.checkAdminIndex = checkAdminIndex;
+    }
+
+    public boolean[] getFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean[] flag) {
+        this.flag = flag;
+    }
+
+    public boolean[] getCheckAdmin() {
+        return checkAdmin;
+    }
+
+    public void setCheckAdmin(boolean[] checkAdmin) {
+        this.checkAdmin = checkAdmin;
+    }
 
     public String getNickName(){
         return nickName;

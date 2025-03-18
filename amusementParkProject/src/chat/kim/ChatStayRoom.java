@@ -4,17 +4,24 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
-public class ChatStayRoom extends JFrame{
+public class ChatStayRoom extends JFrame {
     //gui 부분
     private JButton attractionButton;
     private JButton foodButton;
     private JButton ticketButton;
     private JPanel mainPanel;
-    private boolean[] flagList;
+    private Socket socket;
+    private  boolean[] flagList;
+    private boolean[] checkAdminList;
+    private ObjectOutputStream writer;
+    private ObjectInputStream reader;
 
-    public ChatStayRoom(ChatServerObject chatServerObject){
-        flagList = chatServerObject.getFlagList();
+    public ChatStayRoom(String id) throws IOException, ClassNotFoundException {
+        //서버에서  채팅방상황 플래그 받아오는것
 
         mainPanel = new JPanel();
         mainPanel.setLayout(null);
@@ -24,11 +31,28 @@ public class ChatStayRoom extends JFrame{
         attractionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (flagList[0]) {
-                    new ChatClientObject().service(1004,false,chatServerObject);
-                }else{
-                    JOptionPane.showMessageDialog(mainPanel,"방풀입니다.","gg",JOptionPane.INFORMATION_MESSAGE);
+
+                try {
+                    socket = getFlagFromServer(1004);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
+
+                System.out.println("flagList  = " + flagList[0]);
+                System.out.println("checkAdmin = " + checkAdminList[0]);
+
+                if (flagList[0]) {
+                    new ChatClientObject().service(socket,writer,reader,1004, false, checkAdminList, id);
+                } else {
+                    JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                }
+//                try {
+//                    socket.close();
+//                } catch (IOException ex) {
+//                    throw new RuntimeException(ex);
+//                }
 
             }
         });
@@ -39,12 +63,28 @@ public class ChatStayRoom extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (flagList[1]) {
-                    new ChatClientObject().service(1005, false,chatServerObject);
-                }else{
-                    JOptionPane.showMessageDialog(mainPanel,"방풀입니다.","gg",JOptionPane.INFORMATION_MESSAGE);
+                try {
+                    socket = getFlagFromServer(1005);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
 
+                System.out.println("flagList  = " + flagList[1]);
+                System.out.println("checkAdmin = " + checkAdminList[1]);
+
+                if (flagList[0]) {
+                    new ChatClientObject().service(socket,writer,reader,1005, false, checkAdminList, id);
+                } else {
+                    JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+//                try {
+//                    socket.close();
+//                } catch (IOException ex) {
+//                    throw new RuntimeException(ex);
+//                }
             }
         });
 
@@ -53,12 +93,28 @@ public class ChatStayRoom extends JFrame{
         ticketButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (flagList[2]) {
-                    new ChatClientObject().service(1006,false,chatServerObject);
-                }else{
-                    JOptionPane.showMessageDialog(mainPanel,"방풀입니다.","gg",JOptionPane.INFORMATION_MESSAGE);
+                try {
+                    socket = getFlagFromServer(1006);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
 
+                System.out.println("flagList  = " + flagList[2]);
+                System.out.println("checkAdmin = " + checkAdminList[2]);
+
+                if (flagList[0]) {
+                    new ChatClientObject().service(socket,writer,reader,1006, false, checkAdminList, id);
+                } else {
+                    JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+//                try {
+//                    socket.close();
+//                } catch (IOException ex) {
+//                    throw new RuntimeException(ex);
+//                }
             }
         });
 
@@ -72,6 +128,26 @@ public class ChatStayRoom extends JFrame{
         setBounds(100, 100, 900, 500);
         setVisible(true);
 
+    }
+
+    public Socket getFlagFromServer(int port) throws IOException, ClassNotFoundException {
+        socket = new Socket("192.168.0.28", port); // 서버와 연결
+
+        this.writer = new ObjectOutputStream(socket.getOutputStream());
+        this.reader = new ObjectInputStream(socket.getInputStream());
+
+        //서버로 flag요청
+        ChatDTO dto = new ChatDTO();
+        dto.setCommand(Info.GET_FLAG);
+        writer.writeObject(dto);
+        writer.flush();
+
+        ChatDTO tempDTO = (ChatDTO) reader.readObject();
+
+        flagList = tempDTO.getFlag();
+        checkAdminList = tempDTO.getCheckAdmin();
+
+        return socket;
     }
 
 }
