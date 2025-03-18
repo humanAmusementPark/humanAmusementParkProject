@@ -59,6 +59,41 @@ public class ServerTool extends Thread {
 //                        continue;
 //                    }
 //                }
+                
+                if (!checkAdmin[index[){  //관리자 없는 경우 
+                        Socket socket = serverSocket.accept(); // 클라이언트 연결 대기
+                        System.out.println(" flag = " + flag[index]);
+                        if (chatHandlerObjectList.size() >= 1){
+                            continue;
+                        }
+                        ChatHandlerObject handler = new ChatHandlerObject(socket, chatHandlerObjectList, flag,checkAdmin);
+                        handler.start(); // 각 클라이언트 처리 스레드 시작
+                        chatHandlerObjectList.add(handler); // 클라이언트 핸들러를 리스트에 추가
+                        System.out.println("chekckdkdkdkdkdkk");
+                        sleep(5000);
+                        
+                    
+                }else{  //관리자 있는경우
+                        Socket socket = serverSocket.accept(); // 클라이언트 연결 대기
+                        System.out.println(" flag = " + flag[index]);
+                        if (chatHandlerObjectList.size() >= 2){
+                            continue;
+                        }
+                    ChatHandlerObject handler = new ChatHandlerObject(socket, chatHandlerObjectList, flag,checkAdmin);
+                        handler.start(); // 각 클라이언트 처리 스레드 시작
+                        chatHandlerObjectList.add(handler); // 클라이언트 핸들러를 리스트에 추가
+                        System.out.println("chekckdkdkdkdkdkk");
+                        sleep(5000);
+                }
+
+
+
+                
+                
+                
+                
+                
+                
                 //1. 회원이 먼저 들어온경우 2. 상담사가 먼저 들어온경우 3.
                 if (!checkAdmin[index]) { //상담사가 없는경우
                     if (chatHandlerObjectList.isEmpty()) {
