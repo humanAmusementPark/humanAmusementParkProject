@@ -10,8 +10,6 @@ import java.net.Socket;
 
 public class ChatAdminister {
     private AdminDAO adminDAO;
-    private ChatDTO chatDTO;
-    private boolean[] checkAdmin;
     private Socket socket;
     private ObjectOutputStream writer;
     private ObjectInputStream reader;
@@ -25,65 +23,56 @@ public class ChatAdminister {
         try {
             socket = new Socket("192.168.0.28", port);  // 소켓을 한 번만 열기
             writer = new ObjectOutputStream(socket.getOutputStream());
-            reader = new ObjectInputStream(socket.getInputStream());
+            try{
+                reader = new ObjectInputStream(socket.getInputStream());
+            }catch (Exception e){
+                return ;
+            }
 
-            // 플래그 정보를 서버로부터 받음
-            this.chatDTO = getFlagFromServer(reader,writer);
-            checkAdmin = chatDTO.getCheckAdmin();
 
             // 포트별로 관리자 설정
             switch (port) {
                 case 1004:
-                    checkAdmin[0] = true;
                     setFlagFromClient(writer, 0);
                     break;
                 case 1005:
-                    checkAdmin[1] = true;
                     setFlagFromClient(writer, 1);
                     break;
                 case 1006:
-                    checkAdmin[2] = true;
                     setFlagFromClient(writer, 2);
                     break;
                 default:
                     return;
             }
 
-//            //서버로 바꾼 checkAdmin보내기
-//            //서버로 flag요청
-//            ChatDTO dto = new ChatDTO();
-//            dto.setCommand(Info.GET_FLAG);
-//            writer.writeObject(dto);
-//            writer.flush();
-
-
-            new ChatClientObject().service(socket,writer,reader,port, true, checkAdmin, id);
+            new ChatClientObject().service(socket,writer,reader,port, true, id);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // 서버에서 플래그 정보를 받는 메서드
-    public ChatDTO getFlagFromServer(ObjectInputStream reader,ObjectOutputStream writer ) throws IOException, ClassNotFoundException {
-        // 서버로 flag 요청
-        ChatDTO dto = new ChatDTO();
-        dto.setCommand(Info.GET_FLAG);
-        writer.writeObject(dto); // 이 부분을 추가하여 서버에 GET_FLAG 요청을 보냅니다.
-        writer.flush();
-
-        // 서버로부터 하나의 객체를 받습니다.
-        ChatDTO flagDTO = (ChatDTO) reader.readObject();  // 하나의 객체만 받도록 수정
-        return flagDTO;
-    }
+//    // 서버에서 플래그 정보를 받는 메서드
+//    public ChatDTO getFlagFromServer(ObjectInputStream reader,ObjectOutputStream writer ) throws IOException, ClassNotFoundException {
+//        // 서버로 flag 요청
+//        ChatDTO dto = new ChatDTO();
+//        dto.setCommand(Info.GET_FLAG);
+//        writer.writeObject(dto); // 이 부분을 추가하여 서버에 GET_FLAG 요청을 보냅니다.
+//        writer.flush();
+//
+//        // 서버로부터 하나의 객체를 받습니다.
+//        ChatDTO flagDTO = (ChatDTO) reader.readObject();  // 하나의 객체만 받도록 수정
+//        return flagDTO;
+//    }
 
     // 서버로 플래그를 보내는 메서드
-    public void setFlagFromClient(ObjectOutputStream writer, int flagIndex) throws IOException {
+    public void setFlagFromClient(ObjectOutputStream writer, int checkAdminIndex) throws IOException {
         // 서버로 플래그 설정 요청
+        System.out.println(" fffffffffffffffffffffffffffffff");
         ChatDTO dto = new ChatDTO();
         dto.setCommand(Info.SET_FLAG);
-        dto.setFlagIndex(flagIndex);
-        dto.setCheckFlag(false);
+        dto.setCheckAdminIndex(checkAdminIndex);
+        dto.setCheckFlag(true);
         writer.writeObject(dto);
         writer.flush();
     }

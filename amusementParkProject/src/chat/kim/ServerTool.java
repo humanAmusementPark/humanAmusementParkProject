@@ -29,70 +29,40 @@ public class ServerTool extends Thread {
     @Override
     public void run() {
 
-        // boolean first = true;
 
         try {
             System.out.println("서버 준비 완료. 포트: " + serverSocket.getLocalPort());
             while (true) {
 
-                //내가 원하는 조건?
-                //1. 회원한명 만 들어와 있는 경우
-                //2. 관리자만 들어와 있는 경우
-                //3. 관리자 + 회원 이 있는 경우
-                // 관리자와 + 회원 조합일경우
                 System.out.println(" checkAdmin = " + checkAdmin[index]);
 
                 //
-                System.out.println("socket 이전 ");
                 Socket socket = serverSocket.accept(); // 클라이언트 연결 대기
-                System.out.println(" flag = " + flag[index]);
-                if (chatHandlerObjectList.size() >= 1) {
-                    if (checkAdmin[index]) {
-                        if (chatHandlerObjectList.size() >= 2) {
+                ChatHandlerObject handler = new ChatHandlerObject(socket, chatHandlerObjectList, flag, checkAdmin);
+                handler.getFlag();
+
+
+                System.out.println(" checkAdmin ==  " + checkAdmin[index]);
+
+                if (!chatHandlerObjectList.isEmpty()) {
+                    if (checkAdmin[index]) {  //관리자 들어올떄
+                        if (chatHandlerObjectList.size() >= 2 ) {
+                            System.out.println("dddddddddd");
                             socket.close();
                             continue;
                         }
-                    }else{
+                    }else {  //회원들어올떄
+                        System.out.println(" aaaaaaaaaaa" );
                         socket.close();
                         continue;
                     }
                 }
-                ChatHandlerObject handler = new ChatHandlerObject(socket, chatHandlerObjectList, flag, checkAdmin);
-                handler.start(); // 각 클라이언트 처리 스레드 시작
+
+                handler.start();
+                // 각 클라이언트 처리 스레드 시작
                 chatHandlerObjectList.add(handler); // 클라이언트 핸들러를 리스트에 추가
-                System.out.println("클라이언트 연결됨: " + socket.getInetAddress());
                 sleep(500);
 
-
-//                if (!checkAdmin[index]) {  //관리자 없는 경우
-//                    System.out.println("socket 이전 ");
-//                    Socket socket = serverSocket.accept(); // 클라이언트 연결 대기
-//                    System.out.println(" flag = " + flag[index]);
-//
-//                    if (!chatHandlerObjectList.isEmpty()) {
-//                        socket.close();
-//                        continue;
-//                    }
-//                    ChatHandlerObject handler = new ChatHandlerObject(socket, chatHandlerObjectList, flag, checkAdmin);
-//                    handler.start(); // 각 클라이언트 처리 스레드 시작
-//                    chatHandlerObjectList.add(handler); // 클라이언트 핸들러를 리스트에 추가
-//                    System.out.println("클라이언트 연결됨: " + socket.getInetAddress());
-//                    sleep(500);
-//
-//
-//                } else {  //관리자 있는경우
-//                    System.out.println("관리자가 있는걸로 체크되어 조건문에 들어왔다.");
-//
-//                    Socket socket = serverSocket.accept(); // 클라이언트 연결 대기
-//                    if (chatHandlerObjectList.size() >= 2) {
-//                        socket.close();
-//                        continue;
-//                    }
-//                    ChatHandlerObject handler = new ChatHandlerObject(socket, chatHandlerObjectList, flag, checkAdmin);
-//                    handler.start(); // 각 클라이언트 처리 스레드 시작
-//                    chatHandlerObjectList.add(handler); // 클라이언트 핸들러를 리스트에 추가
-//                    sleep(500);
-//                }
             }
         } catch (IOException e) {
             e.printStackTrace();

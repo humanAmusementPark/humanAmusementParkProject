@@ -24,7 +24,6 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
     private String nickName;
 
     private boolean checkAdmin;
-    private boolean[] checkAdminList;
 
     private int portNum;
 
@@ -66,6 +65,13 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
                     dto.setNickName(nickName);
                     dto.setCommand(Info.EXIT);
 
+                    if (checkAdmin) {
+                        dto.setFlagIndex(checkIndex(portNum));
+                        dto.setCheckFlag(true);
+                    }
+
+
+                    System.out.println("종료 지점이 여기인가?");
                     writer.writeObject(dto);
                     writer.flush();
                 } catch (IOException io) {
@@ -78,15 +84,14 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
     }
 
 
-    public void service(Socket socket, ObjectOutputStream writer, ObjectInputStream reader, int portNum, boolean checkAdmin, boolean[] checkAdminList, String id) {
+    public void service(Socket socket, ObjectOutputStream writer, ObjectInputStream reader, int portNum, boolean checkAdmin, String id) {
         this.checkAdmin = checkAdmin;
 
         this.portNum = portNum;
-        //플레그 가져와서 사용
-        this.checkAdminList = checkAdminList;
+
         socketTemp = socket;
 
-        //에러 발생
+        //
         this.writer = writer;
         this.reader = reader;
 
@@ -104,9 +109,6 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
                 nickName = memDAO.select(id).getMName();
             }
         }
-
-
-
 
         try {
             //서버로 닉네임 보내기
@@ -131,6 +133,23 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
         sendBtn.addActionListener(this);  //멕션 이벤트 추가
     }
 
+    public int checkIndex(int port) {
+        int index = 0;
+
+        switch (port) {
+            case 1004:
+                index = 0;
+                break;
+            case 1005:
+                index = 1;
+                break;
+            case 1006:
+                index = 2;
+                break;
+        }
+        return index;
+    }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         try {
@@ -141,9 +160,12 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
             ChatDTO dto = new ChatDTO();
             if (msg.equals("exit")) {
                 dto.setCommand(Info.EXIT);
-                dto.setFlagIndex();
-                
+
+
+                System.out.println("관리자 x 눌러서 닫았을때 서버로 보내는 부분  " + dto.getCheckFlag());
+
             } else {
+                System.out.printf("dddddd");
                 dto.setCommand(Info.SEND);
                 dto.setMessage(msg);
                 dto.setNickName(nickName);
@@ -159,45 +181,18 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
 
     }
 
-//    // 서버로 플래그를 보내는 메서드
-//    public void setFlag( int flagIndex) throws IOException {
-//        // 서버로 플래그 설정 요청
-//        ChatDTO dto = new ChatDTO();
-//        dto.setCommand(Info.SET_FLAG);
-//        dto.setCheckAdminIndex(flagIndex);
-//        dto.setCheckFlag(true);
-//        writer.writeObject(dto);
-//        writer.flush();
-//    }
 
     @Override
     public void run() {
         //서버로부터 데이터 받기
         ChatDTO dto = null;
-        while (true) {
-            try {
-                System.out.println("여기인가??????????????");
-                dto = (ChatDTO) reader.readObject();
-                System.out.println("아님 여기????????");
-                if (dto.getCommand() == Info.EXIT) {  //서버로부터 내 자신의 exit를 받으면 종료됨
-                    //admin이 종료되었을때 checkAdmin을 false로
-//                    if (checkAdmin) {
-//                        switch (portNum) {
-//                            case 1004:
-//                                checkAdminList[0] = false;
-//                                setFlag(0);
-//                                break;
-//                            case 1005:
-//                                checkAdminList[1] = false;
-//                                setFlag(1);
-//                                break;
-//                            case 1006:
-//                                checkAdminList[2] = false;
-//                                setFlag(2);
-//                                break;
-//                        }
-//                    }
+        try {
+            while (true) {
 
+                dto = (ChatDTO) reader.readObject();
+                if (dto.getCommand() == Info.EXIT) {  //서버로부터 내 자신의 exit를 받으면 종료됨
+
+                    System.out.println("클라이언트 종료 되는 부분 서버에서 다시 받아서 ");
                     reader.close();
                     writer.close();
                     socketTemp.close();
@@ -209,11 +204,12 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
                     int pos = output.getText().length();
                     output.setCaretPosition(pos);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
+
     }
 }

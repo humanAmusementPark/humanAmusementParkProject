@@ -45,7 +45,7 @@ public class ChatStayRoom extends JFrame {
                 System.out.println("checkAdmin = " + checkAdminList[0]);
 
                 if (flagList[0]) {
-                    new ChatClientObject().service(socket,writer,reader,1004, false, checkAdminList, id);
+                    new ChatClientObject().service(socket,writer,reader,1004, false,  id);
                 } else {
                     try {
                         socket.close();
@@ -78,7 +78,7 @@ public class ChatStayRoom extends JFrame {
                 System.out.println("checkAdmin = " + checkAdminList[1]);
 
                 if (flagList[0]) {
-                    new ChatClientObject().service(socket,writer,reader,1005, false, checkAdminList, id);
+                    new ChatClientObject().service(socket,writer,reader,1005, false, id);
                 } else {
                     JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
                     try {
@@ -110,7 +110,7 @@ public class ChatStayRoom extends JFrame {
                 System.out.println("checkAdmin = " + checkAdminList[2]);
 
                 if (flagList[0]) {
-                    new ChatClientObject().service(socket,writer,reader,1006, false, checkAdminList, id);
+                    new ChatClientObject().service(socket,writer,reader,1006, false,  id);
                 } else {
                     JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
                     try {

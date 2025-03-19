@@ -15,7 +15,7 @@ public class ChatHandlerObject extends Thread {
     private List <ChatHandlerObject> list;
     private boolean[] flag;
     private boolean[] checkAdmin;
-
+    private  ChatDTO dto=null;
 
     //생성자
     public ChatHandlerObject(Socket socketTemp, List <ChatHandlerObject> list,boolean[] flag, boolean[] checkAdmin) throws IOException {
@@ -31,13 +31,12 @@ public class ChatHandlerObject extends Thread {
 
     }
     public void run(){
-        ChatDTO dto = null;
         String nickName;
 
         try{
             while(true){
 
-                dto = (ChatDTO) reader.readObject();
+
                 nickName = dto.getNickName();
 
                 //System.out.println("배열 크기:"+ar.length);
@@ -48,7 +47,7 @@ public class ChatHandlerObject extends Thread {
                     sendDto.setCommand(Info.EXIT);
                     writer.writeObject(sendDto);
                     writer.flush();
-
+                    System.out.println(" 임시로 check  = " + dto.getCheckFlag());
                     if (dto.getCheckFlag()){
                         int index = dto.getFlagIndex();
                         checkAdmin[index] = false;
@@ -91,15 +90,16 @@ public class ChatHandlerObject extends Thread {
                     writer.flush();
                 }else if (dto.getCommand() == Info.SET_FLAG){
                     //클라이언트 요청받으면 플래그 바꿔주기
-                    System.out.println(" dto.getCheckFlag = " + dto.getCheckFlag());
-                    if (!dto.getCheckFlag()){
-                        this.checkAdmin[dto.getFlagIndex()] = true;
-                        System.out.println(" 클라이언트에서 고친 checkAdmin= " + checkAdmin[dto.getCheckAdminIndex()]);
-                    }else if (dto.getCheckFlag()){
-                        this.checkAdmin[dto.getFlagIndex()] = false;
+                    System.out.println(" set 들어왔느지 체크 dto.getCheckFlag = " + dto.getCheckFlag());
+                    if (dto.getCheckFlag()){
+                        this.checkAdmin[dto.getCheckAdminIndex()] = true;
+                        System.out.println(" 클라이언트에서 고친 checkAdmin= " + checkAdmin[dto.getFlagIndex()]);
+                    }else {
+                        this.checkAdmin[dto.getCheckAdminIndex()] = false;
                     }
 
                 }
+                dto = (ChatDTO) reader.readObject();
             }
 
         } catch(IOException e){
@@ -118,4 +118,31 @@ public class ChatHandlerObject extends Thread {
     }
 
 
+    public void getFlag() {
+        try {
+            dto = (ChatDTO) reader.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        if (dto.getCommand() == Info.SET_FLAG){
+            //클라이언트 요청받으면 플래그 바꿔주기
+            System.out.println(" set 들어왔느지 체크 dto.getCheckFlag = " + dto.getCheckFlag());
+            if (dto.getCheckFlag()){
+                this.checkAdmin[dto.getCheckAdminIndex()] = true;
+                System.out.println(" 클라이언트에서 고친 checkAdmin= " + checkAdmin[dto.getFlagIndex()]);
+            }else {
+                this.checkAdmin[dto.getCheckAdminIndex()] = false;
+            }
+
+            try {
+                dto = (ChatDTO) reader.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
 }
