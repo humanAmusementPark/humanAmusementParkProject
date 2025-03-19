@@ -33,8 +33,10 @@ public class ChatHandlerObject extends Thread {
     public void run(){
         ChatDTO dto = null;
         String nickName;
+
         try{
             while(true){
+
                 dto = (ChatDTO) reader.readObject();
                 nickName = dto.getNickName();
 
@@ -46,6 +48,11 @@ public class ChatHandlerObject extends Thread {
                     sendDto.setCommand(Info.EXIT);
                     writer.writeObject(sendDto);
                     writer.flush();
+
+                    if (dto.getCheckFlag()){
+                        int index = dto.getFlagIndex();
+                        checkAdmin[index] = false;
+                    }
 
                     reader.close();
                     writer.close();
@@ -84,9 +91,14 @@ public class ChatHandlerObject extends Thread {
                     writer.flush();
                 }else if (dto.getCommand() == Info.SET_FLAG){
                     //클라이언트 요청받으면 플래그 바꿔주기
-                    this.checkAdmin[dto.getFlagIndex()] = true;
-                    System.out.println(" 클라이언트에서 고친 checkAdmin= " + checkAdmin[dto.getCheckAdminIndex()]);
-//                    this.checkAdmin = dto.getCheckAdmin();
+                    System.out.println(" dto.getCheckFlag = " + dto.getCheckFlag());
+                    if (!dto.getCheckFlag()){
+                        this.checkAdmin[dto.getFlagIndex()] = true;
+                        System.out.println(" 클라이언트에서 고친 checkAdmin= " + checkAdmin[dto.getCheckAdminIndex()]);
+                    }else if (dto.getCheckFlag()){
+                        this.checkAdmin[dto.getFlagIndex()] = false;
+                    }
+
                 }
             }
 

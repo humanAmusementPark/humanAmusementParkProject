@@ -80,15 +80,22 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
 
     public void service(Socket socket, ObjectOutputStream writer, ObjectInputStream reader, int portNum, boolean checkAdmin, boolean[] checkAdminList, String id) {
         this.checkAdmin = checkAdmin;
+
         this.portNum = portNum;
         //플레그 가져와서 사용
         this.checkAdminList = checkAdminList;
         socketTemp = socket;
 
+        //에러 발생
+        this.writer = writer;
+        this.reader = reader;
+
+
         //db에서 이름 받아 오기
         if (checkAdmin) {  //chatAdminister 에서 true로 바꿔지면 관리자로 인식
             AdminDAO adminDAO = new AdminDAO();
             nickName = adminDAO.select(id).getAName();
+
         } else {
             MemDAO memDAO = new MemDAO();
             if (memDAO.select(id) == null) {
@@ -98,15 +105,7 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
             }
         }
 
-        //에러 발생
-        this.writer = writer;
-        this.reader = reader;
 
-
-        System.out.println("전송 준비 완료!");
-
-
-        System.out.println("서버와 연결이 안되었습니다.");
 
 
         try {
@@ -142,6 +141,8 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
             ChatDTO dto = new ChatDTO();
             if (msg.equals("exit")) {
                 dto.setCommand(Info.EXIT);
+                dto.setFlagIndex();
+                
             } else {
                 dto.setCommand(Info.SEND);
                 dto.setMessage(msg);
@@ -158,6 +159,16 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
 
     }
 
+//    // 서버로 플래그를 보내는 메서드
+//    public void setFlag( int flagIndex) throws IOException {
+//        // 서버로 플래그 설정 요청
+//        ChatDTO dto = new ChatDTO();
+//        dto.setCommand(Info.SET_FLAG);
+//        dto.setCheckAdminIndex(flagIndex);
+//        dto.setCheckFlag(true);
+//        writer.writeObject(dto);
+//        writer.flush();
+//    }
 
     @Override
     public void run() {
@@ -165,25 +176,32 @@ public class ChatClientObject extends JFrame implements Runnable, ActionListener
         ChatDTO dto = null;
         while (true) {
             try {
+                System.out.println("여기인가??????????????");
                 dto = (ChatDTO) reader.readObject();
+                System.out.println("아님 여기????????");
                 if (dto.getCommand() == Info.EXIT) {  //서버로부터 내 자신의 exit를 받으면 종료됨
+                    //admin이 종료되었을때 checkAdmin을 false로
+//                    if (checkAdmin) {
+//                        switch (portNum) {
+//                            case 1004:
+//                                checkAdminList[0] = false;
+//                                setFlag(0);
+//                                break;
+//                            case 1005:
+//                                checkAdminList[1] = false;
+//                                setFlag(1);
+//                                break;
+//                            case 1006:
+//                                checkAdminList[2] = false;
+//                                setFlag(2);
+//                                break;
+//                        }
+//                    }
+
                     reader.close();
                     writer.close();
                     socketTemp.close();
-                    //admin이 종료되었을때 checkAdmin을 false로
-                    if (checkAdmin) {
-                        switch (portNum) {
-                            case 1004:
-                                checkAdminList[0] = false;
-                                break;
-                            case 1005:
-                                checkAdminList[1] = false;
-                                break;
-                            case 1006:
-                                checkAdminList[2] = false;
-                                break;
-                        }
-                    }
+
                     return;
                 } else if (dto.getCommand() == Info.SEND) {
                     output.append(dto.getMessage() + "\n");

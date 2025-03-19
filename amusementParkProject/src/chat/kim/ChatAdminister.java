@@ -12,6 +12,9 @@ public class ChatAdminister {
     private AdminDAO adminDAO;
     private ChatDTO chatDTO;
     private boolean[] checkAdmin;
+    private Socket socket;
+    private ObjectOutputStream writer;
+    private ObjectInputStream reader;
 
     public ChatAdminister(String id) throws IOException, ClassNotFoundException {
         adminDAO = new AdminDAO();
@@ -19,9 +22,10 @@ public class ChatAdminister {
         int port = Integer.parseInt(adminDTO.getAName());
 
         // 서버와 연결된 소켓을 한 번만 열어두고 재사용
-        try (Socket socket = new Socket("192.168.0.28", port);  // 소켓을 한 번만 열기
-             ObjectOutputStream writer = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream reader = new ObjectInputStream(socket.getInputStream())) {
+        try {
+            socket = new Socket("192.168.0.28", port);  // 소켓을 한 번만 열기
+            writer = new ObjectOutputStream(socket.getOutputStream());
+            reader = new ObjectInputStream(socket.getInputStream());
 
             // 플래그 정보를 서버로부터 받음
             this.chatDTO = getFlagFromServer(reader,writer);
@@ -44,6 +48,15 @@ public class ChatAdminister {
                 default:
                     return;
             }
+
+//            //서버로 바꾼 checkAdmin보내기
+//            //서버로 flag요청
+//            ChatDTO dto = new ChatDTO();
+//            dto.setCommand(Info.GET_FLAG);
+//            writer.writeObject(dto);
+//            writer.flush();
+
+
             new ChatClientObject().service(socket,writer,reader,port, true, checkAdmin, id);
 
         } catch (IOException e) {
@@ -70,6 +83,7 @@ public class ChatAdminister {
         ChatDTO dto = new ChatDTO();
         dto.setCommand(Info.SET_FLAG);
         dto.setFlagIndex(flagIndex);
+        dto.setCheckFlag(false);
         writer.writeObject(dto);
         writer.flush();
     }

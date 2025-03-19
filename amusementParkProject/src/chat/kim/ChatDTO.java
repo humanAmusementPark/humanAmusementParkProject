@@ -14,6 +14,15 @@ class ChatDTO implements Serializable {
     private boolean[] checkAdmin;
     private int flagIndex;
     private int checkAdminIndex;
+    private boolean checkFlag;
+
+    public boolean getCheckFlag() {
+        return checkFlag;
+    }
+
+    public void setCheckFlag(boolean checkFlag) {
+        this.checkFlag = checkFlag;
+    }
 
     public int getFlagIndex() {
         return flagIndex;

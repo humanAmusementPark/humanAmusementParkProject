@@ -35,7 +35,8 @@ public class ChatStayRoom extends JFrame {
                 try {
                     socket = getFlagFromServer(1004);
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                    return;
                 } catch (ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -46,13 +47,14 @@ public class ChatStayRoom extends JFrame {
                 if (flagList[0]) {
                     new ChatClientObject().service(socket,writer,reader,1004, false, checkAdminList, id);
                 } else {
-                    JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        socket.close();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
                 }
-//                try {
-//                    socket.close();
-//                } catch (IOException ex) {
-//                    throw new RuntimeException(ex);
-//                }
+
 
             }
         });
@@ -66,7 +68,8 @@ public class ChatStayRoom extends JFrame {
                 try {
                     socket = getFlagFromServer(1005);
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                    return;
                 } catch (ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -78,13 +81,14 @@ public class ChatStayRoom extends JFrame {
                     new ChatClientObject().service(socket,writer,reader,1005, false, checkAdminList, id);
                 } else {
                     JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        socket.close();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
 
-//                try {
-//                    socket.close();
-//                } catch (IOException ex) {
-//                    throw new RuntimeException(ex);
-//                }
+
             }
         });
 
@@ -96,7 +100,8 @@ public class ChatStayRoom extends JFrame {
                 try {
                     socket = getFlagFromServer(1006);
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                    return;
                 } catch (ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -108,13 +113,13 @@ public class ChatStayRoom extends JFrame {
                     new ChatClientObject().service(socket,writer,reader,1006, false, checkAdminList, id);
                 } else {
                     JOptionPane.showMessageDialog(mainPanel, "방풀입니다.", "gg", JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        socket.close();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
 
-//                try {
-//                    socket.close();
-//                } catch (IOException ex) {
-//                    throw new RuntimeException(ex);
-//                }
             }
         });
 
@@ -131,10 +136,13 @@ public class ChatStayRoom extends JFrame {
     }
 
     public Socket getFlagFromServer(int port) throws IOException, ClassNotFoundException {
+
         socket = new Socket("192.168.0.28", port); // 서버와 연결
 
-        this.writer = new ObjectOutputStream(socket.getOutputStream());
-        this.reader = new ObjectInputStream(socket.getInputStream());
+        writer = new ObjectOutputStream(socket.getOutputStream());
+        System.out.println("요요요요요요요용");
+        reader = new ObjectInputStream(socket.getInputStream());
+        System.out.println("야야야ㅑㅇ야ㅑ");
 
         //서버로 flag요청
         ChatDTO dto = new ChatDTO();
