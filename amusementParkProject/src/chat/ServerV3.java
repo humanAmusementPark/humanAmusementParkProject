@@ -13,7 +13,8 @@ public class ServerV3 {
     private String chatLine;
     private int num;
     static Handler[][] chat = new Handler[3][2];
-
+    static boolean flag = true;
+    static Match match;
     public static void main(String[] args) {
         ServerV3 server = new ServerV3();
     }
@@ -21,7 +22,7 @@ public class ServerV3 {
     public ServerV3() {
         try {
             ServerSocket serverSocket = new ServerSocket(9000);
-            Match match = new Match();
+            match = new Match();
             match.start();
             while (true) {
                 System.out.println("연결대기");
@@ -50,6 +51,7 @@ public class ServerV3 {
                     default:
                         break;
                 }
+                flag = true;
 
             }
         } catch (IOException e) {
@@ -58,33 +60,60 @@ public class ServerV3 {
     }
 
 
-    public static void delete(int delNum) {
+    public synchronized static void delete(int delNum) {
         System.out.println("채팅방 초기화");
+        chat[delNum][0] = null;
         chat[delNum][1] = null;
+        flag = true;
+
     }
 
+//    public synchronized static void matchW(){
+//        if (!flag) {
+//            try {
+//                match.wait();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }else{
+//            match.notify();
+//        }
+//    }
+
     private class Match extends Thread {
+        boolean flag2 = true;
 
         @Override
-        public void run() {
+        public synchronized void run() {
             while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                int index = isEmpty();
-                if (index > -1) {
-                    if (!adminList.isEmpty() && !memList.isEmpty()) {
-                        for (Handler h : adminList) {
-                            for (Handler h2 : memList) {
-                                if (h.getNum()-3 == h2.getNum()) {
-                                    chat[index][0] = h;
-                                    chat[index][1] = memList.remove(index);
-                                    chat[index][0].set(chat[index][1], index);
-                                    chat[index][1].set(chat[index][0], index);
-                                    chat[index][0].start();
-                                    chat[index][1].start();
+                while(flag) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    flag2 = true;
+                    int index = isEmpty();
+                    if (index > -1) {
+                        if (!adminList.isEmpty() && !memList.isEmpty()) {
+                            for (Handler h : adminList) {
+                                for (Handler h2 : memList) {
+                                    if (h.getNum() - 3 == h2.getNum()) {
+                                        chat[index][0] = h;
+                                        chat[index][1] = h2;
+                                        adminList.remove(h);
+                                        memList.remove(h2);
+                                        chat[index][0].set(chat[index][1], index);
+                                        chat[index][1].set(chat[index][0], index);
+                                        chat[index][0].start();
+                                        chat[index][1].start();
+                                        flag = false;
+//                                        matchW();
+                                        flag2 = false;
+                                        break;
+                                    }
+                                }
+                                if(!flag2) {
                                     break;
                                 }
                             }
@@ -92,11 +121,12 @@ public class ServerV3 {
                     }
                 }
             }
+
         }
 
         private int isEmpty() {
             for (int i = 0; i < 3; i++) {
-                if (chat[i][1] == null) {
+                if (chat[i][0] == null || chat[i][1] == null) {
                     return i;
                 }
             }

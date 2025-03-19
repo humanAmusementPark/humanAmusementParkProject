@@ -34,17 +34,25 @@ public class Handler extends Thread {
         while (true) {
             try {
                 String line = input.readLine();
-                if (line.equals("quit")) {
-                    handler.prt("상대방의 채팅종료");
+                if (line.contains("quit")) {
+                    if (handler != null) {
+                        handler.prt("상대방의 채팅종료");
+                    }
                     ServerV3.delete(delNum);
                     break;
                 }
                 handler.prt(line);
                 prt(line);
             } catch (IOException e) {
-                e.printStackTrace();
-                break;
+                throw new RuntimeException(e);
             }
+        }
+        try {
+            input.close();
+            output.close();
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

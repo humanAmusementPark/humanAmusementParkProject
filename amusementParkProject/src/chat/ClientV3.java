@@ -64,7 +64,7 @@ class ClientG extends JFrame implements Runnable, ActionListener {
                         throw new RuntimeException(ex);
                     }
                 }
-                System.exit(0);
+                dispose();
             }
         });
     }
@@ -72,8 +72,11 @@ class ClientG extends JFrame implements Runnable, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == send) {
-            writer.println(id + ":" + input.getText());
-            writer.flush();
+            if(!input.getText().isEmpty()) {
+                writer.println(id + ":" + input.getText());
+
+                writer.flush();
+            }
             System.out.println("Send");
             input.setText("");
         }
