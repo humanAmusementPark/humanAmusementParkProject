@@ -87,7 +87,9 @@ public class ServerV3 {
         @Override
         public synchronized void run() {
             while (true) {
+
                 while (flag) {
+
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -109,7 +111,6 @@ public class ServerV3 {
                                         chat[index][0].start();
                                         chat[index][1].start();
                                         flag = false;
-//                                        matchW();
                                         flag2 = false;
                                         break;
                                     }

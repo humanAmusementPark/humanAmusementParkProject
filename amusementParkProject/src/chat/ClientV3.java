@@ -55,7 +55,7 @@ class ClientG extends JFrame implements Runnable, ActionListener {
                 if (socket != null) {
                     writer.println("quit");
                     writer.flush();
-                    System.out.println("종료");
+                    System.out.println("종료- 창닫기");
                     try {
                         writer.close();
                         reader.close();
@@ -74,7 +74,6 @@ class ClientG extends JFrame implements Runnable, ActionListener {
         if (e.getSource() == send) {
             if(!input.getText().isEmpty()) {
                 writer.println(id + ":" + input.getText());
-
                 writer.flush();
             }
             System.out.println("Send");
@@ -104,6 +103,7 @@ class ClientG extends JFrame implements Runnable, ActionListener {
                 String line2 = reader.readLine();
                 if (line2 != null) {
                     if (line2.equals("quit")) {
+                        dispose();
                         break;
                     }
                     output.append(line2 + "\n");

@@ -34,9 +34,10 @@ public class Handler extends Thread {
         while (true) {
             try {
                 String line = input.readLine();
-                if (line.contains("quit")) {
+                if (line.equals("quit")) {
                     if (handler != null) {
                         handler.prt("상대방의 채팅종료");
+                        prt("채팅종료");
                     }
                     ServerV3.delete(delNum);
                     break;
@@ -48,6 +49,7 @@ public class Handler extends Thread {
             }
         }
         try {
+            System.out.println("자원 닫기- Handler");
             input.close();
             output.close();
             socket.close();
