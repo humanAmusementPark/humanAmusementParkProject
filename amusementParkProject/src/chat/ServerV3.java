@@ -15,6 +15,7 @@ public class ServerV3 {
     static Handler[][] chat = new Handler[3][2];
     static boolean flag = true;
     static Match match;
+
     public static void main(String[] args) {
         ServerV3 server = new ServerV3();
     }
@@ -86,7 +87,7 @@ public class ServerV3 {
         @Override
         public synchronized void run() {
             while (true) {
-                while(flag) {
+                while (flag) {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -113,7 +114,7 @@ public class ServerV3 {
                                         break;
                                     }
                                 }
-                                if(!flag2) {
+                                if (!flag2) {
                                     break;
                                 }
                             }
