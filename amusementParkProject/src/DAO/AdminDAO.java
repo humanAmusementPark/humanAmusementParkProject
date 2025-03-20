@@ -4,8 +4,10 @@ package javaproject.DAO;
 import javaproject.DTO.AdminDTO;
 
 import java.sql.*;
+import java.util.List;
 
-public class AdminDAO extends SuperDAO {
+public class AdminDAO extends SuperDAO  implements DAOinf<AdminDTO>{
+
     public boolean idDuplicate(String id) {
         Connection conn = super.getConnection();
         String sql = "select count(*) from administer where aId = ?";
@@ -25,6 +27,12 @@ public class AdminDAO extends SuperDAO {
         return true;
     }
 
+    @Override
+    public List<AdminDTO> selectAll() {
+        return null;
+    }
+
+    @Override
     public void insert(AdminDTO adminDTO) {
         Connection conn = super.getConnection();
         String sql = "insert into administer values(?,?,?,?,?,?)";
@@ -49,6 +57,17 @@ public class AdminDAO extends SuperDAO {
         }
     }
 
+    @Override
+    public void update(AdminDTO data) {
+
+    }
+
+    @Override
+    public void delete(AdminDTO data) {
+
+    }
+
+    @Override
     public AdminDTO select(String aId) {
         Connection conn = super.getConnection();
         String sql = "select * from administer where aId = ?";
@@ -131,4 +150,7 @@ public class AdminDAO extends SuperDAO {
             }
         }
     }
+
+
+
 }

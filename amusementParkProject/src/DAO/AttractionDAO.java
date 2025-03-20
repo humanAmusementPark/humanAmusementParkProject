@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,9 +13,9 @@ import java.util.List;
 
 import javaproject.DTO.AttractionDTO;
 
-public class AttractionDAO extends SuperDAO {
+public class AttractionDAO extends SuperDAO implements DAOinf<AttractionDTO> {
 	private Connection conn=null;
-	
+	@Override
     public List<AttractionDTO> selectAll() {
         List<AttractionDTO> attractionDTOList = new ArrayList<AttractionDTO>();
         String query = "SELECT * FROM attraction";
@@ -33,18 +32,31 @@ public class AttractionDAO extends SuperDAO {
                         .atMax(rs.getInt("atMax"))
                         .atOnoff(rs.getInt("atOnoff"))
                         .build();
-
                 attractionDTOList.add(attractionDTO);
             }
             
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
-
         return attractionDTOList;
     }
 
-    public void insert() {
+	@Override
+	public void insert(AttractionDTO data) {
+
+	}
+
+	@Override
+	public void update(AttractionDTO data) {
+
+	}
+
+	@Override
+	public void delete(AttractionDTO data) {
+
+	}
+
+	public void insert() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String query = "INSERT INTO attraction(attractionName, attrationURL) VALUES(?,?)";
         try {
@@ -118,8 +130,9 @@ public class AttractionDAO extends SuperDAO {
            e.printStackTrace();
        }
     }
-    
-	public AttractionDTO getAttract(String atId) {
+
+    @Override
+	public AttractionDTO select(String atId) {
 		AttractionDTO a=null;
 		PreparedStatement ptmt=null;
 		try {
@@ -145,7 +158,6 @@ public class AttractionDAO extends SuperDAO {
 		} finally {
 			try {
 				ptmt.close();
-				
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -183,7 +195,6 @@ public class AttractionDAO extends SuperDAO {
 			if(rs>0) {
 				flag=true;
 			}
-			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

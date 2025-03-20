@@ -53,7 +53,6 @@ public class ServerV3 {
                         break;
                 }
                 flag = true;
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -69,27 +68,13 @@ public class ServerV3 {
 
     }
 
-//    public synchronized static void matchW(){
-//        if (!flag) {
-//            try {
-//                match.wait();
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }else{
-//            match.notify();
-//        }
-//    }
-
     private class Match extends Thread {
         boolean flag2 = true;
 
         @Override
         public synchronized void run() {
             while (true) {
-
                 while (flag) {
-
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {

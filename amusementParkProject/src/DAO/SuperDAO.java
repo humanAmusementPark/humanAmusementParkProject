@@ -1,6 +1,8 @@
 package javaproject.DAO;
 
 
+import javaproject.DTO.AdminDTO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,8 +25,6 @@ public class SuperDAO<T> {
         init();
     }
 
-
-
     private void init() {
         try {
             Class.forName(driver);
@@ -42,21 +42,4 @@ public class SuperDAO<T> {
         }
         return conn;
     }
-
-    public List<T> selectAll() {
-        return null;
-    }
-
-    public void insert() {
-
-    }
-
-    public void update(int choiceNum) {
-
-    }
-
-    public void delete(int choiceNum) {
-
-    }
-
 }

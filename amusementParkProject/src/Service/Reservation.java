@@ -2,13 +2,11 @@ package javaproject.Service;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
@@ -43,7 +41,7 @@ public class Reservation extends JFrame{
 		
 		this.setTitle("기구 예약");
 		System.out.println("atname =  " + atname);
-		AttractionDTO attract=adao.getAttract(atname);
+		AttractionDTO attract=adao.select(atname);
 		
 		if(attract==null) {
 			before.setEnabled(true);
