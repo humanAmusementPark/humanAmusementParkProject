@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationDAO extends SuperDAO {
+public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
 
 
     @Override
@@ -43,6 +43,74 @@ public class ReservationDAO extends SuperDAO {
         }
         return reservations;
     }
+
+    @Override
+    public ReservationDTO select(String id) {
+        return null;
+    }
+
+    @Override
+    public boolean insert(ReservationDTO r) {
+        PreparedStatement ptmt=null;
+        boolean flag=false;
+        try {
+            Connection  conn=super.getConnection();
+            String sql = "insert into reservation values(?,?,?,?,sysdate())";
+            ptmt = conn.prepareStatement(sql);
+            ptmt.setInt(1,r.getNo());
+            ptmt.setString(2,r.getMId());
+            ptmt.setString(3,r.getTPass());
+            ptmt.setString(4,r.getAtId());
+
+
+            int rq=ptmt.executeUpdate();
+            if(rq>0) {
+                flag=true;
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ptmt.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return flag;
+    }
+
+    @Override
+    public boolean update(ReservationDTO data) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        Connection conn = super.getConnection();
+        String sql = "delete from reservation where no = ?";
+        int intNo = Integer.parseInt(id);
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, intNo);
+            int result = stmt.executeUpdate();
+            System.out.println(result + "건 완료");
+            if(result > 0) return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
     public int selectatt(String id) {
         PreparedStatement ptmt=null;
         int r=0;
@@ -100,58 +168,6 @@ public class ReservationDAO extends SuperDAO {
         }
         return r;
 
-    }
-
-    public void delete(Object o) {
-        Connection conn = super.getConnection();
-        String sql = "delete from reservation where no = ?";
-        int intNo = Integer.parseInt(o.toString());
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, intNo);
-            int result = stmt.executeUpdate();
-            System.out.println(result + "건 완료");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    public boolean insertres(ReservationDTO r) {
-        PreparedStatement ptmt=null;
-        boolean flag=false;
-        try {
-          Connection  conn=super.getConnection();
-            String sql = "insert into reservation values(?,?,?,?,sysdate())";
-            ptmt = conn.prepareStatement(sql);
-            ptmt.setInt(1,r.getNo());
-            ptmt.setString(2,r.getMId());
-            ptmt.setString(3,r.getTPass());
-            ptmt.setString(4,r.getAtId());
-
-
-            int rq=ptmt.executeUpdate();
-            if(rq>0) {
-                flag=true;
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                ptmt.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return flag;
     }
 
     public int getcount(String id) {

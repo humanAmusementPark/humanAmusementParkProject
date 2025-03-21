@@ -4,28 +4,47 @@ package javaproject.DAO;
 import javaproject.DTO.AdminDTO;
 
 import java.sql.*;
+import java.util.List;
 
-public class AdminDAO extends SuperDAO {
-    public boolean idDuplicate(String id) {
+public class AdminDAO extends SuperDAO implements DAOinf<AdminDTO> {
+
+    @Override
+    public List<AdminDTO> selectAll() {
+        return null;
+    }
+
+    @Override
+    public AdminDTO select(String aId) {
         Connection conn = super.getConnection();
-        String sql = "select count(*) from administer where aId = ?";
+        String sql = "select * from administer where aId = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
+            pstmt.setString(1, aId);
             ResultSet rs = pstmt.executeQuery();
-            System.out.println("qqq");
             if (rs.next()) {
-                if (rs.getInt(1) == 1) {
-                    return false;
-                }
+                AdminDTO adminDTO = new AdminDTO();
+                adminDTO.setAId(rs.getString("aId"));
+                adminDTO.setAPass(rs.getString("aPass"));
+                adminDTO.setAName(rs.getString("aName"));
+                adminDTO.setAGender(rs.getInt("aGender"));
+                adminDTO.setABirth(rs.getDate("aBirth"));
+                adminDTO.setAPosition(rs.getString("aPosition"));
+                return adminDTO;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return true;
+        return null;
     }
 
-    public void insert(AdminDTO adminDTO) {
+    @Override
+    public boolean insert(AdminDTO adminDTO) {
         Connection conn = super.getConnection();
         String sql = "insert into administer values(?,?,?,?,?,?)";
         try {
@@ -47,36 +66,17 @@ public class AdminDAO extends SuperDAO {
                 throw new RuntimeException(e);
             }
         }
+        return true;
     }
 
-    public AdminDTO select(String aId) {
-        Connection conn = super.getConnection();
-        String sql = "select * from administer where aId = ?";
-        ResultSet rs = null;
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, aId);
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                AdminDTO adminDTO = new AdminDTO();
-                adminDTO.setAId(rs.getString("aId"));
-                adminDTO.setAPass(rs.getString("aPass"));
-                adminDTO.setAName(rs.getString("aName"));
-                adminDTO.setAGender(rs.getInt("aGender"));
-                adminDTO.setABirth(rs.getDate("aBirth"));
-                adminDTO.setAPosition(rs.getString("aPosition"));
-                return adminDTO;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return null;
+    @Override
+    public boolean update(AdminDTO data) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        return false;
     }
 
     public void edit(int num, String text, String aId) {
@@ -131,4 +131,31 @@ public class AdminDAO extends SuperDAO {
             }
         }
     }
+
+    public boolean idDuplicate(String id) {
+        Connection conn = super.getConnection();
+        String sql = "select count(*) from administer where aId = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            System.out.println("qqq");
+            if (rs.next()) {
+                if (rs.getInt(1) == 1) {
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return true;
+    }
+
+
 }

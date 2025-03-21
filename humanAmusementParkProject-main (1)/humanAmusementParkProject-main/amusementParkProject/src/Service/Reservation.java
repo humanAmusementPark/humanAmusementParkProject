@@ -98,7 +98,7 @@ public class Reservation extends JFrame{
             	r.setAtId(attract.getAtId());
             	r.setMId(mId);
             	r.setTPass(tpass);
-            	if(rdao.insertres(r)) {
+            	if(rdao.insert(r)) {
             		JOptionPane.showMessageDialog(null, "예약되었습니다.");     
             		before.setEnabled(true);
             		dispose();

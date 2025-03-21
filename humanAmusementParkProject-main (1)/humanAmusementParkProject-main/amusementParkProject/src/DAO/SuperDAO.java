@@ -11,19 +11,12 @@ public class SuperDAO<T> {
     private String url = "jdbc:mariadb://localhost:3306/mysql";
     private String user = "root";
     //private String password = "park1676";
-    private String password = "park1676";
+    private String password = "1111";
     private Connection conn;
 
     public SuperDAO() {
-        try {
-            this.conn = DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         init();
     }
-
-
 
     private void init() {
         try {
@@ -42,21 +35,4 @@ public class SuperDAO<T> {
         }
         return conn;
     }
-
-    public List<T> selectAll() {
-        return null;
-    }
-
-    public void insert() {
-
-    }
-
-    public void update(int choiceNum) {
-
-    }
-
-    public void delete(int choiceNum) {
-
-    }
-
 }

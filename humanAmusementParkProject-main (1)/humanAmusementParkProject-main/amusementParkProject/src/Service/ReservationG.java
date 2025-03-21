@@ -53,7 +53,8 @@ public class ReservationG extends JFrame implements ActionListener {
             int row = table.getSelectedRow();
             if (row != -1) {
                 ReservationDAO reservationDAO = new ReservationDAO();
-                reservationDAO.delete(table.getValueAt(row, 0));
+                String no = String.valueOf(table.getValueAt(row, 0));
+                reservationDAO.delete(no);
                 dispose();
                 new ReservationG();
             }

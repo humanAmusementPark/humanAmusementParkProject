@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
 //import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 //import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
-public class SignInG extends JFrame implements ActionListener {
+public class    SignInG extends JFrame implements ActionListener {
 
     JLabel title = new JLabel("회원가입");
     JLabel i_label = new JLabel("id");

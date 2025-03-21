@@ -11,98 +11,105 @@ import java.awt.event.ActionListener;
 
 public class AdG extends JFrame implements ActionListener {
     private JPanel labelJPanel = new JPanel();
-    private String[] labelName = {"아이디", "비밀번호", "이름", "성별", "생년월일", "직책"};
     private JPanel textFJPanel = new JPanel();
-    private JRadioButton radioMan = new JRadioButton("남자");
-    private JRadioButton radioWoman = new JRadioButton("여자");
-    private ButtonGroup group = new ButtonGroup();
-    private JComboBox yearCom;
-    private JComboBox monthCom;
-    private JComboBox dayCom;
     private JButton editPass = new JButton("수정");
     private JButton editName = new JButton("수정");
     private JButton editGender = new JButton("수정");
     private JButton editBirth = new JButton("수정");
     private JButton editPos = new JButton("수정");
     private JPanel buttonJPanel = new JPanel();
-    private JLabel aId = new JLabel();
-    private JTextField aPass = new JTextField();
-    private JTextField aName = new JTextField();
-    private JTextField aPos = new JTextField();
-    String id ;
+
+    String id;
+    private JPanel center = new JPanel();
+    private String[] labelName = {"아이디", "비밀번호", "이름", "성별", "생년월일", "직책"};
+    private String[] positionName = {"매니저", "부매니저", "놀이공원관리자", "예약관리자", "티켓관리자"};
+    private JLabel aId;
+    private JTextField aPass;
+    private JTextField aName;
+    private JRadioButton radioMan = new JRadioButton("남자");
+    private JRadioButton radioWoman = new JRadioButton("여자");
+    private ButtonGroup group = new ButtonGroup();
+    private JComboBox yearCom;
+    private JComboBox monthCom;
+    private JComboBox dayCom;
+    private JComboBox aPos = new JComboBox(positionName);
+    private JButton updateBut = new JButton("수정");
+
     public AdG(String id) {
         this.id = id;
         setTitle("관리자정보");
-        setBounds(10, 10, 400, 300);
-        setLayout(null);
-
-        setLabelJPanel();
-        labelJPanel.setBounds(10, 10, 80, 200);
-        add(labelJPanel);
-
-        setTextFieldsJPanel();
-        textFJPanel.setBounds(100, 10, 210, 200);
-        add(textFJPanel);
-
-        setButtonJPanel();
-        buttonJPanel.setBounds(310, 10, 60, 200);
-        add(buttonJPanel);
-
-        editPass.addActionListener(this);
-        editName.addActionListener(this);
-        editGender.addActionListener(this);
-        editBirth.addActionListener(this);
-        editPos.addActionListener(this);
-
+        setSize(600, 400);
+        setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        centerLayout();
+        this.add(center);
+        this.add("South", updateBut);
+
     }
 
-    private void setButtonJPanel() {
-        GridLayout a = new GridLayout(6, 1);
-        a.setVgap(2);
-        buttonJPanel.setLayout(a);
-        buttonJPanel.add(new JLabel(""));
-        buttonJPanel.add(editPass);
-        buttonJPanel.add(editName);
-        buttonJPanel.add(editGender);
-        buttonJPanel.add(editBirth);
-        buttonJPanel.add(editPos);
-    }
+    private void centerLayout() {
+        center.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(5, 5, 5, 5);
 
-    private void setTextFieldsJPanel() { // 테스트용 id = "A1001"
-        textFJPanel.setLayout(new GridLayout(6, 1));
+
+        // label
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 0;
+        c.gridy = 0;
+        center.add(new JLabel(labelName[0]), c);
+        c.gridx = 0;
+        c.gridy = 1;
+        center.add(new JLabel(labelName[1]), c);
+        c.gridx = 0;
+        c.gridy = 2;
+        center.add(new JLabel(labelName[2]), c);
+        c.gridx = 0;
+        c.gridy = 3;
+        center.add(new JLabel(labelName[3]), c);
+        c.gridx = 0;
+        c.gridy = 4;
+        center.add(new JLabel(labelName[4]), c);
+        c.gridx = 0;
+        c.gridy = 5;
+        center.add(new JLabel(labelName[5]), c);
+
+        // Text
         AdminDAO adminDAO = new AdminDAO();
         AdminDTO adminDTO = adminDAO.select(id);
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 1;
+        c.gridy = 0;
         aId = new JLabel(adminDTO.getAId());
-        textFJPanel.add(aId);
+        center.add(aId, c);
+        c.fill = GridBagConstraints.VERTICAL;
+        c.gridx = 1;
+        c.gridy = 1;
         aPass = new JTextField(adminDTO.getAPass(), 10);
-        aPass.setSize(150, 20);
-        aPass.setEditable(true);
-        textFJPanel.add(aPass);
+        center.add(aPass, c);
+        c.gridx = 1;
+        c.gridy = 2;
         aName = new JTextField(adminDTO.getAName(), 10);
-        aName.setSize(150, 20);
-        aName.setEditable(true);
-        textFJPanel.add(aName);
+        center.add(aName, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 3;
+        c.insets.top = 5;
+        c.insets.bottom = 5;
         JPanel aGender = makeGenderPanel(adminDTO.getAGender());
-        textFJPanel.add(aGender);
+        center.add(aGender, c);
+        c.gridx = 1;
+        c.gridy = 4;
         JPanel aBirth = makerBirthPanel(adminDTO);
-        textFJPanel.add(aBirth);
-        aPos = new JTextField(adminDTO.getAPosition());
-        textFJPanel.add(aPos);
-
-    }
-
-    private void setLabelJPanel() {
-        labelJPanel.setLayout(new GridLayout(6, 1));
-        for (int i = 0; i < labelName.length; i++) {
-            StringBuilder labelN = new StringBuilder(labelName[i]);
-            while (labelN.length() < 5) {
-                labelN.append(" ");
-            }
-            JLabel label = new JLabel(labelN.toString());
-            labelJPanel.add(label);
-        }
+        center.add(aBirth, c);
+        c.fill = GridBagConstraints.NONE;
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridwidth = 1;
+        aPos.setBackground(Color.WHITE);
+        aPos.setSelectedItem(adminDTO.getAPosition());
+        center.add(aPos, c);
     }
 
     private JPanel makeGenderPanel(int a) {
@@ -183,7 +190,7 @@ public class AdG extends JFrame implements ActionListener {
             adminDAO.edit(4, newBirth, newId);
         }
         if (e.getSource() == editPos) {
-            String newPos = aPos.getText();
+            String newPos = aPos.getSelectedItem().toString();
             System.out.println(newPos);
             adminDAO.edit(5, newPos, newId);
         } else {
