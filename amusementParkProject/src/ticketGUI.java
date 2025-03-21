@@ -21,7 +21,6 @@ public class ticketGUI extends JFrame implements ActionListener {
     private MemDAO memDAO = new MemDAO();
     public ticketGUI(String id) throws SQLException {
         this.userId = id;
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(400, 400);
         this.setTitle("티켓 구매");
 
@@ -63,11 +62,7 @@ public class ticketGUI extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "이미 티켓을 구매하셨습니다!");
             return;
         }
-//        if(ticket.equals("노멀패스")){
-//            memDAO.edit(5,"노멀패스",userId);
-//        }else{
-//            memDAO.edit(5,"매직패스",userId);
-//        }
+
         memDAO.edit(5,ticket,userId); //여기서 넘겨줌@!@!@!
         JOptionPane.showMessageDialog(this, ticket + "가 성공적으로 구매되었습니다");
     }

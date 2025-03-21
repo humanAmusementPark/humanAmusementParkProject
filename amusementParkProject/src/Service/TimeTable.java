@@ -30,38 +30,49 @@ public class TimeTable extends JFrame {
         }
     }
 
-    // jcomponent인 jbutton의 객체에 x,y의 좌표의 시작점에서 w,h 크기의 단추를 만듭니다
-    public void make(JComponent c,int x, int y, int w, int h){
-        gbc.gridx = x;
-        gbc.gridy = y;
-        gbc.gridwidth = w;
-        gbc.gridheight = h;
-        //gridBagLayout의 GridBagConstraintsDML set하는 방법
-        grid.setConstraints(c,gbc);
-    }
+
 
     public void setDisplay() {
 
+        Image image = new ImageIcon("resource\\images\\일정표.jpeg").getImage();
+        JPanel ImagePanel = new JPanel(){
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(image,0,0,getWidth(),getHeight(),this);
+                this.setOpaque(true);
+                super.paintComponents(g);
+            }
+        };
 
-        JPanel panel = new JPanel();  //기존 판넬
+//        //움짤
+//        Image moveImage = new ImageIcon("resource\\images\\surprise.gif").getImage();
+//        JLabel moveLabel = new JLabel(){
+//            public void paintComponent(Graphics g) {
+//                super.paintComponent(g);
+//                g.drawImage(moveImage,20,20,200,100,this);
+//                this.setOpaque(true);
+//            }
+//        };
+//
+//        add(moveLabel);
 
-        grid = new GridBagLayout();
-        panel.setLayout(grid);
-        gbc = new GridBagConstraints();
-
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
+        //제목 만들기
+        JLabel titleLabel = new JLabel("Parade Schedule",SwingConstants.CENTER);
+        titleLabel.setBounds(190,20,500,100);
+        Font font = new Font("맑은 고딕",Font.PLAIN,51);
+        titleLabel.setFont(font);
+        titleLabel.setForeground(Color.white);
+        add(titleLabel);
 
         //요일 라벨만들기
         String[] days = {"월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"};
-
-        int x = 0;
+        int x_temp = 40;
         for (String day : days) {
             JLabel label = new JLabel(day,SwingConstants.CENTER);
-
-            make(label, x++ , 0,1,1);
-            panel.add(label);
+            label.setBounds(x_temp,103,100,40);
+            label.setForeground(Color.white);
+            x_temp += 115;
+            add(label);
         }
 
         // 요일별 데이터를 그룹화 Map 활용
@@ -74,10 +85,16 @@ public class TimeTable extends JFrame {
         for (TimeTableDTO dto : timeTableDTOList) {
             groupedData.get(dto.getTiDay()).add(dto);
         }
-
+        int x = 40;
         // 요일별로 내용과 시간을 세로로 나열
         for (int i = 1; i <= 7; i++) {
-            JPanel dayPanel = new JPanel();
+            JPanel dayPanel = new JPanel(){
+                public void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    g.setColor(new Color(0, 0, 0, 0)); // 투명 색상
+                    g.fillRect(0, 0, getWidth(), getHeight());
+                }
+            };
 
             dayPanel.setLayout(new BoxLayout(dayPanel, BoxLayout.Y_AXIS)); // 세로로 배치
 
@@ -85,11 +102,6 @@ public class TimeTable extends JFrame {
             List<TimeTableDTO> dtos = groupedData.get(i);
             if (!dtos.isEmpty()) {
                 for (TimeTableDTO dto : dtos) {
-                    // 행사 내용 표시
-                    JLabel contentLabel = new JLabel(dto.getTiContent());
-
-                    contentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    dayPanel.add(contentLabel);
 
                     // 행사 시간 표시
                     JLabel timeLabel = new JLabel(String.valueOf(dto.getTiTime()));
@@ -97,31 +109,39 @@ public class TimeTable extends JFrame {
                     timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     dayPanel.add(timeLabel);
 
-                    //gridBag 부분    배경 넣을거면 생략?
-                    make(dayPanel,  i - 1,1,1,4);
+
+                    // 행사 내용 표시
+                    JLabel contentLabel = new JLabel(dto.getTiContent());
+
+                    contentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    dayPanel.add(contentLabel);
+
+                    dayPanel.add(Box.createVerticalStrut(10)); // 10px의 세로 간격을 추가
+
                 }
             } else {
                 JLabel noContentLabel = new JLabel("");
                 noContentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-                //gridBag 부분     배경넣을거면 생략?
-                make(noContentLabel,  i - 1,1,1,4);
-
                 dayPanel.add(noContentLabel);
             }
             // 요일별로 패널에 추가
-            panel.add(dayPanel);
-        }
+            dayPanel.setBounds(x,150, 100,200);
+            dayPanel.setOpaque(false);    //투명화
 
-        add(panel);
+            x += 115;
+            add(dayPanel);
+        }
+        add(ImagePanel);
     }
 
     public void showFrame() {
         setTitle("Banner");
-        setBounds(100, 100, 800, 400);
+        setBounds(100, 100, 885, 500);
         setVisible(true);
-//        //이거 실행하면 전체 JFrame가 꺼짐 그래서 베너만 없에애되니까
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    public static void main(String[] args){
+        new TimeTable();
     }
 
 }

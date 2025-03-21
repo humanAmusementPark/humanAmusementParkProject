@@ -7,11 +7,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerTool extends Thread {
     private ServerSocket serverSocket;
-    private List<ChatHandlerObject> chatHandlerObjectList;
+    private List<ChatHandler> chatHandlerList;
     private boolean[] flag;
     private int index;
     private boolean[] checkAdmin;
@@ -20,7 +19,7 @@ public class ServerTool extends Thread {
 
     public ServerTool(ServerSocket serverSocket, boolean[] flagList, int index, boolean[] checkAdmin) {
         this.serverSocket = serverSocket;
-        this.chatHandlerObjectList = new ArrayList<>();
+        this.chatHandlerList = new ArrayList<>();
         this.flag = flagList;
         this.index = index;
         this.checkAdmin = checkAdmin;
@@ -38,21 +37,19 @@ public class ServerTool extends Thread {
 
                 //
                 Socket socket = serverSocket.accept(); // 클라이언트 연결 대기
-                ChatHandlerObject handler = new ChatHandlerObject(socket, chatHandlerObjectList, flag, checkAdmin);
+                ChatHandler handler = new ChatHandler(socket, chatHandlerList, flag, checkAdmin);
                 handler.getFlag();
 
 
                 System.out.println(" checkAdmin ==  " + checkAdmin[index]);
 
-                if (!chatHandlerObjectList.isEmpty()) {
+                if (!chatHandlerList.isEmpty()) {
                     if (checkAdmin[index]) {  //관리자 들어올떄
-                        if (chatHandlerObjectList.size() >= 2 ) {
-                            System.out.println("dddddddddd");
+                        if (chatHandlerList.size() >= 2 ) {
                             socket.close();
                             continue;
                         }
                     }else {  //회원들어올떄
-                        System.out.println(" aaaaaaaaaaa" );
                         socket.close();
                         continue;
                     }
@@ -60,8 +57,8 @@ public class ServerTool extends Thread {
 
                 handler.start();
                 // 각 클라이언트 처리 스레드 시작
-                chatHandlerObjectList.add(handler); // 클라이언트 핸들러를 리스트에 추가
-                sleep(500);
+                chatHandlerList.add(handler); // 클라이언트 핸들러를 리스트에 추가
+                sleep(100);
 
             }
         } catch (IOException e) {

@@ -2,7 +2,7 @@ package javaproject;
 
 import javaproject.Service.*;
 import javaproject.chat.kim.ChatAdminister;
-import javaproject.chat.kim.ChatServerObject;
+import javaproject.chat.kim.ChatServer;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -26,7 +26,7 @@ public class AdminMenu1 extends JFrame {
     String id;
 
     //채팅
-    private ChatServerObject chatServerObject;
+    private ChatServer chatServer;
 
     public AdminMenu1(LoginG loginG,String id) {
         this.id = id;
@@ -37,7 +37,7 @@ public class AdminMenu1 extends JFrame {
         setting();
 
         //chat부분
-        chatServerObject = chatServerObject;
+        chatServer = chatServer;
 
         this.setVisible(true);
 

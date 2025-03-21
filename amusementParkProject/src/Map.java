@@ -4,8 +4,7 @@ import javaproject.Service.LoginG;
 import javaproject.Service.MemG;
 import javaproject.Service.Reservation;
 import javaproject.Service.ReservationG;
-import javaproject.chat.kim.ChatServerObject;
-import javaproject.chat.kim.ChatStayRoom;
+import javaproject.chat.kim.ClientGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 
 public class Map extends JFrame implements ActionListener {
@@ -151,7 +149,7 @@ public class Map extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new ChatStayRoom(id);
+                    new ClientGUI(id);
                 } catch (IOException | ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }

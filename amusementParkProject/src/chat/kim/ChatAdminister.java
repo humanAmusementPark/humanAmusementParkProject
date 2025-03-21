@@ -45,7 +45,7 @@ public class ChatAdminister {
                     return;
             }
 
-            new ChatClientObject().service(socket,writer,reader,port, true, id);
+            new ChatClient().service(socket,writer,reader,port, true, id);
 
         } catch (IOException e) {
             e.printStackTrace();
