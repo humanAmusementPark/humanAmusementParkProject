@@ -42,6 +42,36 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
         return reservations;
     }
 
+    public List<ReservationDTO> selectAll(String id) {
+        List<ReservationDTO> reservations = new ArrayList<>();
+        String sql = "select * from reservation where mId=?";
+        Connection conn = super.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                ReservationDTO reservation = ReservationDTO.builder()
+                        .no(rs.getInt("no"))
+                        .mId(rs.getString("mId"))
+                        .tPass(rs.getString("tPass"))
+                        .atId(rs.getString("atId"))
+                        .rTime(rs.getDate("rTime"))
+                        .build();
+                reservations.add(reservation);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return reservations;
+    }
+
     @Override
     public ReservationDTO select(String id) {
         return null;
@@ -85,7 +115,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             ptmt.setDate(4, (Date) r.getRTime());
             ptmt.setInt(5, r.getNo());
             int rq = ptmt.executeUpdate();
-            System.out.println(rq+"건 완료");
+            System.out.println(rq + "건 완료");
             if (rq > 0) {
                 return true;
             }
