@@ -112,17 +112,19 @@ public class AttractionManager extends JFrame{
             @Override
             public void actionPerformed(ActionEvent arg0) {
             	flag=true;
-            	
-            			
-            }
+
+
+				return null;
+			}
         });
 		off.addActionListener (new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
             	flag=false;
-            	
-            }
+
+				return null;
+			}
         });
 		
 		JPanel p2=new JPanel();
@@ -172,9 +174,10 @@ public class AttractionManager extends JFrame{
             	}catch (Exception e) {
             		JOptionPane.showMessageDialog(null, "정확히 입력해주세요.");  
 				}
-            	
-            			
-            }
+
+
+				return null;
+			}
         });
 		
 		add("South",p2);

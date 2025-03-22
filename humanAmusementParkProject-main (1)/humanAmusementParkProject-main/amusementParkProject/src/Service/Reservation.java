@@ -103,7 +103,8 @@ public class Reservation extends JFrame{
             		before.setEnabled(true);
             		dispose();
             	}
-            }
+				return null;
+			}
         });
 
 		

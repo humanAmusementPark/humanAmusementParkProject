@@ -109,6 +109,7 @@ public class ManagerTicket extends JFrame implements MouseListener {
                     public void actionPerformed(ActionEvent e) {
                         insert();
                         newFrame.setVisible(false);
+                        return null;
                     }
                 });
                 newpanel.add(insertButton);
@@ -119,6 +120,7 @@ public class ManagerTicket extends JFrame implements MouseListener {
                 newFrame.setBounds(300, 300, 400, 200);
                 newFrame.setVisible(true);
 
+                return null;
             }
         });
 
@@ -131,6 +133,7 @@ public class ManagerTicket extends JFrame implements MouseListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 delete();
+                return null;
             }
         });
         centerPanel.add(deleteBtn);
@@ -142,6 +145,7 @@ public class ManagerTicket extends JFrame implements MouseListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 update();
+                return null;
             }
         });
 

@@ -1,7 +1,6 @@
 package javaproject.DAO;
 
 
-
 import javaproject.DTO.ReservationDTO;
 
 import java.sql.*;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
-
 
     @Override
     public List<ReservationDTO> selectAll() {
@@ -23,13 +21,13 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
-
-                ReservationDTO reservation = new ReservationDTO();
-                reservation.setNo(rs.getInt("no"));
-                reservation.setMId(rs.getString("mId"));
-                reservation.setTPass(rs.getString("tPass"));
-                reservation.setAtId(rs.getString("atId"));
-                reservation.setRTime(rs.getDate("rTime"));
+                ReservationDTO reservation = ReservationDTO.builder()
+                        .no(rs.getInt("no"))
+                        .mId(rs.getString("mId"))
+                        .tPass(rs.getString("tPass"))
+                        .atId(rs.getString("atId"))
+                        .rTime(rs.getDate("rTime"))
+                        .build();
                 reservations.add(reservation);
             }
         } catch (SQLException e) {
@@ -51,40 +49,55 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
 
     @Override
     public boolean insert(ReservationDTO r) {
-        PreparedStatement ptmt=null;
-        boolean flag=false;
+        Connection conn = super.getConnection();
+        PreparedStatement ptmt = null;
         try {
-            Connection  conn=super.getConnection();
-            String sql = "insert into reservation values(?,?,?,?,sysdate())";
+            String sql = "insert into reservation values(seq.nextval,?,?,?,sysdate())";
             ptmt = conn.prepareStatement(sql);
-            ptmt.setInt(1,r.getNo());
-            ptmt.setString(2,r.getMId());
-            ptmt.setString(3,r.getTPass());
-            ptmt.setString(4,r.getAtId());
-
-
-            int rq=ptmt.executeUpdate();
-            if(rq>0) {
-                flag=true;
+            ptmt.setString(1, r.getMId());
+            ptmt.setString(2, r.getTPass());
+            ptmt.setString(3, r.getAtId());
+            int rq = ptmt.executeUpdate();
+            if (rq > 0) {
+                return true;
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                ptmt.close();
-
+                conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
-        return flag;
+        return false;
     }
 
     @Override
-    public boolean update(ReservationDTO data) {
+    public boolean update(ReservationDTO r) {
+        Connection conn = super.getConnection();
+        String sql = "update reservation set mid = ?, tPass = ?,atId = ?,rTime = ? where no = ?";
+        try {
+            PreparedStatement ptmt = conn.prepareStatement(sql);
+            ptmt.setString(1, r.getMId());
+            ptmt.setString(2, r.getTPass());
+            ptmt.setString(3, r.getAtId());
+            ptmt.setDate(4, (Date) r.getRTime());
+            ptmt.setInt(5, r.getNo());
+            int rq = ptmt.executeUpdate();
+            System.out.println(rq+"건 완료");
+            if (rq > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return false;
     }
 
@@ -98,7 +111,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             stmt.setInt(1, intNo);
             int result = stmt.executeUpdate();
             System.out.println(result + "건 완료");
-            if(result > 0) return true;
+            if (result > 0) return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -112,19 +125,18 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     }
 
     public int selectatt(String id) {
-        PreparedStatement ptmt=null;
-        int r=0;
+        PreparedStatement ptmt = null;
+        int r = 0;
         try {
-            Connection conn=super.getConnection();
+            Connection conn = super.getConnection();
             String sql = "select count(*) from reservation where atId=? and DATE(rTime) = CURDATE()";
             ptmt = conn.prepareStatement(sql);
-            ptmt.setString(1,id);
+            ptmt.setString(1, id);
 
-            ResultSet rs=ptmt.executeQuery();
-            if(rs.next()) {
-                r=rs.getInt(1);
+            ResultSet rs = ptmt.executeQuery();
+            if (rs.next()) {
+                r = rs.getInt(1);
             }
-
 
 
         } catch (SQLException e) {
@@ -142,18 +154,18 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     }
 
     public int selectvip(String id) {
-        PreparedStatement ptmt=null;
-        int r=0;
+        PreparedStatement ptmt = null;
+        int r = 0;
         try {
-            Connection conn=super.getConnection();
+            Connection conn = super.getConnection();
             String sql = "select count(*) from reservation r inner join ticket t on r.tpass="
                     + "t.tpass where atId=? and DATE(rTime) = CURDATE() and tname='vip'";
             ptmt = conn.prepareStatement(sql);
-            ptmt.setString(1,id);
+            ptmt.setString(1, id);
 
-            ResultSet rs=ptmt.executeQuery();
-            if(rs.next()) {
-                r=rs.getInt(1);
+            ResultSet rs = ptmt.executeQuery();
+            if (rs.next()) {
+                r = rs.getInt(1);
             }
 
 
@@ -171,20 +183,19 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     }
 
     public int getcount(String id) {
-        int count=0;
+        int count = 0;
 
-        PreparedStatement ptmt=null;
+        PreparedStatement ptmt = null;
         try {
-            Connection  conn=super.getConnection();
+            Connection conn = super.getConnection();
             String sql = "select count(*) from reservation where mId=?";
             ptmt = conn.prepareStatement(sql);
-            ptmt.setString(1,id);
+            ptmt.setString(1, id);
 
-            ResultSet rs=ptmt.executeQuery();
-            if(rs.next()) {
-                count=rs.getInt(1);
+            ResultSet rs = ptmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
             }
-
 
 
         } catch (SQLException e) {

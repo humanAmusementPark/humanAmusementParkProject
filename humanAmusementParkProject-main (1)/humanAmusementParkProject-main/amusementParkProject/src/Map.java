@@ -84,7 +84,8 @@ public class Map extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
-                new ReservationG();
+//                new ReservationG(m);
+                return null;
             }
         });
         jpImage.add(rbnt);
@@ -97,7 +98,8 @@ public class Map extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
-                new MemG(id);
+                new MemG(id,m);
+                return null;
             };
         });
 
@@ -113,6 +115,7 @@ public class Map extends JFrame implements ActionListener {
                 System.out.println("연결해야댐");
                 dispose();
                 LoginG.setVisible(true);
+                return null;
             }
         });
 
@@ -131,6 +134,7 @@ public class Map extends JFrame implements ActionListener {
                     throw new RuntimeException(ex);
                 }
 
+                return null;
             }
         });
         jpImage.add(tbnt);
@@ -177,6 +181,7 @@ public class Map extends JFrame implements ActionListener {
                 }
 
 //               임시 sendDataToTeamMember(rideName, rideId, clickedButton);  // 정진형한테 전달
+                return null;
             }
         };
     }
@@ -185,6 +190,7 @@ public class Map extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        return null;
     }
 
 

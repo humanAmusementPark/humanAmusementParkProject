@@ -1,7 +1,7 @@
 package javaproject.Service;
 
 
-
+import javaproject.AdminMenu1;
 import javaproject.DAO.MemDAO;
 import javaproject.DTO.MemDTO;
 
@@ -9,31 +9,98 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.util.List;
 
-public class MemAdG extends JFrame implements ActionListener {
-    private JButton edit = new JButton("수정");
+public class MemAdG extends JFrame {
+    private JButton update = new JButton("수정");
     private JButton delete = new JButton("삭제");
     private JTable table = null;
+    private JScrollPane scrollPane = null;
 
-    public MemAdG() {
+    public MemAdG(AdminMenu1 before) {
         setTitle("회원관리");
-        setBounds(100, 100, 600, 300);
-        table = getList();
-        table.setBounds(0, 0, 600, 100);
-        add(new JScrollPane(table));
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        tableLayout();
+        butLayout();
+
+        update.addActionListener(e -> update());
+        delete.addActionListener(e -> delete());
+
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
+    }
+
+    private void delete() {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "선택한 행 없음", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        MemDAO memDAO = new MemDAO();
+        if (memDAO.delete(table.getValueAt(row, 0).toString())) {
+            JOptionPane.showMessageDialog(null, "삭제 완료");
+            this.remove(scrollPane);
+            tableLayout();
+        } else {
+            JOptionPane.showMessageDialog(null, "삭제 실패", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void update() {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "선택한 행 없음", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        MemDAO memDAO = new MemDAO();
+        MemDTO memDTO = MemDTO.builder()
+                .mId(table.getValueAt(row, 0).toString())
+                .mPass(table.getValueAt(row, 2).toString())
+                .mName(table.getValueAt(row, 1).toString())
+                .mGender(table.getValueAt(row, 3).toString().equals("남자") ? 1 : 0)
+                .mBirth(Date.valueOf(table.getValueAt(row, 4).toString()))
+                .tPass(table.getValueAt(row, 5).toString())
+                .build();
+        if (memDAO.update(memDTO)) {
+            JOptionPane.showMessageDialog(null, "수정 완료");
+            this.remove(scrollPane);
+            tableLayout();
+        } else {
+            JOptionPane.showMessageDialog(null, "수정 실패", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void butLayout() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-        panel.add(edit);
+        panel.add(update);
         panel.add(delete);
-
-        edit.addActionListener(this);
-        delete.addActionListener(this);
         add("South", panel);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    private void tableLayout() {
+        table = getList();
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setResizingAllowed(false);
+        scrollPane = new JScrollPane(table);
+        scrollPane.setSize(getWidth(), 300);
+        add(new JScrollPane(table));
     }
 
     private JTable getList() {
@@ -51,39 +118,10 @@ public class MemAdG extends JFrame implements ActionListener {
             } else {
                 data[i][3] = "여자";
             }
-            data[i][4] = member.toString(member.getMBirth());
+            data[i][4] = member.BirthToString();
             data[i][5] = member.getTPass();
         }
         return new JTable(data, header);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        MemDAO memDAO = new MemDAO();
-        MemDTO member = new MemDTO();
-        int row = table.getSelectedRow();
-        if (e.getSource() == edit) {
-            System.out.println(table.getEditingRow());
-            System.out.println(table.getEditingColumn());
-            member.setMId(table.getValueAt(row, 0).toString());
-            member.setMPass(table.getValueAt(row, 1).toString());
-            member.setMName(table.getValueAt(row, 2).toString());
-            if (table.getValueAt(row, 3).toString().equals("남자")) {
-                member.setMGender(0);
-            }else{
-                member.setMGender(1);
-            }
-            member.setMBirth(Date.valueOf(table.getValueAt(row,4).toString()));
-            member.setTPass(table.getValueAt(row,5).toString());
-            memDAO.update(member);
-            dispose();
-            new MemAdG();
-        }
-        if (e.getSource() == delete) {
-            String mId = table.getValueAt(row, 0).toString();
-            memDAO.delete(mId);
-            dispose();
-            new MemAdG();
-        }
-    }
 }

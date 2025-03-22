@@ -54,8 +54,8 @@ public class    SignInG extends JFrame implements ActionListener {
         g_radio.add(f);
         JPanel radio = new JPanel();
         radio.setLayout(new GridLayout());
-        radio.add(m);
-        radio.add(f);
+        p_radio.add(m);
+        p_radio.add(f);
 
 
         center.setLayout(new GridBagLayout());
@@ -213,43 +213,44 @@ public class    SignInG extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "중복체크필수");
             }
         }
+        return null;
     }
 
     private void signInDB() {
         if (ad_button.isSelected()) {
-            String adNum = JOptionPane.showInputDialog(null, "관리자비밀번호");
-            AdminDTO adminDTO = new AdminDTO();
-            if (adNum.equals("1111")) {
-                adminDTO.setAPosition("a");
-            } else if (adNum.equals("2222")) {
-                adminDTO.setAPosition("b");
-            } else if (adNum.equals("3333")) {
-                adminDTO.setAPosition("c");
-            } else {
-                JOptionPane.showMessageDialog(null, "비밀번호 오류");
-                dispose();
-            }
-            adminDTO.setAId(i_field.getText());
-            adminDTO.setAPass(p_field.getText());
-            adminDTO.setAName(n_field.getText());
-            adminDTO.setAGender(m.isSelected() ? 1 : 0);
-            String aBirth = yearCom.getSelectedItem().toString() + "-"
-                    + monthCom.getSelectedItem().toString() + "-" + dayCom.getSelectedItem().toString();
-            adminDTO.setBirth(aBirth);
-            AdminDAO adminDAO = new AdminDAO();
-            adminDAO.insert(adminDTO);
-        } else if (mm_button.isSelected()) {
-            MemDTO memDTO = new MemDTO();
-            memDTO.setMId(i_field.getText());
-            memDTO.setMPass(p_field.getText());
-            memDTO.setMName(n_field.getText());
-            memDTO.setMGender(m.isSelected() ? 1 : 0);
-            String mBirth = yearCom.getSelectedItem().toString() + "-"
-                    + monthCom.getSelectedItem().toString() + "-" + dayCom.getSelectedItem().toString();
-            memDTO.setBirth(mBirth);
-            System.out.println(memDTO.getMBirth().toString());
-            MemDAO memDAO = new MemDAO();
-            memDAO.insert(memDTO);
+//            String adNum = JOptionPane.showInputDialog(null, "관리자비밀번호");
+//            AdminDTO adminDTO = new AdminDTO();
+//            if (adNum.equals("1111")) {
+//                adminDTO.setAPosition("a");
+//            } else if (adNum.equals("2222")) {
+//                adminDTO.setAPosition("b");
+//            } else if (adNum.equals("3333")) {
+//                adminDTO.setAPosition("c");
+//            } else {
+//                JOptionPane.showMessageDialog(null, "비밀번호 오류");
+//                dispose();
+//            }
+//            adminDTO.setAId(i_field.getText());
+//            adminDTO.setAPass(p_field.getText());
+//            adminDTO.setAName(n_field.getText());
+//            adminDTO.setAGender(m.isSelected() ? 1 : 0);
+//            String aBirth = yearCom.getSelectedItem().toString() + "-"
+//                    + monthCom.getSelectedItem().toString() + "-" + dayCom.getSelectedItem().toString();
+//            adminDTO.setBirth(aBirth);
+//            AdminDAO adminDAO = new AdminDAO();
+//            adminDAO.insert(adminDTO);
+//        } else if (mm_button.isSelected()) {
+//            MemDTO memDTO = new MemDTO();
+//            memDTO.setMId(i_field.getText());
+//            memDTO.setMPass(p_field.getText());
+//            memDTO.setMName(n_field.getText());
+//            memDTO.setMGender(m.isSelected() ? 1 : 0);
+//            String mBirth = yearCom.getSelectedItem().toString() + "-"
+//                    + monthCom.getSelectedItem().toString() + "-" + dayCom.getSelectedItem().toString();
+//            memDTO.setBirth(mBirth);
+//            System.out.println(memDTO.getMBirth().toString());
+//            MemDAO memDAO = new MemDAO();
+//            memDAO.insert(memDTO);
         }
     }
 }

@@ -1,5 +1,6 @@
 package javaproject.DTO;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@Builder
 public class ReservationDTO {
     private int no;
     private String mId;
@@ -15,8 +17,8 @@ public class ReservationDTO {
     private String atId;
     private Date rTime;
 
-    public String toString(Date rTime){
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+    public String TimetoString(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(rTime);
     }
 }

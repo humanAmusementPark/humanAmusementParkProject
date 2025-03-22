@@ -1,107 +1,152 @@
 package javaproject.Service;
 
 
-
 import javaproject.DAO.MemDAO;
 import javaproject.DTO.MemDTO;
+import javaproject.Map;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Date;
 
 // 회원 회원정보수정
-public class MemG extends JFrame implements ActionListener {
-    private JPanel labelJPanel = new JPanel();
-    private String[] labelName = {"아이디", "비밀번호", "이름", "성별", "생년월일", "이용권번호"};
-    private JPanel textFJPanel = new JPanel();
+public class MemG extends JFrame {
+    private String id;
+    private JPanel center = new JPanel();
+    private String[] labelName = {"아이디", "비밀번호", "이름", "성별", "생년월일", "티켓번호"};
+    private JLabel mId;
+    private JTextField mPass;
+    private JTextField mName;
     private JRadioButton radioMan = new JRadioButton("남자");
     private JRadioButton radioWoman = new JRadioButton("여자");
+    private ButtonGroup group = new ButtonGroup();
     private JComboBox yearCom;
     private JComboBox monthCom;
     private JComboBox dayCom;
-    private JButton editPass = new JButton("수정");
-    private JButton editName = new JButton("수정");
-    private JButton editGender = new JButton("수정");
-    private JButton editBirth = new JButton("수정");
-    private JPanel buttonJPanel = new JPanel();
-    private JLabel mId = new JLabel();
-    private JTextField mPass = new JTextField();
-    private JTextField mName = new JTextField();
-    String id;
-    public MemG(String id) {
+    private JLabel tPass;
+    private JButton updateBut = new JButton("수정");
+
+    public MemG(String id, Map before) {
         this.id = id;
         setTitle("회원정보");
-        setBounds(10, 10, 400, 300);
-        setLayout(null);
-
-        setLabelJPanel();
-        labelJPanel.setBounds(10, 10, 80, 200);
-        add(labelJPanel);
-
-        setTextFieldsJPanel();
-        textFJPanel.setBounds(100, 10, 210, 200);
-        add(textFJPanel);
-
-        setButtonJPanel();
-        buttonJPanel.setBounds(310, 10, 60, 200);
-        add(buttonJPanel);
-
-        editPass.addActionListener(this);
-        editName.addActionListener(this);
-        editGender.addActionListener(this);
-        editBirth.addActionListener(this);
-
+        setSize(600, 400);
+        setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        centerLayout();
+        updateBut.addActionListener(e -> update());
+
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
     }
 
-    private void setButtonJPanel() {
-        GridLayout a = new GridLayout(6, 1);
-        a.setVgap(2);
-        buttonJPanel.setLayout(a);
-        buttonJPanel.add(new JLabel(""));
-        buttonJPanel.add(editPass);
-        buttonJPanel.add(editName);
-        buttonJPanel.add(editGender);
-        buttonJPanel.add(editBirth);
-        buttonJPanel.add(new JLabel(""));
+    private void update() {
+        MemDAO memDAO = new MemDAO();
+        String newPass = mPass.getText();
+        String newName = mName.getText();
+        if (newPass.isEmpty() || newName.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "빈칸 발생.", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int newGender = radioMan.isSelected() ? 1 : 0;
+        String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString()
+                + "-" + dayCom.getSelectedItem().toString();
+        MemDTO memDTO = MemDTO.builder()
+                .mId(id)
+                .mPass(newPass)
+                .mName(newName)
+                .mGender(newGender)
+                .mBirth(Date.valueOf(newBirth))
+                .build();
+        if (memDAO.update(memDTO)) {
+            JOptionPane.showMessageDialog(null, "수정 완료");
+            this.remove(center);
+            centerLayout();
+        } else {
+            JOptionPane.showMessageDialog(null, "수정 실패", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
 
-    private void setTextFieldsJPanel() { // 테스트용 id = "M1001"
-        textFJPanel.setLayout(new GridLayout(6, 1));
+    private void centerLayout() {
+        center.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(5, 5, 5, 5);
+        //label
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 0;
+        c.gridy = 0;
+        center.add(new JLabel(labelName[0]), c);
+        c.gridx = 0;
+        c.gridy = 1;
+        center.add(new JLabel(labelName[1]), c);
+        c.gridx = 0;
+        c.gridy = 2;
+        center.add(new JLabel(labelName[2]), c);
+        c.gridx = 0;
+        c.gridy = 3;
+        center.add(new JLabel(labelName[3]), c);
+        c.gridx = 0;
+        c.gridy = 4;
+        center.add(new JLabel(labelName[4]), c);
+        c.gridx = 0;
+        c.gridy = 5;
+        center.add(new JLabel(labelName[5]), c);
+        // Text
         MemDAO memDAO = new MemDAO();
         MemDTO memDTO = memDAO.select(id);
+        c.gridx = 1;
+        c.gridy = 0;
+        c.gridwidth = 2;
         mId = new JLabel(memDTO.getMId());
-        textFJPanel.add(mId);
+        center.add(mId, c);
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 2;
         mPass = new JTextField(memDTO.getMPass(), 10);
-        mPass.setSize(150, 20);
-        mPass.setEditable(true);
-        textFJPanel.add(mPass);
-        mName = new JTextField(memDTO.getMName(), 10);
-        mName.setSize(150, 20);
-        mName.setEditable(true);
-        textFJPanel.add(mName);
+        center.add(mPass, c);
+        c.gridx = 1;
+        c.gridy = 2;
+        mName = new JTextField(memDTO.getMName(),10);
+        center.add(mName, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 3;
         JPanel mGender = makeGenderPanel(memDTO.getMGender());
-        textFJPanel.add(mGender);
+        center.add(mGender, c);
+        c.gridx = 1;
+        c.gridy = 4;
         JPanel mBirth = makerBirthPanel(memDTO);
-        textFJPanel.add(mBirth);
-        JLabel tPass = new JLabel(memDTO.getTPass());
-        textFJPanel.add(tPass);
+        center.add(mBirth, c);
+        c.fill = GridBagConstraints.NONE;
+        c.gridx = 1;
+        c.gridy = 5;
+        tPass = new JLabel(memDTO.getTPass());
+        center.add(tPass, c);
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 2;
+        c.gridy = 6;
+        c.gridwidth = 1;
+        updateBut.setBackground(Color.BLACK);
+        updateBut.setFont(new Font("Aharoni 굵게", Font.BOLD, 12));
+        updateBut.setForeground(Color.WHITE);
+        center.add(updateBut, c);
 
-    }
-
-    private void setLabelJPanel() {
-        labelJPanel.setLayout(new GridLayout(6, 1));
-        for (int i = 0; i < labelName.length; i++) {
-            StringBuilder labelN = new StringBuilder(labelName[i]);
-            while (labelN.length() < 5) {
-                labelN.append(" ");
-            }
-            JLabel label = new JLabel(labelN.toString());
-            labelJPanel.add(label);
-
-        }
+        this.add(center);
     }
 
     private JPanel makeGenderPanel(int a) {
@@ -113,20 +158,9 @@ public class MemG extends JFrame implements ActionListener {
         } else if (a == 1) {
             radioWoman.setSelected(true);
         }
-        radioMan.addActionListener(actionEvent -> {
-            if (radioMan.isSelected()) {
-                radioWoman.setSelected(false);
-            } else {
-                radioMan.setSelected(true);
-            }
-        });
-        radioWoman.addActionListener(actionEvent -> {
-            if (radioWoman.isSelected()) {
-                radioMan.setSelected(false);
-            } else {
-                radioWoman.setSelected(true);
-            }
-        });
+        group.add(radioMan);
+        group.add(radioWoman);
+
         return panel;
     }
 
@@ -168,37 +202,5 @@ public class MemG extends JFrame implements ActionListener {
         return panel;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        MemDAO memDAO = new MemDAO();
-        String newId = mId.getText();
-        if (e.getSource() == editPass) {
-            String newPass = mPass.getText();
-            memDAO.edit(1, newPass, newId);
-            dispose();
-            new MemG(id);
-        }
-        if (e.getSource() == editName) {
-            String newName = mName.getText();
-            memDAO.edit(2, newName,newId);
-            dispose();
-            new MemG(id);
-        }
-        if (e.getSource() == editGender) {
-            if (radioMan.isSelected()) {
-                memDAO.edit(3, "0", newId);
-            } else {
-                memDAO.edit(3, "1", newId);
-            }
-            dispose();
-            new MemG(id);
-        }
-        if (e.getSource() == editBirth) {
-            String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString() + "-" + dayCom.getSelectedItem().toString();
-            System.out.println(newBirth);
-            memDAO.edit(4, newBirth, newId);
-            dispose();
-            new MemG(id);
-        }
-    }
+
 }

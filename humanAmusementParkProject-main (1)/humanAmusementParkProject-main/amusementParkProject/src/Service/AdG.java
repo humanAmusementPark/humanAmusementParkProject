@@ -1,25 +1,19 @@
 package javaproject.Service;
 
+import javaproject.AdminMenu1;
 import javaproject.DAO.AdminDAO;
 import javaproject.DTO.AdminDTO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Date;
 
 
-public class AdG extends JFrame implements ActionListener {
-    private JPanel labelJPanel = new JPanel();
-    private JPanel textFJPanel = new JPanel();
-    private JButton editPass = new JButton("수정");
-    private JButton editName = new JButton("수정");
-    private JButton editGender = new JButton("수정");
-    private JButton editBirth = new JButton("수정");
-    private JButton editPos = new JButton("수정");
-    private JPanel buttonJPanel = new JPanel();
+public class AdG extends JFrame {
 
-    String id;
+    private String id;
     private JPanel center = new JPanel();
     private String[] labelName = {"아이디", "비밀번호", "이름", "성별", "생년월일", "직책"};
     private String[] positionName = {"매니저", "부매니저", "놀이공원관리자", "예약관리자", "티켓관리자"};
@@ -35,25 +29,64 @@ public class AdG extends JFrame implements ActionListener {
     private JComboBox aPos = new JComboBox(positionName);
     private JButton updateBut = new JButton("수정");
 
-    public AdG(String id) {
+    public AdG(String id, AdminMenu1 before) {
         this.id = id;
         setTitle("관리자정보");
         setSize(600, 400);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        centerLayout();
-        this.add(center);
-        this.add("South", updateBut);
 
+        centerLayout();
+        updateBut.addActionListener(e -> update());
+
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
+    }
+
+    private void update() {
+        AdminDAO adminDAO = new AdminDAO();
+        String newPass = aPass.getText();
+        String newName = aName.getText();
+        if (newPass.isEmpty() || newName.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "빈칸 발생.", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int newGender = radioMan.isSelected() ? 1 : 0;
+        String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString()
+                + "-" + dayCom.getSelectedItem().toString();
+        String newPos = aPos.getSelectedItem().toString();
+        AdminDTO adminDTO = AdminDTO.builder()
+                .aId(id)
+                .aPass(newPass)
+                .aName(newName)
+                .aGender(newGender)
+                .aBirth(Date.valueOf(newBirth))
+                .aPosition(newPos)
+                .build();
+        if (adminDAO.update(adminDTO)) {
+            JOptionPane.showMessageDialog(null, "수정 완료");
+            this.remove(center);
+            centerLayout();
+        } else {
+            JOptionPane.showMessageDialog(null, "수정 실패", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void centerLayout() {
         center.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
-
-
         // label
         c.anchor = GridBagConstraints.WEST;
         c.gridx = 0;
@@ -74,16 +107,14 @@ public class AdG extends JFrame implements ActionListener {
         c.gridx = 0;
         c.gridy = 5;
         center.add(new JLabel(labelName[5]), c);
-
         // Text
         AdminDAO adminDAO = new AdminDAO();
         AdminDTO adminDTO = adminDAO.select(id);
-        c.anchor = GridBagConstraints.WEST;
         c.gridx = 1;
         c.gridy = 0;
+        c.gridwidth = 2;
         aId = new JLabel(adminDTO.getAId());
         center.add(aId, c);
-        c.fill = GridBagConstraints.VERTICAL;
         c.gridx = 1;
         c.gridy = 1;
         aPass = new JTextField(adminDTO.getAPass(), 10);
@@ -95,8 +126,6 @@ public class AdG extends JFrame implements ActionListener {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
-        c.insets.top = 5;
-        c.insets.bottom = 5;
         JPanel aGender = makeGenderPanel(adminDTO.getAGender());
         center.add(aGender, c);
         c.gridx = 1;
@@ -110,6 +139,15 @@ public class AdG extends JFrame implements ActionListener {
         aPos.setBackground(Color.WHITE);
         aPos.setSelectedItem(adminDTO.getAPosition());
         center.add(aPos, c);
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 2;
+        c.gridy = 6;
+        updateBut.setBackground(Color.BLACK);
+        updateBut.setFont(new Font("Aharoni 굵게", Font.BOLD, 12));
+        updateBut.setForeground(Color.WHITE);
+        center.add(updateBut, c);
+
+        this.add(center);
     }
 
     private JPanel makeGenderPanel(int a) {
@@ -165,39 +203,5 @@ public class AdG extends JFrame implements ActionListener {
         return panel;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        AdminDAO adminDAO = new AdminDAO();
-        String newId = aId.getText();
-        if (e.getSource() == editPass) {
-            String newPass = aPass.getText();
-            adminDAO.edit(1, newPass, newId);
-        }
-        if (e.getSource() == editName) {
-            String newName = aName.getText();
-            adminDAO.edit(2, newName, newId);
-        }
-        if (e.getSource() == editGender) {
-            if (radioMan.isSelected()) {
-                adminDAO.edit(3, "0", newId);
-            } else {
-                adminDAO.edit(3, "1", newId);
-            }
-        }
-        if (e.getSource() == editBirth) {
-            String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString() + "-" + dayCom.getSelectedItem().toString();
-            System.out.println(newBirth);
-            adminDAO.edit(4, newBirth, newId);
-        }
-        if (e.getSource() == editPos) {
-            String newPos = aPos.getSelectedItem().toString();
-            System.out.println(newPos);
-            adminDAO.edit(5, newPos, newId);
-        } else {
-            return;
-        }
-        dispose();
-        new AdG(id);
-    }
 
 }

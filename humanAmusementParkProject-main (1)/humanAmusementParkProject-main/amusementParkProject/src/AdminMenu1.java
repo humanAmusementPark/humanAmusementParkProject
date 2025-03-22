@@ -21,7 +21,8 @@ public class AdminMenu1 extends JFrame {
     JButton update = new JButton("관리자정보수정/로그아웃");
     LoginG LoginG;
     String id;
-    public AdminMenu1(LoginG loginG,String id) {
+
+    public AdminMenu1(LoginG loginG, String id) {
         this.id = id;
         this.LoginG = loginG;
         this.setSize(1000, 650);
@@ -100,7 +101,8 @@ public class AdminMenu1 extends JFrame {
 
     private void resCLick() {
         System.out.println("연결");
-        new ReservationG();
+
+        new ReservationG(this);
     }
 
     private void scheduleClick() {
@@ -113,10 +115,10 @@ public class AdminMenu1 extends JFrame {
 
     private void memberClick() {
         System.out.println("연결");
-        new MemAdG();
+        new MemAdG(this);
     }
 
-    private void ticketClick()  {
+    private void ticketClick() {
         try {
             new ManagerTicket();
         } catch (SQLException e) {
@@ -126,7 +128,8 @@ public class AdminMenu1 extends JFrame {
 
     private void adminUpdate() {
         System.out.println("연결");
-         new AdG(id);
+        this.setEnabled(false);
+        new AdG(id, this);
     }
 
 

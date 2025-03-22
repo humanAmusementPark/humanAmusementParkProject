@@ -22,13 +22,14 @@ public class AdminDAO extends SuperDAO implements DAOinf<AdminDTO> {
             pstmt.setString(1, aId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                AdminDTO adminDTO = new AdminDTO();
-                adminDTO.setAId(rs.getString("aId"));
-                adminDTO.setAPass(rs.getString("aPass"));
-                adminDTO.setAName(rs.getString("aName"));
-                adminDTO.setAGender(rs.getInt("aGender"));
-                adminDTO.setABirth(rs.getDate("aBirth"));
-                adminDTO.setAPosition(rs.getString("aPosition"));
+                AdminDTO adminDTO = AdminDTO.builder()
+                        .aId(rs.getString("aId"))
+                        .aPass(rs.getString("aPass"))
+                        .aName(rs.getString("aName"))
+                        .aGender(rs.getInt("aGender"))
+                        .aBirth(rs.getDate("aBirth"))
+                        .aPosition(rs.getString("aPosition"))
+                        .build();
                 return adminDTO;
             }
         } catch (SQLException e) {
@@ -70,7 +71,29 @@ public class AdminDAO extends SuperDAO implements DAOinf<AdminDTO> {
     }
 
     @Override
-    public boolean update(AdminDTO data) {
+    public boolean update(AdminDTO AdminDTO) {
+        Connection conn = super.getConnection();
+        String sql = "update administer set aPass = ?, aName = ?, aGender = ?, aBirth = ?, aPosition = ? where aId = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, AdminDTO.getAPass());
+            pstmt.setString(2, AdminDTO.getAName());
+            pstmt.setInt(3, AdminDTO.getAGender());
+            pstmt.setDate(4, Date.valueOf(AdminDTO.BirthToString()));
+            pstmt.setString(5, AdminDTO.getAPosition());
+            pstmt.setString(6, AdminDTO.getAId());
+            int result = pstmt.executeUpdate();
+            System.out.println(result+"건 완료");
+            if(result>0) return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return false;
     }
 

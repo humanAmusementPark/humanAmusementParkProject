@@ -1,14 +1,15 @@
 package javaproject.DTO;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Getter
-@Setter
+@Builder
 public class MemDTO {
     private String mId;
     private String mPass;
@@ -31,6 +32,7 @@ public class MemDTO {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
         return sdf.format(mBirth);
     }
+
     public String BirthToString(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(mBirth);
@@ -41,12 +43,4 @@ public class MemDTO {
         return sdf.format(mBirth);
     }
 
-    public void setBirth(String mBirth) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            this.mBirth = sdf.parse(mBirth);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

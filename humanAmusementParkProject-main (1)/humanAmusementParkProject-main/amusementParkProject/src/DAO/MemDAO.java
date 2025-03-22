@@ -18,13 +18,14 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                MemDTO member = new MemDTO();
-                member.setMId(rs.getString("mId"));
-                member.setMName(rs.getString("mName"));
-                member.setMPass(rs.getString("mPass"));
-                member.setMGender(rs.getInt("mGender"));
-                member.setMBirth(rs.getDate("mbirth"));
-                member.setTPass(rs.getString("tPass"));
+                MemDTO member = MemDTO.builder()
+                        .mId(rs.getString("mId"))
+                        .mPass(rs.getString("mPass"))
+                        .mName(rs.getString("mName"))
+                        .mGender(rs.getInt("mGender"))
+                        .mBirth(rs.getDate("mBirth"))
+                        .tPass(rs.getString("tPass"))
+                        .build();
                 memberList.add(member);
             }
         } catch (SQLException e) {
@@ -48,13 +49,14 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
             stmt.setString(1, mId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                MemDTO member = new MemDTO();
-                member.setMId(rs.getString("mId"));
-                member.setMName(rs.getString("mName"));
-                member.setMPass(rs.getString("mPass"));
-                member.setMGender(rs.getInt("mGender"));
-                member.setMBirth(rs.getDate("mBirth"));
-                member.setTPass(rs.getString("tPass"));
+                MemDTO member = MemDTO.builder()
+                        .mId(rs.getString("mId"))
+                        .mPass(rs.getString("mPass"))
+                        .mName(rs.getString("mName"))
+                        .mGender(rs.getInt("mGender"))
+                        .mBirth(rs.getDate("mBirth"))
+                        .tPass(rs.getString("tPass"))
+                        .build();
                 return member;
             }
         } catch (SQLException e) {
@@ -99,15 +101,14 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
     @Override
     public boolean update(MemDTO member) {
         Connection conn = super.getConnection();
-        String sql = "update member set mPass = ?, mName = ?, mGender = ? ,mBirth = ?,tPass = ? where mId = ?";
+        String sql = "update member set mPass = ?, mName = ?, mGender = ? ,mBirth = ? where mId = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, member.getMPass());
             stmt.setString(2, member.getMName());
             stmt.setInt(3, member.getMGender());
-            stmt.setDate(4, Date.valueOf(member.getMBirth().toString()));
-            stmt.setString(5, member.getTPass());
-            stmt.setString(6, member.getMId());
+            stmt.setDate(4, Date.valueOf(member.BirthToString()));
+            stmt.setString(5, member.getMId());
             int result = stmt.executeUpdate();
             System.out.println(result + "건 완료");
             if (result > 0) return true;

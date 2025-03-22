@@ -122,6 +122,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 search();
+                return null;
             }
         });
         JButton prtAll = new JButton("전체보기");
@@ -132,6 +133,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
                 // 기존 데이터를 새로 갱신된 데이터로 교체
                 String[][] dataList = listAll();
                 model.setDataVector(dataList, new String[]{"Id", "요일", "시간", "퍼레이드이름"});
+                return null;
             }
         });
         centerPanel.add(combo);
@@ -180,6 +182,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
                     public void actionPerformed(ActionEvent e) {
                         insert();
                         newFrame.setVisible(false);
+                        return null;
                     }
                 });
                 newpanel.add(insertButton);
@@ -190,6 +193,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
                 newFrame.setBounds(300, 300, 400, 200);
                 newFrame.setVisible(true);
 
+                return null;
             }
         });
 
@@ -203,6 +207,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
             public void actionPerformed(ActionEvent e) {
                 delete();
 
+                return null;
             }
         });
         centerPanel.add(deleteBtn);
@@ -214,6 +219,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 update();
+                return null;
             }
         });
 
