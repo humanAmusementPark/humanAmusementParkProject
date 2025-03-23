@@ -213,7 +213,7 @@ public class    SignInG extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "중복체크필수");
             }
         }
-        return null;
+
     }
 
     private void signInDB() {

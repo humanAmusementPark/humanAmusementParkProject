@@ -106,14 +106,13 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     @Override
     public boolean update(ReservationDTO r) {
         Connection conn = super.getConnection();
-        String sql = "update reservation set mid = ?, tPass = ?,atId = ?,rTime = ? where no = ?";
+        String sql = "update reservation set mid = ?, tPass = ?,atId = ? where no = ?";
         try {
             PreparedStatement ptmt = conn.prepareStatement(sql);
             ptmt.setString(1, r.getMId());
             ptmt.setString(2, r.getTPass());
             ptmt.setString(3, r.getAtId());
-            ptmt.setDate(4, (Date) r.getRTime());
-            ptmt.setInt(5, r.getNo());
+            ptmt.setInt(4, r.getNo());
             int rq = ptmt.executeUpdate();
             System.out.println(rq + "건 완료");
             if (rq > 0) {
@@ -196,6 +195,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             ResultSet rs = ptmt.executeQuery();
             if (rs.next()) {
                 r = rs.getInt(1);
+
             }
 
 
@@ -240,6 +240,8 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
 
         return count;
     }
+
+
 }
 
 

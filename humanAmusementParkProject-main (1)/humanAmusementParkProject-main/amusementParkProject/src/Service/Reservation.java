@@ -93,17 +93,17 @@ public class Reservation extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-            	ReservationDTO r=new ReservationDTO();
-            	r.setNo(rdao.getcount(mId));
-            	r.setAtId(attract.getAtId());
-            	r.setMId(mId);
-            	r.setTPass(tpass);
-            	if(rdao.insert(r)) {
-            		JOptionPane.showMessageDialog(null, "예약되었습니다.");     
-            		before.setEnabled(true);
-            		dispose();
-            	}
-				return null;
+//            	ReservationDTO r=new ReservationDTO();
+//            	r.setNo(rdao.getcount(mId));
+//            	r.setAtId(attract.getAtId());
+//            	r.setMId(mId);
+//            	r.setTPass(tpass);
+//            	if(rdao.insert(r)) {
+//            		JOptionPane.showMessageDialog(null, "예약되었습니다.");
+//            		before.setEnabled(true);
+//            		dispose();
+//            	}
+
 			}
         });
 

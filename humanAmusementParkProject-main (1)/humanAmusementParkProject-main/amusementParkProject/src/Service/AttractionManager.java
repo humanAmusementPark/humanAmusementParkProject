@@ -114,7 +114,7 @@ public class AttractionManager extends JFrame{
             	flag=true;
 
 
-				return null;
+
 			}
         });
 		off.addActionListener (new ActionListener() {
@@ -123,7 +123,7 @@ public class AttractionManager extends JFrame{
             public void actionPerformed(ActionEvent arg0) {
             	flag=false;
 
-				return null;
+
 			}
         });
 		
@@ -176,7 +176,7 @@ public class AttractionManager extends JFrame{
 				}
 
 
-				return null;
+
 			}
         });
 		

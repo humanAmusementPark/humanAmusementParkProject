@@ -106,7 +106,7 @@ public class LoginG extends JFrame implements ActionListener {
             new SignInG(this);
 
         }
-        return null;
+
     }
 
     private void submit() {

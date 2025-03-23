@@ -83,7 +83,7 @@ public class ChatGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChatGUI.this.startMatching();
-                return null;
+
             }
         });
         topPanel.add(matchButton);
@@ -116,7 +116,7 @@ public class ChatGUI {
             public void actionPerformed(ActionEvent e) {
                 closed = true;
                 ChatGUI.this.sendMessage();
-                return null;
+
             }
         });
 
@@ -126,7 +126,7 @@ public class ChatGUI {
             public void actionPerformed(ActionEvent e) {
                 role = "고객";
                 ChatGUI.this.checkIfReadyToMatch();
-                return null;
+
             }
         });
 
@@ -135,7 +135,7 @@ public class ChatGUI {
             public void actionPerformed(ActionEvent e) {
                 role = "상담사";
                 ChatGUI.this.checkIfReadyToMatch();
-                return null;
+
             }
         });
 
@@ -144,7 +144,7 @@ public class ChatGUI {
             public void actionPerformed(ActionEvent e) {
                 inquiryType = "예약 관련 문의";
                 ChatGUI.this.checkIfReadyToMatch();
-                return null;
+
             }
         });
 
@@ -153,7 +153,7 @@ public class ChatGUI {
             public void actionPerformed(ActionEvent e) {
                 inquiryType = "분실물 문의";
                 ChatGUI.this.checkIfReadyToMatch();
-                return null;
+
             }
         });
 
@@ -162,7 +162,7 @@ public class ChatGUI {
             public void actionPerformed(ActionEvent e) {
                 inquiryType = "기타 문의";
                 ChatGUI.this.checkIfReadyToMatch();
-                return null;
+
             }
         });
 
@@ -170,7 +170,7 @@ public class ChatGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChatGUI.this.sendMessage();
-                return null;
+
             }
         });
 
@@ -179,7 +179,7 @@ public class ChatGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChatGUI.this.sendMessage();
-                return null;
+
             }
         });
 

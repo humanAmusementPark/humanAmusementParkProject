@@ -2,11 +2,12 @@ package javaproject.Service;
 
 
 import javaproject.AdminMenu1;
+import javaproject.DAO.AttractionDAO;
 import javaproject.DAO.MemDAO;
 import javaproject.DAO.ReservationDAO;
 import javaproject.DTO.MemDTO;
 import javaproject.DTO.ReservationDTO;
-import javaproject.Map;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
+import java.util.Arrays;
+import java.util.Date;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import java.util.List;
 
 // 회원, 관리자 예약현황 둘다 전체 조회 삭제만 가능
@@ -57,8 +63,8 @@ public class ReservationG extends JFrame implements ActionListener {
         ReservationDAO reservationDAO = new ReservationDAO();
         if (reservationDAO.delete(table.getValueAt(row, 0).toString())) {
             JOptionPane.showMessageDialog(null, "수정 완료");
-            this.remove(scrollPane);
-            tableLayout();
+            table.setModel(getList().getModel());
+            table.getColumn("예약시간").setPreferredWidth(150);
         } else {
             JOptionPane.showMessageDialog(null, "수정 실패", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -71,19 +77,17 @@ public class ReservationG extends JFrame implements ActionListener {
                 .mId(table.getValueAt(row, 1).toString())
                 .tPass(table.getValueAt(row, 2).toString())
                 .atId(table.getValueAt(row, 3).toString())
-                .rTime(Date.valueOf(table.getValueAt(row, 4).toString()))
                 .build();
         if (reservationDAO.update(reservationDTO)) {
             JOptionPane.showMessageDialog(null, "수정 완료");
-            this.remove(scrollPane);
-            tableLayout();
+            table.setModel(getList().getModel());
+            table.getColumn("예약시간").setPreferredWidth(150);
         } else {
             JOptionPane.showMessageDialog(null, "수정 실패", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     private void insert() {
-        insertFrame(this);
         for (String infoI : info) {
             if (infoI.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "빈칸 발생", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -98,48 +102,34 @@ public class ReservationG extends JFrame implements ActionListener {
                 .build();
         if (reservationDAO.insert(reservationDTO)) {
             JOptionPane.showMessageDialog(null, "등록 완료");
-            this.remove(scrollPane);
-            tableLayout();
+            table.setModel(getList().getModel());
+            table.getColumn("예약시간").setPreferredWidth(150);
         } else {
             JOptionPane.showMessageDialog(null, "등록 실패", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-    private void insertFrame(ReservationG before) {
-        JFrame inFrame = new JFrame();
-        inFrame.setVisible(true);
-        setTitle("등록");
-        setSize(300, 200);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        JLabel[] labelName = {new JLabel("회원 아이디"), new JLabel("티켓 번호"), new JLabel("놀이기구 번호")};
-        JPanel lPanel = new JPanel(new GridLayout(3, 1));
-        lPanel.add(labelName[0]);
-        lPanel.add(labelName[1]);
-        lPanel.add(labelName[2]);
-        inFrame.add("WEST", lPanel);
-        JPanel tPanel = new JPanel(new GridLayout(3, 1));
-        JTextField[] infoField = {new JTextField(10), new JTextField(10), new JTextField(10)};
-        tPanel.add(infoField[0]);
-        tPanel.add(infoField[1]);
-        tPanel.add(infoField[2]);
-        inFrame.add("EAST", tPanel);
-        JButton inInsert = new JButton("등록");
-        inFrame.add("SOUTH", inInsert);
-        inInsert.addActionListener(e -> {
-            info = new String[]{infoField[0].getText(), infoField[1].getText(), infoField[2].getText()};
-            inFrame.dispose();
-        });
-        inFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                before.setEnabled(true);
-                before.toFront();
-                before.setFocusable(true);
-                before.requestFocusInWindow();
+    private void insertFrame() {
+        String id = JOptionPane.showInputDialog(this, "회원 아이디 입력");
+        System.out.println(id);
+        MemDAO memDAO = new MemDAO();
+        MemDTO memDTO = memDAO.select(id);
+        String tPass = memDTO.getTPass();
+        System.out.println(tPass);
+        if (tPass.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "티켓 없음", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            AttractionDAO attractionDAO = new AttractionDAO();
+            String[] selections = attractionDAO.selectAllId();
+            System.out.println(Arrays.toString(selections));
+            String atId = JOptionPane.showInputDialog(this, id + "- " + tPass +
+                    "\n 예약할 놀이기구 번호 선택", "놀이기구 선택", JOptionPane.PLAIN_MESSAGE, null, selections, selections[0]).toString();
+            System.out.println(atId);
+            if (!atId.isEmpty()) {
+                info = new String[]{id, tPass, atId};
+                insert();
             }
-        });
-
+        }
     }
 
     private void butLayout() {
@@ -157,6 +147,7 @@ public class ReservationG extends JFrame implements ActionListener {
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
         table.setSize(getWidth(), 300);
+        table.getColumn("예약시간").setPreferredWidth(150);
         scrollPane = new JScrollPane(table);
         add(scrollPane);
     }
@@ -180,7 +171,7 @@ public class ReservationG extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == insert) {
-            insert();
+            insertFrame();
         } else {
             int row = table.getSelectedRow();
             if (row == -1) {

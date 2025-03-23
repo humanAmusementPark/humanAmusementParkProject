@@ -195,6 +195,30 @@ public class AttractionDAO extends SuperDAO {
 		}
 		return flag;
 	}
+
+	public String[] selectAllId() {
+		ArrayList<String> list = new ArrayList<>();
+		Connection conn = super.getConnection();
+		String sql = "select atId from attraction";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				list.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		String[] arr = new String[list.size()];
+		arr = list.toArray(arr);
+		return arr;
+	}
 	
 	
 }

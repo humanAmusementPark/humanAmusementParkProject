@@ -54,8 +54,7 @@ public class ReservationMemG extends JFrame implements ActionListener {
         ReservationDAO reservationDAO = new ReservationDAO();
         if (reservationDAO.delete(table.getValueAt(row, 0).toString())) {
             JOptionPane.showMessageDialog(null, "수정 완료");
-            this.remove(scrollPane);
-            tableLayout(id);
+            table.setModel(getList(id).getModel());
         } else {
             JOptionPane.showMessageDialog(null, "수정 실패", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -68,12 +67,10 @@ public class ReservationMemG extends JFrame implements ActionListener {
                 .mId(table.getValueAt(row, 1).toString())
                 .tPass(table.getValueAt(row, 2).toString())
                 .atId(table.getValueAt(row, 3).toString())
-                .rTime(Date.valueOf(table.getValueAt(row, 4).toString()))
                 .build();
         if (reservationDAO.update(reservationDTO)) {
             JOptionPane.showMessageDialog(null, "수정 완료");
-            this.remove(scrollPane);
-            tableLayout(id);
+            table.setModel(getList(id).getModel());
         } else {
             JOptionPane.showMessageDialog(null, "수정 실패", "Warning", JOptionPane.WARNING_MESSAGE);
         }
