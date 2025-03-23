@@ -8,15 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicketDAO extends SuperDAO {
-    private Connection conn;
     private static TicketDAO tinstance;
     private List<TicketDTO> ticketList = new ArrayList<>(); //여기 추가요12!@!@!@!@!@!@
 
 
     public TicketDAO() throws SQLException {
-        this.conn = super.getConnection();
         loadTickets(); //여기추가요!@!@!@
     }
+
     public static TicketDAO getInstance()  { //여기 추가했어요!@!@!@
         try{
             if (tinstance == null) {
@@ -24,14 +23,19 @@ public class TicketDAO extends SuperDAO {
             }
             return tinstance;
         }catch (Exception e){
+
             e.printStackTrace();
         }
         return tinstance;
     }
+
     public List<TicketDTO> getTicketList() {
         return new ArrayList<>(ticketList); // 리스트 복사하여 반환
     }
     private void loadTickets() { //여기 추가요!@!@!@!@!@!@!@!@!@!@
+
+        Connection conn = super.getConnection();
+
         ticketList.clear();
         String sql = " SELECT * FROM ticket";
         try{
@@ -51,12 +55,17 @@ public class TicketDAO extends SuperDAO {
 
             }
         }catch (Exception e){
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }
 
     public TicketDTO selectti(String id){
-
+        Connection conn = super.getConnection();
         String query = "SELECT * FROM ticket where tPass='"+ id +"'";
 
         try {
@@ -73,6 +82,11 @@ public class TicketDAO extends SuperDAO {
                 return ticketDTO;
             }
         } catch (SQLException e) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace(System.err);
         }
         return null;
@@ -83,6 +97,8 @@ public class TicketDAO extends SuperDAO {
         List<TicketDTO> ticketDTOList = new ArrayList<>();
 
         String query = "SELECT * FROM ticket";
+
+        Connection conn = super.getConnection();
 
         try {
             Statement stmt = conn.createStatement();
@@ -98,6 +114,11 @@ public class TicketDAO extends SuperDAO {
                 ticketDTOList.add(ticketDTO);
             }
         } catch (SQLException e) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace(System.err);
         }
         return ticketDTOList;
@@ -105,6 +126,8 @@ public class TicketDAO extends SuperDAO {
 
     public void insert(TicketDTO ticketDTO){
         String query = "INSERT INTO ticket  VALUES(?,?,?)";
+        Connection conn = super.getConnection();
+
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -115,6 +138,11 @@ public class TicketDAO extends SuperDAO {
             stmt.executeUpdate();
 
         } catch (Exception e) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }
@@ -122,6 +150,7 @@ public class TicketDAO extends SuperDAO {
     public void delete(String tPass){
         String query = "DELETE FROM ticket WHERE tPass = ?";
 
+        Connection conn = super.getConnection();
 
         try{
             PreparedStatement cursor = conn.prepareStatement(query);
@@ -130,12 +159,18 @@ public class TicketDAO extends SuperDAO {
             cursor.executeUpdate();
 
         }catch (Exception e){
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }
 
     public void update(TicketDTO ticketDTO,String tPass){
         String query = "UPDATE ticket SET tPass = ?, tName = ? , tPrice = ?  WHERE tPass = ?";
+        Connection conn = super.getConnection();
 
         try {
             PreparedStatement cursor = conn.prepareStatement(query);
@@ -150,6 +185,11 @@ public class TicketDAO extends SuperDAO {
             cursor.executeUpdate();
 
         } catch (SQLException e) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }

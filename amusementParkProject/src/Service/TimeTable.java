@@ -34,7 +34,10 @@ public class TimeTable extends JFrame {
 
     public void setDisplay() {
 
-        Image image = new ImageIcon("resource\\images\\일정표.jpeg").getImage();
+//        Image image = new ImageIcon("resource\\images\\일정표.jpeg").getImage();
+        //mac용
+        Image image = new ImageIcon("resource/images/일정표.jpeg").getImage();
+
         JPanel ImagePanel = new JPanel(){
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -44,17 +47,6 @@ public class TimeTable extends JFrame {
             }
         };
 
-//        //움짤
-//        Image moveImage = new ImageIcon("resource\\images\\surprise.gif").getImage();
-//        JLabel moveLabel = new JLabel(){
-//            public void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                g.drawImage(moveImage,20,20,200,100,this);
-//                this.setOpaque(true);
-//            }
-//        };
-//
-//        add(moveLabel);
 
         //제목 만들기
         JLabel titleLabel = new JLabel("Parade Schedule",SwingConstants.CENTER);
@@ -138,6 +130,10 @@ public class TimeTable extends JFrame {
     public void showFrame() {
         setTitle("Banner");
         setBounds(100, 100, 885, 500);
+
+        //창크기조절막기
+        setResizable(false);
+
         setVisible(true);
     }
     public static void main(String[] args){

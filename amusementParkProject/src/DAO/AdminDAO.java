@@ -14,6 +14,7 @@ public class AdminDAO extends SuperDAO {
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             System.out.println("qqq");
+
             if (rs.next()) {
                 if (rs.getInt(1) == 1) {
                     return false;

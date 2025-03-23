@@ -6,6 +6,7 @@ import javaproject.DTO.TimeTableDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +16,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
 
-public class ManagerTicket extends JFrame implements MouseListener {
+public class ManagerTicket extends JFrame {
     //setDisplay 부분
     private List<TicketDTO> ticketDTOList;
     private TicketDAO ticketDAO;
@@ -33,6 +34,7 @@ public class ManagerTicket extends JFrame implements MouseListener {
         setDisplay();
         showFrame();
     }
+
 
     public void getTimeTableInfo() throws SQLException {
         ticketDAO = new TicketDAO();
@@ -56,24 +58,28 @@ public class ManagerTicket extends JFrame implements MouseListener {
         model = new DefaultTableModel(dataList, columnType);
 
         table = new JTable(model);
+        // 컬럼 순서 변경 불가능하도록 설정
+        table.getTableHeader().setReorderingAllowed(false);
+
+
         //JScrollPane처리를 해줘야 헤더 까지 나옴
         add(new JScrollPane(table));
 
-        //테이블에 MouseListener등록
-        table.addMouseListener(this);
+//        //테이블에 MouseListener등록
+//        table.addMouseListener(this);
 
         //레이아웃 추가
         setLayout(new GridLayout(2, 1));
 
-        JPanel panel = new JPanel(new GridLayout(3, 3));
+        JPanel panel = new JPanel(new GridLayout(3, 2));
 
         //아래 위로 빈칸 넣기
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 1; i++) {
             JLabel noContentLabel = new JLabel("");
             panel.add(noContentLabel);
         }
 
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         //등록 버튼
         JButton insertBtn = new JButton("등록");
@@ -87,16 +93,19 @@ public class ManagerTicket extends JFrame implements MouseListener {
                 JPanel newpanel = new JPanel(new GridLayout(4, 2));
 
                 JLabel ticketNumJLabel = new JLabel("이용권 번호");
+                ticketNumJLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 ticketNumTextField = new JTextField(10);
                 newpanel.add(ticketNumJLabel);
                 newpanel.add(ticketNumTextField);
 
                 JLabel ticketNameJLabel = new JLabel("이용권 이름");
+                ticketNameJLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 tickNameTextField = new JTextField(10);
                 newpanel.add(ticketNameJLabel);
                 newpanel.add(tickNameTextField);
 
                 JLabel ticketPriceJLabel = new JLabel("이용권 가격");
+                ticketPriceJLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 ticketPriceTextField = new JTextField(10);
                 newpanel.add(ticketPriceJLabel);
                 newpanel.add(ticketPriceTextField);
@@ -126,17 +135,6 @@ public class ManagerTicket extends JFrame implements MouseListener {
 
         centerPanel.add(insertBtn);
 
-        //삭제
-        JButton deleteBtn = new JButton("삭제");
-        deleteBtn.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                delete();
-            }
-        });
-        centerPanel.add(deleteBtn);
-
         //수정
         JButton updateBtn = new JButton("수정");
         updateBtn.addActionListener(new ActionListener() {
@@ -149,15 +147,23 @@ public class ManagerTicket extends JFrame implements MouseListener {
 
         centerPanel.add(updateBtn);
 
+        //삭제
+        JButton deleteBtn = new JButton("삭제");
+        deleteBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                delete();
+            }
+        });
+        centerPanel.add(deleteBtn);
+
+
+
 
         panel.add(centerPanel);
         add(panel);
 
-        //아래 위로 빈칸 넣기
-        for (int i = 0; i < 4; i++) {
-            JLabel noContentLabel = new JLabel("");
-            panel.add(noContentLabel);
-        }
 
     }
 
@@ -184,7 +190,7 @@ public class ManagerTicket extends JFrame implements MouseListener {
             int tPrice = Integer.parseInt(ticketPrice);
 
             TicketDTO ticketDTO = TicketDTO.builder()
-                    .tPass(ticketName)
+                    .tPass(ticketNum)
                     .tName(ticketName)
                     .tPrice(tPrice)
                     .build();
@@ -297,32 +303,13 @@ public class ManagerTicket extends JFrame implements MouseListener {
 
     public void showFrame() {
         setTitle("티켓-관리자");
-        setBounds(100, 100, 900, 500);
+
+        setSize(600, 400); // 창 크기 설정
+
+        setLocationRelativeTo(null);
+        setResizable(false);
+
         setVisible(true);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
-    }
 }

@@ -21,7 +21,10 @@ public class ChatAdminister {
 
         // 서버와 연결된 소켓을 한 번만 열어두고 재사용
         try {
-            socket = new Socket("192.168.0.28", port);  // 소켓을 한 번만 열기
+//            socket = new Socket("192.168.0.28", port);  // 소켓을 한 번만 열기
+//            김정규  172.30.1.12
+            socket = new Socket("172.30.1.12", port);  // 소켓을 한 번만 열기
+
             writer = new ObjectOutputStream(socket.getOutputStream());
             try{
                 reader = new ObjectInputStream(socket.getInputStream());

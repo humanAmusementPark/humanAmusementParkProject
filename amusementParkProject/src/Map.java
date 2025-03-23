@@ -17,7 +17,10 @@ import java.sql.SQLException;
 
 public class Map extends JFrame implements ActionListener {
 
-    private Image image = new ImageIcon("resource\\images\\kkk.jpg").getImage();
+//    private Image image = new ImageIcon("resource\\images\\kkk.jpg").getImage();
+    //mac용
+    private Image image = new ImageIcon("resource/images/kkk.jpg").getImage();
+
     private String id;
     private LoginG LoginG;
     private JPanel jpImage = new JPanel() {

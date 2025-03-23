@@ -37,7 +37,6 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
         showFrame();
     }
 
-
     public void getTimeTableInfo() {
         try {
             timeTableDAO = new TimeTableDAO();
@@ -93,6 +92,10 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
 
 
         table = new JTable(model);
+
+        // 컬럼 순서 변경 불가능하도록 설정
+        table.getTableHeader().setReorderingAllowed(false);
+
         add(new JScrollPane(table));
 
 
@@ -103,15 +106,15 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
         //버튼추가
         setLayout(new GridLayout(2, 1));
 
-        JPanel panel = new JPanel(new GridLayout(3, 3));
+        JPanel panel = new JPanel(new GridLayout(3, 4));
 
-        //아래 위로 빈칸 넣기
-        for (int i = 0; i < 4; i++) {
+//        아래 위로 빈칸 넣기
+        for (int i = 0; i < 1; i++) {
             JLabel noContentLabel = new JLabel("");
             panel.add(noContentLabel);
         }
 
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         //검색 -----------------------------------------------------------------------------------------
         JButton searchBtn = new JButton("검색");
@@ -124,6 +127,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
                 search();
             }
         });
+
         JButton prtAll = new JButton("전체보기");
         prtAll.addActionListener(new ActionListener() {
 
@@ -137,7 +141,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
         centerPanel.add(combo);
         centerPanel.add(searchTextField);
         centerPanel.add(searchBtn);
-        centerPanel.add(prtAll);
+
 
         //등록 ----------------------------------------------------------------------------------------
         JButton insertBtn = new JButton("등록");
@@ -195,17 +199,6 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
 
         centerPanel.add(insertBtn);
 
-        //삭제 ----------------------------------------------------------------------------------------
-        JButton deleteBtn = new JButton("삭제");
-        deleteBtn.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                delete();
-
-            }
-        });
-        centerPanel.add(deleteBtn);
 
         //수정 ---------------------------------------------------------------------------------------
         JButton updateBtn = new JButton("수정");
@@ -219,21 +212,34 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
 
         centerPanel.add(updateBtn);
 
+        //삭제 ----------------------------------------------------------------------------------------
+        JButton deleteBtn = new JButton("삭제");
+        deleteBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                delete();
+
+            }
+        });
+        centerPanel.add(deleteBtn);
+
+        centerPanel.add(prtAll);
+
 
         panel.add(centerPanel);
         add(panel);
 
-        //아래 위로 빈칸 넣기
-        for (int i = 0; i < 4; i++) {
-            JLabel noContentLabel = new JLabel("");
-            panel.add(noContentLabel);
-        }
 
     }
 
     public void showFrame() {
         setTitle("일정표-관리자");
-        setBounds(100, 100, 900, 500);
+        setSize(600, 400); // 창 크기 설정
+
+        setLocationRelativeTo(null);
+        setResizable(false);
+
         setVisible(true);
     }
 

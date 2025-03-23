@@ -7,21 +7,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
+
+// import junggkim.util.*;
+
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TimeTableDAO extends SuperDAO {
-    private Connection conn;
-
-    public TimeTableDAO() throws SQLException {
-        this.conn = super.getConnection();
-    }
-
 
     public List<TimeTableDTO> select(){
         List<TimeTableDTO> timeTableDTOList = new ArrayList<>();
         String query = "SELECT * FROM timeTable";
+        Connection conn = super.getConnection();
+
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -37,6 +37,11 @@ public class TimeTableDAO extends SuperDAO {
                 timeTableDTOList.add(timeTableDTO);
             }
         } catch (SQLException e) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace(System.err);
         }
         return timeTableDTOList;
@@ -45,9 +50,10 @@ public class TimeTableDAO extends SuperDAO {
 
     public void insert(TimeTableDTO timeTableDTO) {
         String query = "INSERT INTO timeTable  VALUES(?,?,?,?)";
+
+        Connection conn = super.getConnection();
+
         try {
-
-
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, timeTableDTO.getTiId());
             stmt.setInt(2, timeTableDTO.getTiDay());
@@ -57,6 +63,11 @@ public class TimeTableDAO extends SuperDAO {
             stmt.executeUpdate();
 
         } catch (Exception e) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }
@@ -64,6 +75,9 @@ public class TimeTableDAO extends SuperDAO {
 
     public void update(TimeTableDTO timeTableDTO, String id) {
         String query = "UPDATE timeTable SET tiId = ?, tiDay = ? , tiTime = ? , tiContent = ? WHERE tiId = ?";
+
+        Connection conn = super.getConnection();
+
         try {
             PreparedStatement cursor = conn.prepareStatement(query);
 
@@ -79,6 +93,11 @@ public class TimeTableDAO extends SuperDAO {
             cursor.executeUpdate();
 
         } catch (SQLException e) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }
@@ -87,6 +106,7 @@ public class TimeTableDAO extends SuperDAO {
     public void delete(String tiId) {
         String query = "DELETE FROM timeTable WHERE tiId = ?";
 
+        Connection conn = super.getConnection();
 
         try{
             PreparedStatement cursor = conn.prepareStatement(query);
@@ -95,6 +115,11 @@ public class TimeTableDAO extends SuperDAO {
             cursor.executeUpdate();
 
         }catch (Exception e){
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }

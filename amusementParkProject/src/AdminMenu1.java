@@ -92,7 +92,7 @@ public class AdminMenu1 extends JFrame {
                 throw new RuntimeException(ex);
             }
         });
-        attraction.addActionListener(_ -> attractClick());
+        attraction.addActionListener(e -> attractClick());
         reservation.addActionListener(e -> resCLick());
         schedule.addActionListener(e -> {
             scheduleClick();

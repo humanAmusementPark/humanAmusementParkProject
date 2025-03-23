@@ -137,7 +137,8 @@ public class ClientGUI extends JFrame {
 
     public Socket getFlagFromServer(int port) throws IOException, ClassNotFoundException {
 
-        socket = new Socket("192.168.0.28", port); // 서버와 연결
+//        socket = new Socket("192.168.0.28", port); // 서버와 연결
+        socket = new Socket("172.30.1.12", port);  // 소켓을 한 번만 열기
 
         writer = new ObjectOutputStream(socket.getOutputStream());
         System.out.println("요요요요요요요용");

@@ -128,6 +128,28 @@ VALUES
     ('AT013', '이솝', 'resource\\images\\이솝.jpg', 30, 1),
     ('AT014', '판다', 'resource\\images\\판다.jpg', 30, 1);
 
+-- 놀이기구 테이블 mac용
+-- 놀이기구 테이블 샘플 데이터
+INSERT INTO attraction (atId, atName, atUrl, atMax, atOnoff)
+VALUES
+    ('AT001', 'lost', 'resource/images/lost.jpg', 20, 1),
+    ('AT002', 't익스', 'resource/images/t익스.jpg', 30, 1),
+    ('AT003', '더블락', 'resource/images/더블락.jpg', 10, 1),
+    ('AT004', '로스트2', 'resource/images/로스트2.jpg', 15, 0),
+    ('AT005', '롤링', 'resource/images/롤링.jpg', 25, 1),
+    ('AT006', '버드', 'resource/images/버드.jpg', 20, 1),
+    ('AT007', '범퍼', 'resource/images/범퍼.jpg', 15, 0),
+    ('AT008', '사파리', 'resource/images/사파리.jpg', 25, 1),
+    ('AT009', '썬더폴스', 'resource/images/썬더폴스.jpg', 20, 1),
+    ('AT010', '씨라이언', 'resource/images/씨라이언.jpg', 30, 1),
+    ('AT011', '애니멀원더 스테이지', 'resource/images/애니멀원더 스테이지.jpg', 35, 1),
+    ('AT012', '애니멀원더 월드', 'resource/images/애니멀원더 월드.jpg', 20, 1),
+    ('AT013', '이솝', 'resource/images/이솝.jpg', 30, 1),
+    ('AT014', '판다', 'resource/images/판다.jpg', 30, 1);
+
+
+
+
 
 -- 일정표 테이블 샘플 데이터
 INSERT INTO timeTable (tiId, tiDay, tiTime, tiContent)
