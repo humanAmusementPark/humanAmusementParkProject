@@ -30,9 +30,9 @@ public class ticketGUI extends JFrame implements ActionListener {
 
         // 이미지 경로 확인
         //mac 용
-        String imagePath = "resource/images/티켓.jpg";
+//        String imagePath = "resource/images/티켓.jpg";
         //window용
-//        String imagePath = "resource\\images\\티켓.jpg";
+        String imagePath = "resource\\images\\티켓.jpg";
 
         Image image = new ImageIcon(imagePath).getImage();
 

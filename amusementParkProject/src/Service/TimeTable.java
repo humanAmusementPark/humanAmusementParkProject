@@ -34,9 +34,9 @@ public class TimeTable extends JFrame {
 
     public void setDisplay() {
 
-//        Image image = new ImageIcon("resource\\images\\일정표.jpeg").getImage();
+        Image image = new ImageIcon("resource\\images\\일정표.jpeg").getImage();
         //mac용
-        Image image = new ImageIcon("resource/images/일정표.jpeg").getImage();
+//        Image image = new ImageIcon("resource/images/일정표.jpeg").getImage();
 
         JPanel ImagePanel = new JPanel(){
             public void paintComponent(Graphics g) {

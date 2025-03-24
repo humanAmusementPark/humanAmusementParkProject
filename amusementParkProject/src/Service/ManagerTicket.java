@@ -8,10 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
@@ -55,18 +52,22 @@ public class ManagerTicket extends JFrame {
             dataList[i][2] = String.valueOf(ticketDTO.getTPrice());
         }
         // JTable 관리자 생성
-        model = new DefaultTableModel(dataList, columnType);
+        model = new DefaultTableModel(dataList, columnType){
+          @Override
+          public boolean isCellEditable(int row, int column) {
+              return column != 0;
+          }
+        };
 
         table = new JTable(model);
-        // 컬럼 순서 변경 불가능하도록 설정
+
         table.getTableHeader().setReorderingAllowed(false);
+
 
 
         //JScrollPane처리를 해줘야 헤더 까지 나옴
         add(new JScrollPane(table));
 
-//        //테이블에 MouseListener등록
-//        table.addMouseListener(this);
 
         //레이아웃 추가
         setLayout(new GridLayout(2, 1));
@@ -244,6 +245,8 @@ public class ManagerTicket extends JFrame {
         int rowIndex = table.getSelectedRow();
         int columnIndex = table.getSelectedColumn();
 
+
+
         TicketDTO newTicketDTO = null;
 
         String value = null;
@@ -256,18 +259,8 @@ public class ManagerTicket extends JFrame {
         } else {
             switch (columnIndex) {
                 case 0:
-                    value = table.getValueAt(rowIndex, 0).toString();
 
-                    id = ticketDTOList.get(rowIndex).getTPass();
-
-                    newTicketDTO = TicketDTO.builder()
-                            .tPass(value)
-                            .tName(ticketDTOList.get(rowIndex).getTName())
-                            .tPrice(ticketDTOList.get(rowIndex).getTPrice())
-                            .build();
-                    //db처리
-                    ticketDAO.update(newTicketDTO,id);
-
+                    JOptionPane.showMessageDialog(this, "다른칼럼을 선택하세요.", "메세지", JOptionPane.WARNING_MESSAGE);
                     break;
                 case 1:
                     value = table.getValueAt(rowIndex, 1).toString();
@@ -284,13 +277,22 @@ public class ManagerTicket extends JFrame {
                     break;
                 case 2:
                     value = table.getValueAt(rowIndex, 2).toString();
-
+                    int tPrice = 0;
+                    if (value.isEmpty()){
+                        value = "0";
+                    }else {
+                        try{
+                            tPrice = Integer.parseInt(value);
+                        }catch (Exception e){
+                            JOptionPane.showMessageDialog(this, "숫자를 입력하세요.", "메세지", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
                     id = ticketDTOList.get(rowIndex).getTPass();
 
                     newTicketDTO = TicketDTO.builder()
                             .tPass(ticketDTOList.get(rowIndex).getTPass())
                             .tName(ticketDTOList.get(rowIndex).getTName())
-                            .tPrice(Integer.parseInt(value))
+                            .tPrice(tPrice)
                             .build();
                     //db처리
                     ticketDAO.update(newTicketDTO,id);
@@ -310,6 +312,7 @@ public class ManagerTicket extends JFrame {
         setResizable(false);
 
         setVisible(true);
+
     }
 
 }

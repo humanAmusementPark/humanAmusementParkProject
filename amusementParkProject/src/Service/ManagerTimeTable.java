@@ -61,10 +61,15 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
     }
 
     public int changeDayToInt(String day) {
+
         int dayNum = 0;
         String[] dayList = {"월요일","화요일","수요일","목요일","금요일","토요일","일요일"};
 
         for (int i = 0; i < dayList.length + 1; i++) {
+            if (i == 7){
+                JOptionPane.showMessageDialog(this, "요일을 제대로 적으세요.", "메세지", JOptionPane.WARNING_MESSAGE);
+                break ;
+            }
             if (dayList[i].equals(day)) {
                 dayNum = i + 1;
                 break;
@@ -87,8 +92,13 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
             dataList[i][2] = timeTableDTO.getTiTime() + "";
             dataList[i][3] = timeTableDTO.getTiContent();
         }
-        // JTable, JTable 관리자 생성하기**
-        model = new DefaultTableModel(dataList, columnType);
+        // JTable 관리자 생성
+        model = new DefaultTableModel(dataList, columnType){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column != 0;
+            }
+        };
 
 
         table = new JTable(model);
@@ -406,23 +416,13 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
             return;
         } else {
             switch (columnIndex) {
-                case 0:
-                    value = table.getValueAt(rowIndex, 0).toString();
-                    String id = timeTableDTOList.get(rowIndex).getTiId();
-                    newTimeTableDTO = TimeTableDTO.builder()
-                            .tiId(value)
-                            .tiDay(timeTableDTOList.get(rowIndex).getTiDay())
-                            .tiTime(timeTableDTOList.get(rowIndex).getTiTime())
-                            .tiContent(timeTableDTOList.get(rowIndex).getTiContent())
-                            .build();
-
-                    timeTableDAO.update(newTimeTableDTO,id);
-
-
-                    break;
                 case 1:
                     value = table.getValueAt(rowIndex, 1).toString();
                     int result = changeDayToInt(value);
+                    if (result == 0){
+                        return ;
+                    }
+
                     String id2 = timeTableDTOList.get(rowIndex).getTiId();
                     newTimeTableDTO = TimeTableDTO.builder()
                             .tiId(timeTableDTOList.get(rowIndex).getTiId())
@@ -433,7 +433,13 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
                     timeTableDAO.update(newTimeTableDTO,id2);
                     break;
                 case 2:
-                    Time value2 = Time.valueOf(table.getValueAt(rowIndex, 2).toString());
+                    Time value2 = null;
+                    try {
+                        value2 = Time.valueOf(table.getValueAt(rowIndex, 2).toString());
+                    }catch (Exception e){
+                        JOptionPane.showMessageDialog(this, "시간을 제대로 적으세요.", "메세지", JOptionPane.WARNING_MESSAGE);
+                        return ;
+                    }
                     String id3 = timeTableDTOList.get(rowIndex).getTiId();
                     newTimeTableDTO = TimeTableDTO.builder()
                             .tiId(timeTableDTOList.get(rowIndex).getTiId())
