@@ -1,0 +1,13 @@
+insert into attraction values('AT001','로스트발리','C:\\Users\\hu-15\\Downloads\\사진\\lost.jpg',50,1);
+insert into attraction values('AT002','롤러코스터','C:\\Users\\hu-15\\Downloads\\사진\\t익스.jpg',50,1);
+insert into attraction values('AT003','더블락스핀','C:\\Users\\hu-15\\Downloads\\사진\\더블락.jpg',50,1);
+insert into attraction values('AT004','롤링엑스트레인','C:\\Users\\hu-15\\Downloads\\사진\\롤링.jpg',50,1);
+insert into attraction values('AT005','버드파라다이스','C:\\Users\\hu-15\\Downloads\\사진\\버드.jpg',50,1);
+insert into attraction values('AT006','범퍼카','C:\\Users\\hu-15\\Downloads\\사진\\범퍼.jpg',50,1);
+insert into attraction values('AT007','사파리월드','C:\\Users\\hu-15\\Downloads\\사진\\사파리.jpg',50,1);
+insert into attraction values('AT008','썬더홀스','C:\\Users\\hu-15\\Downloads\\사진\\썬더폴스.jpg',50,1);
+insert into attraction values('AT009','씨라이언스타디움','C:\\Users\\hu-15\\Downloads\\사진\\씨라이언.jpg',50,1);
+insert into attraction values('AT010','애니멀원더스테이지','C:\\Users\\hu-15\\Downloads\\사진\\애니멀원더 스테이지.jpg',50,1);
+insert into attraction values('AT011','애니멀원더월드','C:\\Users\\hu-15\\Downloads\\사진\\애니멀원더 월드.jpg',50,1);
+insert into attraction values('AT012','판다월드','C:\\Users\\hu-15\\Downloads\\사진\\판다.png',50,1);
+insert into attraction values('AT013','이솝빌리지','C:\\Users\\hu-15\\Downloads\\사진\\이솝.jpg',50,1);
