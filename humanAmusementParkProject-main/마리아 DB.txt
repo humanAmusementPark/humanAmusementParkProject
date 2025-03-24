@@ -1,10 +1,6 @@
-use mysql;
 
-drop table if exists reservation;
-drop table if exists member;
-drop table if exists administer;
-drop table if exists ticket;
-drop table if exists foodmenu, food, attraction, timetable; # 테이블 초기화
+
+drop table if exists reservation,member,administer,ticket,attraction,timeTable; # 테이블 초기화
 
 create table if not exists administer # 관리자
 (
@@ -21,21 +17,6 @@ create table if not exists ticket # 이용권
     tPass  varchar(4) primary key, # 이용권 번호
     tName  varchar(10) not null,   # 이용권 이름
     tPrice int         not null    # 이용권 가격
-);
-
-create table if not exists food # 음식점
-(
-    fId   varchar(10) primary key,     # 음식점 번호
-    fName varchar(10) not null unique, # 음식점 이름
-    fUrl  varchar(50) not null         # 음식점 사진 url
-);
-
-create table if not exists foodMenu # 음식점 메뉴
-(
-    fId     varchar(10) not null,    # 음식점 번호
-    fmName  varchar(10) primary key, # 메뉴 이름
-    fmPrice int         not null,    # 메뉴 가격
-    foreign key (fId) references food (fId) on delete cascade
 );
 
 create table if not exists attraction # 놀이기구
@@ -68,13 +49,13 @@ create table if not exists member # 회원
 
 create table if not exists reservation # 예약
 (
-    no    int primary key,      # 예약번호
-    mId   varchar(10) not null, # 회원 아이디
-    tPass varchar(4)  not null, # 이용권 번호
-    atId  varchar(10) not null, # 놀이기구 번호
-    rTime datetime    not null, # 예약시간
+    no    int auto_increment primary key, # 예약번호
+    mId   varchar(10) not null,           # 회원 아이디
+    tPass varchar(4)  not null,           # 이용권 번호
+    atId  varchar(10) not null,           # 놀이기구 번호
+    rTime datetime    not null,           # 예약시간
     foreign key (mId) references member (mId) on delete cascade,
-    foreign key (tPass) references member (tPass) on delete cascade,
+    foreign key (tPass) references ticket (tPass) on delete cascade,
     foreign key (atId) references attraction (atId) on delete cascade
 );
 
@@ -94,39 +75,22 @@ VALUES ('T001', '일일권', 50000),
        ('T004', 'VIP권', 120000),
        ('T005', '연간권', 300000);
 
--- 음식점 테이블 샘플 데이터
-INSERT INTO food (fId, fName, fUrl)
-VALUES ('F001', '한식당', 'http://example.com/hansik.jpg'),
-       ('F002', '일식당', 'http://example.com/japan.jpg'),
-       ('F003', '중식당', 'http://example.com/china.jpg'),
-       ('F004', '양식당', 'http://example.com/western.jpg'),
-       ('F005', '패스트푸드', 'http://example.com/fastfood.jpg');
-
--- 음식점 메뉴 테이블 샘플 데이터
-INSERT INTO foodMenu (fId, fmName, fmPrice)
-VALUES ('F001', '불고기', 15000),
-       ('F002', '초밥세트', 20000),
-       ('F003', '짜장면', 8000),
-       ('F004', '스테이크', 35000),
-       ('F005', '햄버거', 7000);
-
 -- 놀이기구 테이블 샘플 데이터
 INSERT INTO attraction (atId, atName, atUrl, atMax, atOnoff)
-VALUES
-    ('AT001', 'lost', 'resource\\images\\lost.jpg', 20, 1),
-    ('AT002', 't익스', 'resource\\images\\t익스.jpg', 30, 1),
-    ('AT003', '더블락', 'resource\\images\\더블락.jpg', 10, 1),
-    ('AT004', '로스트2', 'resource\\images\\로스트2.jpg', 15, 0),
-    ('AT005', '롤링', 'resource\\images\\롤링.jpg', 25, 1),
-    ('AT006', '버드', 'resource\\images\\버드.jpg', 20, 1),
-    ('AT007', '범퍼', 'resource\\images\\범퍼.jpg', 15, 0),
-    ('AT008', '사파리', 'resource\\images\\사파리.jpg', 25, 1),
-    ('AT009', '썬더폴스', 'resource\\images\\썬더폴스.jpg', 20, 1),
-    ('AT010', '씨라이언', 'resource\\images\\씨라이언.jpg', 30, 1),
-    ('AT011', '애니멀원더 스테이지', 'resource\\images\\애니멀원더 스테이지.jpg', 35, 1),
-    ('AT012', '애니멀원더 월드', 'resource\\images\\애니멀원더 월드.jpg', 20, 1),
-    ('AT013', '이솝', 'resource\\images\\이솝.jpg', 30, 1),
-    ('AT014', '판다', 'resource\\images\\판다.jpg', 30, 1);
+VALUES ('AT001', 'lost', 'resource\\images\\lost.jpg', 20, 1),
+       ('AT002', 't익스', 'resource\\images\\t익스.jpg', 30, 1),
+       ('AT003', '더블락', 'resource\\images\\더블락.jpg', 10, 1),
+       ('AT004', '로스트2', 'resource\\images\\로스트2.jpg', 15, 0),
+       ('AT005', '롤링', 'resource\\images\\롤링.jpg', 25, 1),
+       ('AT006', '버드', 'resource\\images\\버드.jpg', 20, 1),
+       ('AT007', '범퍼', 'resource\\images\\범퍼.jpg', 15, 0),
+       ('AT008', '사파리', 'resource\\images\\사파리.jpg', 25, 1),
+       ('AT009', '썬더폴스', 'resource\\images\\썬더폴스.jpg', 20, 1),
+       ('AT010', '씨라이언', 'resource\\images\\씨라이언.jpg', 30, 1),
+       ('AT011', '애니멀원더 스테이지', 'resource\\images\\애니멀원더 스테이지.jpg', 35, 1),
+       ('AT012', '애니멀원더 월드', 'resource\\images\\애니멀원더 월드.jpg', 20, 1),
+       ('AT013', '이솝', 'resource\\images\\이솝.jpg', 30, 1),
+       ('AT014', '판다', 'resource\\images\\판다.jpg', 30, 1);
 
 
 -- 일정표 테이블 샘플 데이터
@@ -146,23 +110,28 @@ VALUES ('M1001', 'mpass1', '김하늘', 1, '2000-05-14', 'T001'),
        ('M1005', 'mpass5', '정지훈', 0, '1996-03-10', 'T005');
 
 -- 예약 테이블 샘플 데이터
-INSERT INTO reservation (no, mId, tPass, atId, rTime)
-VALUES (6, 'M1005', 'T005', 'AT005', '2025-03-20 09:00:00'),
-       (7, 'M1005', 'T005', 'AT005', '2025-03-21 10:15:00'),
-       (8, 'M1005', 'T005', 'AT005', '2025-03-22 11:30:00'),
-       (9, 'M1005', 'T005', 'AT005', '2025-03-23 13:45:00'),
-       (10, 'M1005', 'T005', 'AT005', '2025-03-24 15:00:00'),
-       (11, 'M1005', 'T005', 'AT005', '2025-03-25 17:15:00'),
-       (12, 'M1005', 'T005', 'AT005', '2025-03-26 19:30:00'),
-       (13, 'M1005', 'T005', 'AT005', '2025-03-27 08:45:00'),
-       (14, 'M1005', 'T005', 'AT005', '2025-03-28 10:00:00'),
-       (15, 'M1005', 'T005', 'AT005', '2025-03-29 12:15:00'),
-       (16, 'M1005', 'T005', 'AT005', '2025-03-30 14:30:00'),
-       (17, 'M1005', 'T005', 'AT005', '2025-03-31 16:45:00'),
-       (18, 'M1005', 'T005', 'AT005', '2025-04-01 18:00:00'),
-       (19, 'M1005', 'T005', 'AT005', '2025-04-02 20:15:00'),
-       (20, 'M1005', 'T005', 'AT005', '2025-04-03 22:30:00');
+INSERT INTO reservation (mId, tPass, atId, rTime)
+VALUES ('M1001', 'T001', 'AT001', '2025-03-25 10:00:00'),
+       ('aaa', 'T001', 'AT002', '2025-03-25 11:00:00'),
+       ('M1003', 'T003', 'AT003', '2025-03-25 12:00:00'),
+       ('M1004', 'T004', 'AT004', '2025-03-25 13:00:00'),
+       ('M1005', 'T005', 'AT005', '2025-03-25 14:00:00'),
+       ('M1001', 'T001', 'AT006', '2025-03-25 15:00:00'),
+       ('aaa', 'T001', 'AT007', '2025-03-25 16:00:00'),
+       ('M1003', 'T003', 'AT008', '2025-03-25 17:00:00'),
+       ('M1004', 'T004', 'AT009', '2025-03-25 18:00:00'),
+       ('M1005', 'T005', 'AT010', '2025-03-25 19:00:00'),
+       ('M1001', 'T001', 'AT011', '2025-03-26 10:00:00'),
+       ('aaa', 'T001', 'AT012', '2025-03-26 11:00:00'),
+       ('M1003', 'T003', 'AT013', '2025-03-26 12:00:00'),
+       ('M1004', 'T004', 'AT014', '2025-03-26 13:00:00'),
+       ('M1005', 'T005', 'AT001', '2025-03-26 14:00:00'),
+       ('M1001', 'T001', 'AT002', '2025-03-26 15:00:00'),
+       ('aaa', 'T001', 'AT003', '2025-03-26 16:00:00'),
+       ('M1003', 'T003', 'AT004', '2025-03-26 17:00:00'),
+       ('M1004', 'T004', 'AT005', '2025-03-26 18:00:00'),
+       ('M1005', 'T005', 'AT006', '2025-03-26 19:00:00');
 
 
-
-select * from member;
+select *
+from member;
