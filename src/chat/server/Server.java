@@ -26,13 +26,9 @@ public class Server {
         serverSocket = new ServerSocket(port);
         log("서버 소켓 시작- 리스닝 포트 : " + port);
 
-//        셧다운 훅 등록
-//        addShutdownHook();
-        //프로그램 작동
+
         running();
-
-
-    }
+ }
 
     private void running() {
         try {
