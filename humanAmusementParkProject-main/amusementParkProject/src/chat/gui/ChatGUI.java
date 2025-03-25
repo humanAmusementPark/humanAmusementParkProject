@@ -135,13 +135,13 @@ public class ChatGUI {
         bottomPanel.add(messageField, BorderLayout.CENTER);
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
 
-        // 프레임에 추가
+
         frame.add(headerPanel, BorderLayout.NORTH);
         frame.add(inputPanel, BorderLayout.NORTH); // 이름, 문의 유형, 매칭 버튼 영역
         frame.add(chatScroll, BorderLayout.CENTER); // 채팅창
         frame.add(bottomPanel, BorderLayout.SOUTH); // 메시지 입력 및 버튼
 
-        // 이벤트 리스너 추가
+
         matchButton.addActionListener(e -> startMatching());
         exitButton.addActionListener(e -> {
             closed = true;
@@ -166,8 +166,8 @@ public class ChatGUI {
             @Override
             public void windowClosing(WindowEvent e) {
                 closed = true;
-                sendMessage(); // 서버에 종료 메시지 전송
-                closeResources(); // 리소스 정리
+                sendMessage();
+                closeResources();
             }
         });
 

@@ -21,6 +21,7 @@ public class AdminMenu1 extends JFrame {
     JButton member = new JButton("회원");
     JButton ticket = new JButton("티켓");
     JButton update = new JButton("로그아웃");
+    JButton adminManage = new JButton("관리자정보"); // 새로 추가
 
     LoginG LoginG;
     String id;
@@ -28,7 +29,7 @@ public class AdminMenu1 extends JFrame {
     public AdminMenu1(LoginG loginG, String id) {
         this.id = id;
         this.LoginG = loginG;
-        this.setSize(1200, 800); // 더 큰 창으로 조정
+        this.setSize(1200, 800);
         this.setLocationRelativeTo(null);
         this.setTitle("정규랜드 관리자모드");
         setupUI();
@@ -38,33 +39,32 @@ public class AdminMenu1 extends JFrame {
 
     private void setupUI() {
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBackground(new Color(240, 242, 245)); // 웹 느낌의 연한 배경
+        mainPanel.setBackground(new Color(240, 242, 245));
 
-        // 헤더 패널
         headerPanel.setLayout(new BorderLayout());
-        headerPanel.setBackground(new Color(26, 35, 126)); // 어두운 파란색 헤더
+        headerPanel.setBackground(new Color(26, 35, 126));
         headerPanel.setPreferredSize(new Dimension(1200, 80));
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 28));
         titleLabel.setForeground(Color.WHITE);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
         headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // 콘텐츠 패널
         contentPanel.setLayout(new GridBagLayout());
         contentPanel.setBackground(new Color(240, 242, 245));
         contentPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15); // 버튼 간 간격
+        gbc.insets = new Insets(15, 15, 15, 15);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // 버튼 배치
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1;
         contentPanel.add(chating, gbc);
         gbc.gridx = 1; gbc.gridy = 0;
         contentPanel.add(attraction, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1; // 예약관리 한 칸으로 줄임
         contentPanel.add(reservation, gbc);
+        gbc.gridx = 1; gbc.gridy = 1; // 관리자관리 추가
+        contentPanel.add(adminManage, gbc);
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1;
         contentPanel.add(member, gbc);
         gbc.gridx = 1; gbc.gridy = 2;
@@ -74,20 +74,18 @@ public class AdminMenu1 extends JFrame {
         gbc.gridx = 1; gbc.gridy = 3;
         contentPanel.add(update, gbc);
 
-        // 메인 패널에 추가
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        // 버튼 스타일 적용
         styleButton(chating, new Color(33, 150, 243), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
         styleButton(attraction, new Color(33, 150, 243), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
-        styleButton(reservation, new Color(76, 175, 80), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 20), 530, 70); // 더 큰 버튼
+        styleButton(reservation, new Color(76, 175, 80), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70); // 크기 조정
+        styleButton(adminManage, new Color(156, 39, 176), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70); // 관리자관리 스타일
         styleButton(member, new Color(255, 152, 0), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
-        styleButton(ticket, new Color(255, 152, 0), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
+        styleButton(ticket, new Color(255, 102, 0), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
         styleButton(schedule, new Color(97, 97, 97), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
         styleButton(update, new Color(244, 67, 54), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
 
-        // 액션 리스너 추가
         setupActions();
 
         this.add(mainPanel);
@@ -105,7 +103,6 @@ public class AdminMenu1 extends JFrame {
         ));
         button.setOpaque(true);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // 호버 효과
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(bgColor.brighter());
@@ -123,7 +120,8 @@ public class AdminMenu1 extends JFrame {
         schedule.addActionListener(e -> scheduleClick());
         member.addActionListener(e -> memberClick());
         ticket.addActionListener(e -> ticketClick());
-        update.addActionListener(e -> adminUpdate());
+        update.addActionListener(e -> logOut());
+        adminManage.addActionListener(e -> adminManageClick()); // 새로 추가
     }
 
     private void chatClick() {
@@ -162,8 +160,17 @@ public class AdminMenu1 extends JFrame {
         }
     }
 
-    private void adminUpdate() {
+
+
+    private void adminManageClick() {
         System.out.println("연결");
+        // 여기에 관리자관리 기능 추가 (예: new AdminManagerG();)
         new AdG(id);
+    }
+
+    private void logOut() {
+        System.out.println("연결");
+         dispose();
+         new LoginG();
     }
 }

@@ -48,13 +48,12 @@ public class Session implements Runnable {
     @Override
     public void run() throws RuntimeException {
         try {
-//            send("역할을 입력하세요 ( 고객 / 상담사): ");
+
 
             role = input.readUTF();
-//            send("이름을 입력하세요 : ");
+
             name = input.readUTF();
-//
-//            send("원하는 상담 : ");
+
             type = input.readUTF();
 
             sessionManager.add(this);
@@ -66,6 +65,7 @@ public class Session implements Runnable {
                 if (commandManager.execute(received, this)) {
                    matchedSession.setFlag(true);
                     matchedSession.setMatchedSession(null);
+                    sessionManager.remove(this.matchedSession);//추가!@!@!@!@!@!@!
                     send("님이 퇴장하셨습니다.");
                     sessionManager.remove(this);
                     sessionManager.matchCustomerToAdmin(matchedSession);

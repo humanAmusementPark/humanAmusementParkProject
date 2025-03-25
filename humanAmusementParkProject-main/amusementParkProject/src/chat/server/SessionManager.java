@@ -49,7 +49,7 @@ public class SessionManager {
             }
 
 
-            // 매칭된 상담사와 고객의 세션에 서로를 매칭
+
             if (customer != null) {
                 customer.setMatchedSession(admin);
             }
@@ -57,7 +57,7 @@ public class SessionManager {
                 admin.setMatchedSession(customer);
             }
 
-            // 매칭된 상담사와 고객에게 알림
+
             try {
                 if(session.getMatchedSession()!=null) {
                     customer.send("고객이 매칭되었습니다. 이제 대화가 가능합니다.");
