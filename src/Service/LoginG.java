@@ -1,8 +1,6 @@
 package javaproject.Service;
 
-import javaproject.AdminMenu1;
 import javaproject.DAO.MemDAO;
-import javaproject.Map;
 
 import javax.swing.*;
 import java.awt.*;

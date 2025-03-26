@@ -68,7 +68,7 @@ public class TimeTable extends JFrame {
         }
 
         // 요일별 데이터를 그룹화 Map 활용
-        Map<Integer, List<TimeTableDTO>> groupedData = new HashMap<>();
+        HashMap<Integer, List<TimeTableDTO>> groupedData = new HashMap<>();
         for (int i = 1; i <= 7; i++) {
             groupedData.put(i, new ArrayList<>());
         }

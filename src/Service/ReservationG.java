@@ -1,7 +1,6 @@
 package javaproject.Service;
 
 
-import javaproject.AdminMenu1;
 import javaproject.DAO.AttractionDAO;
 import javaproject.DAO.MemDAO;
 import javaproject.DAO.ReservationDAO;
@@ -17,10 +16,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
-import java.util.Date;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import java.util.List;
 
@@ -115,6 +110,10 @@ public class ReservationG extends JFrame implements ActionListener {
         System.out.println(id);
         MemDAO memDAO = new MemDAO();
         MemDTO memDTO = memDAO.select(id);
+        if(memDTO == null) {
+            JOptionPane.showMessageDialog(this, "회원 없음", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String tPass = memDTO.getTPass();
         System.out.println(tPass);
         if (tPass.isEmpty()) {

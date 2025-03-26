@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
@@ -19,7 +17,6 @@ import javaproject.DAO.ReservationDAO;
 import javaproject.DAO.TicketDAO;
 import javaproject.DTO.AttractionDTO;
 import javaproject.DTO.ReservationDTO;
-import javaproject.Map;
 
 public class Reservation extends JFrame {
     String mId = null;

@@ -1,4 +1,4 @@
-package javaproject;
+package javaproject.Service;
 
 import javaproject.DAO.MemDAO;
 import javaproject.DAO.TicketDAO;

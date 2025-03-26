@@ -1,6 +1,5 @@
-package javaproject;
+package javaproject.Service;
 
-import javaproject.Service.*;
 import javaproject.chat.gui.ChatClient;
 
 import javax.swing.*;
