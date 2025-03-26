@@ -41,6 +41,7 @@ public class LoginG extends JFrame implements ActionListener {
     SignInG signInG=new SignInG(pp);
 
     public LoginG() {
+
         this.setTitle("놀이공원 예약 시스템");
         this.setLayout(new GridLayout(2,1));
 

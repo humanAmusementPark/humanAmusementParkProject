@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -144,8 +145,12 @@ public class ChatGUI {
 
         matchButton.addActionListener(e -> startMatching());
         exitButton.addActionListener(e -> {
-            closed = true;
-            sendMessage();
+            closed = true; // 닫힘 플래그 설정
+            if (socket != null && !socket.isClosed()) { // 서버 연결 확인
+                sendMessage(); // 연결된 경우에만 메시지 전송
+            }
+            closeResources(); // 리소스 정리
+            frame.dispose(); // 창 닫기
         });
         reservationButton.addActionListener(e -> {
             inquiryType = "예약 관련 문의";
@@ -221,7 +226,8 @@ public class ChatGUI {
                             String message = input.readUTF();
                             chatArea.append(message + "\n");
                         }
-                    } catch (EOFException e) {
+                    }
+                    catch (EOFException e) {
                         System.out.println("예외 : " + e);
                         statusLabel.setText("서버 연결 끊어짐");
                     } catch (IOException e) {
@@ -233,6 +239,10 @@ public class ChatGUI {
                 }
             }).start();
 
+        }catch (ConnectException e){
+            JOptionPane.showMessageDialog(null,"서버연결 불가능");
+            frame.dispose();
+           //
         } catch (IOException e) {
             statusLabel.setText("서버 연결 실패");
             e.printStackTrace();
