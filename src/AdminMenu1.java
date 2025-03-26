@@ -6,6 +6,8 @@ import javaproject.chat.gui.ChatClient;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 public class AdminMenu1 extends JFrame {
@@ -26,15 +28,26 @@ public class AdminMenu1 extends JFrame {
     LoginG LoginG;
     String id;
 
-    public AdminMenu1(LoginG loginG, String id) {
+    public AdminMenu1(LoginG before, String id) {
         this.id = id;
-        this.LoginG = loginG;
+        this.LoginG = before;
         this.setSize(1200, 800);
         this.setLocationRelativeTo(null);
         this.setTitle("정규랜드 관리자모드");
         setupUI();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
     }
 
     private void setupUI() {
@@ -171,6 +184,7 @@ public class AdminMenu1 extends JFrame {
     private void logOut() {
         System.out.println("연결");
          dispose();
-         new LoginG();
+         LoginG.setVisible(true);
+
     }
 }

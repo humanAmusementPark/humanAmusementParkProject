@@ -195,6 +195,8 @@ public class LoginG extends JFrame implements ActionListener {
     private void submit() {
         String id = idField.getText();
         String pw = pwField.getText();
+        idField.setText("");
+        pwField.setText("");
         boolean success = false;
         MemDAO memDAO = new MemDAO();
         if (s_flag)

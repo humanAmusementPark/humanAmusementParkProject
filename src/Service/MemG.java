@@ -121,7 +121,7 @@ public class MemG extends JFrame {
         center.add(mPass, c);
         c.gridx = 1;
         c.gridy = 2;
-        mName = new JTextField(memDTO.getMName(),10);
+        mName = new JTextField(memDTO.getMName(), 10);
         center.add(mName, c);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
@@ -141,9 +141,7 @@ public class MemG extends JFrame {
         c.gridx = 2;
         c.gridy = 6;
         c.gridwidth = 1;
-        updateBut.setBackground(Color.BLACK);
-        updateBut.setFont(new Font("Aharoni 굵게", Font.BOLD, 12));
-        updateBut.setForeground(Color.WHITE);
+        updateBut.setFont(new Font("맑은고딕", Font.BOLD, 12));
         center.add(updateBut, c);
 
         this.add(center);

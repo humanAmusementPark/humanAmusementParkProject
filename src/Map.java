@@ -5,10 +5,7 @@ import javaproject.chat.gui.ChatClient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 
 public class Map extends JFrame implements ActionListener {
@@ -39,13 +36,13 @@ public class Map extends JFrame implements ActionListener {
         new Map(null, null);
     }
 
-    public Map(String id, LoginG loginG) {
-        this.LoginG = loginG;
+    public Map(String id, LoginG before) {
+        this.LoginG = before;
         this.id = id;
         this.setTitle("정규랜드 지도");
         this.setSize(1200, 7000);
         this.setLocation(0, 0);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.add(jpImage);
 
@@ -61,6 +58,17 @@ public class Map extends JFrame implements ActionListener {
         logoutBnt();
         ticketBnt();
         talkBut();
+
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
 
     }
 

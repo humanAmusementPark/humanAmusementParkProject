@@ -142,9 +142,7 @@ public class AdG extends JFrame {
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 2;
         c.gridy = 6;
-        updateBut.setBackground(Color.BLACK);
-        updateBut.setFont(new Font("Aharoni 굵게", Font.BOLD, 12));
-        updateBut.setForeground(Color.WHITE);
+        updateBut.setFont(new Font("맑은고딕", Font.BOLD, 12));
         center.add(updateBut, c);
 
         this.add(center);
