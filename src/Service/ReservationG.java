@@ -123,7 +123,7 @@ public class ReservationG extends JFrame implements ActionListener {
             String[] selections = attractionDAO.selectAllId();
             System.out.println(Arrays.toString(selections));
             String atId = JOptionPane.showInputDialog(this, id + "- " + tPass +
-                    "\n 예약할 놀이기구 번호 선택", "놀이기구 선택", JOptionPane.PLAIN_MESSAGE, null, selections, selections[0]).toString();
+                    "\n 예약할 시설 번호 선택", "시설 선택", JOptionPane.PLAIN_MESSAGE, null, selections, selections[0]).toString();
             System.out.println(atId);
             if (!atId.isEmpty()) {
                 info = new String[]{id, tPass, atId};
