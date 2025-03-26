@@ -41,7 +41,7 @@ public class ChatGUI {
         frame.setLayout(new BorderLayout());
         frame.setBackground(new Color(255, 255, 255));
 
-        // 상단 패널 (헤더)
+
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(255, 229, 0)); // 카카오톡 노란색
         headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -136,7 +136,7 @@ public class ChatGUI {
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
 
 
-        frame.add(headerPanel, BorderLayout.NORTH);
+      
         frame.add(inputPanel, BorderLayout.NORTH); // 이름, 문의 유형, 매칭 버튼 영역
         frame.add(chatScroll, BorderLayout.CENTER); // 채팅창
         frame.add(bottomPanel, BorderLayout.SOUTH); // 메시지 입력 및 버튼
@@ -199,7 +199,7 @@ public class ChatGUI {
         radio.setBackground(Color.WHITE);
         radio.setFocusPainted(false);
     }
-
+    Thread t=null;
     private void connectToServer(String serverAddress, int port) {
         try {
             socket = new Socket(serverAddress, port);
@@ -213,7 +213,11 @@ public class ChatGUI {
                 @Override
                 public void run() {
                     try {
+
+
+                        System.out.println("시작");
                         while (true) {
+
                             String message = input.readUTF();
                             chatArea.append(message + "\n");
                         }
@@ -270,18 +274,19 @@ public class ChatGUI {
         try {
             output.writeUTF(role);
             output.flush();
-            Thread.sleep(50);
+
             output.writeUTF(name);
             output.flush();
-            Thread.sleep(50);
+
             output.writeUTF(inquiryType);
             output.flush();
+
+
         } catch (IOException e) {
             JOptionPane.showMessageDialog(frame, "서버 전송 실패");
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
+
     }
 
     private void checkIfReadyToMatch() {

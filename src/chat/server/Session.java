@@ -48,13 +48,12 @@ public class Session implements Runnable {
     @Override
     public void run() throws RuntimeException {
         try {
-//            send("역할을 입력하세요 ( 고객 / 상담사): ");
+
 
             role = input.readUTF();
-//            send("이름을 입력하세요 : ");
+
             name = input.readUTF();
-//
-//            send("원하는 상담 : ");
+
             type = input.readUTF();
 
             sessionManager.add(this);
@@ -63,14 +62,16 @@ public class Session implements Runnable {
                 String received = input.readUTF();
                 log("클라 -> 서버 : " + received);
 
-                if (commandManager.execute(received, this)) {
-                    matchedSession.setFlag(true);
-                    matchedSession.setMatchedSession(null);
-                    sessionManager.remove(this.matchedSession);
-                    send("님이 퇴장하셨습니다.");
-                    sessionManager.remove(this);
-                    sessionManager.matchCustomerToAdmin(matchedSession);
 
+                if (commandManager.execute(received, this)) {
+                   if(matchedSession != null) {
+                       matchedSession.setFlag(true);
+                       matchedSession.setMatchedSession(null);
+                       sessionManager.matchCustomerToAdmin(matchedSession);
+
+                       send("님이 퇴장하셨습니다.");
+                   }
+                    sessionManager.remove(this);
                     close();
                 } else {
                     send(received);
@@ -92,6 +93,7 @@ public class Session implements Runnable {
             log("서버 - > 클라 : " + message);
             output.writeUTF(message);
             output.flush();
+
         }
     }
 
@@ -105,4 +107,16 @@ public class Session implements Runnable {
 
     }
 
+    public boolean conn() {
+        try {
+            getOutput().writeUTF("시작");
+            getOutput().flush();
+            input.readUTF();
+            System.out.println("연결");
+            return true;
+        }catch (Exception e){
+            System.out.println("탈출");
+        }
+        return false;
+    }
 }
