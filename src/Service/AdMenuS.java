@@ -16,7 +16,7 @@ public class AdMenuS extends JFrame {
     JLabel titleLabel = new JLabel("정규랜드 관리모드", SwingConstants.CENTER);
 
     JButton chating = new JButton("회원상담");
-    JButton attraction = new JButton("어트랙션");
+    JButton attraction = new JButton("시설관리");
     JButton reservation = new JButton("예약관리");
     JButton schedule = new JButton("일정표 관리");
     JButton member = new JButton("회원");
@@ -90,7 +90,7 @@ public class AdMenuS extends JFrame {
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
         styleButton(chating, new Color(33, 150, 243), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
-        styleButton(attraction, new Color(33, 150, 243), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
+        styleButton(attraction, new Color(15, 76, 233), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
         styleButton(reservation, new Color(76, 175, 80), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70); // 크기 조정
         styleButton(adminManage, new Color(156, 39, 176), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70); // 관리자관리 스타일
         styleButton(member, new Color(255, 152, 0), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);

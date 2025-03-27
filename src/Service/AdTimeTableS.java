@@ -165,21 +165,25 @@ public class AdTimeTableS extends JFrame implements MouseListener {
                 JPanel newpanel = new JPanel(new GridLayout(5,2));
 
                 JLabel idJLabel = new JLabel("id");
+                idJLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 idTextField = new JTextField(10);
                 newpanel.add(idJLabel);
                 newpanel.add(idTextField);
 
                 JLabel dayJLabel = new JLabel("요일");
+                dayJLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 dayTextField = new JTextField(10);
                 newpanel.add(dayJLabel);
                 newpanel.add(dayTextField);
 
                 JLabel timeJLabel = new JLabel("시간");
+                timeJLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 timeTextField = new JTextField(10);
                 newpanel.add(timeJLabel);
                 newpanel.add(timeTextField);
 
                 JLabel paradeJLabel = new JLabel("퍼레이드이름");
+                paradeJLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 paradeTextField = new JTextField(10);
                 newpanel.add(paradeJLabel);
                 newpanel.add(paradeTextField);

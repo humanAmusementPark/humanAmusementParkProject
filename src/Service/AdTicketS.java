@@ -170,8 +170,6 @@ public class AdTicketS extends JFrame {
         String ticketNum = ticketNumTextField.getText();
         String ticketName = tickNameTextField.getText();
         String ticketPrice = ticketPriceTextField.getText();
-
-
         // 값이 없을떄 경고창
         if (ticketNum.equals("")) {
             JOptionPane.showMessageDialog(newFrame, "이용권 번호를 입력해 주세요.", "메세지", JOptionPane.WARNING_MESSAGE);
@@ -183,24 +181,18 @@ public class AdTicketS extends JFrame {
         }
         if (ticketPrice.equals("")) {
             JOptionPane.showMessageDialog(newFrame, "이용권 가격을 입력하세요 ", "메세지", JOptionPane.WARNING_MESSAGE);
-            return;
         } else {
             int tPrice = Integer.parseInt(ticketPrice);
-
             TicketDTO ticketDTO = TicketDTO.builder()
                     .tPass(ticketNum)
                     .tName(ticketName)
                     .tPrice(tPrice)
                     .build();
-
             //db넣기
             ticketDAO.insertT(ticketDTO);
-
             ticketDTOList.add(ticketDTO);
-
             String[][] updatedData = listToArr();
-
-            //Jtable 부분 바꾼다.
+            //Jtable 부분 바꾸기.
             model.setDataVector(updatedData, new String[]{"이용권 번호", "이용권 이름", "이용권 가격"});
         }
     }
