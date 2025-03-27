@@ -1,0 +1,141 @@
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
++++ /dev/null	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
+@@ -1,8 +0,0 @@
+-# 디폴트 무시된 파일
+-/shelf/
+-/workspace.xml
+-# 에디터 기반 HTTP 클라이언트 요청
+-/httpRequests/
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+Index: .idea/git_toolbox_prj.xml
+===================================================================
+diff --git a/.idea/git_toolbox_prj.xml b/.idea/git_toolbox_prj.xml
+deleted file mode 100644
+--- a/.idea/git_toolbox_prj.xml	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
++++ /dev/null	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
+@@ -1,15 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="GitToolBoxProjectSettings">
+-    <option name="commitMessageIssueKeyValidationOverride">
+-      <BoolValueOverride>
+-        <option name="enabled" value="true" />
+-      </BoolValueOverride>
+-    </option>
+-    <option name="commitMessageValidationEnabledOverride">
+-      <BoolValueOverride>
+-        <option name="enabled" value="true" />
+-      </BoolValueOverride>
+-    </option>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/dataSources.xml
+===================================================================
+diff --git a/.idea/dataSources.xml b/.idea/dataSources.xml
+deleted file mode 100644
+--- a/.idea/dataSources.xml	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
++++ /dev/null	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
+@@ -1,17 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+-    <data-source source="LOCAL" name="@localhost" uuid="472492a3-7f85-4274-a426-76fa3ac0d19b">
+-      <driver-ref>mariadb</driver-ref>
+-      <synchronize>true</synchronize>
+-      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+-      <jdbc-url>jdbc:mariadb://localhost:3306</jdbc-url>
+-      <jdbc-additional-properties>
+-        <property name="com.intellij.clouds.kubernetes.db.host.port" />
+-        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+-        <property name="com.intellij.clouds.kubernetes.db.container.port" />
+-      </jdbc-additional-properties>
+-      <working-dir>$ProjectFileDir$</working-dir>
+-    </data-source>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/material_theme_project_new.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"MaterialThemeProjectNewConfig\">\r\n    <option name=\"metadata\">\r\n      <MTProjectMetadataState>\r\n        <option name=\"migrated\" value=\"true\" />\r\n        <option name=\"pristineConfig\" value=\"false\" />\r\n        <option name=\"userId\" value=\"-3144c146:19511d5513f:-7ffe\" />\r\n      </MTProjectMetadataState>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/material_theme_project_new.xml b/.idea/material_theme_project_new.xml
+--- a/.idea/material_theme_project_new.xml	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
++++ b/.idea/material_theme_project_new.xml	(date 1742911796624)
+@@ -3,9 +3,7 @@
+   <component name="MaterialThemeProjectNewConfig">
+     <option name="metadata">
+       <MTProjectMetadataState>
+-        <option name="migrated" value="true" />
+-        <option name="pristineConfig" value="false" />
+-        <option name="userId" value="-3144c146:19511d5513f:-7ffe" />
++        <option name="userId" value="6b760412:195cda34f9d:-7ffd" />
+       </MTProjectMetadataState>
+     </option>
+   </component>
+Index: .idea/libraries/lombok.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"libraryTable\">\r\n  <library name=\"lombok\">\r\n    <CLASSES>\r\n      <root url=\"jar://$PROJECT_DIR$/lib/lombok.jar!/\" />\r\n      <root url=\"jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/\" />\r\n    </CLASSES>\r\n    <JAVADOC />\r\n    <SOURCES />\r\n  </library>\r\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/lombok.xml b/.idea/libraries/lombok.xml
+--- a/.idea/libraries/lombok.xml	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
++++ b/.idea/libraries/lombok.xml	(date 1742948546103)
+@@ -2,7 +2,6 @@
+   <library name="lombok">
+     <CLASSES>
+       <root url="jar://$PROJECT_DIR$/lib/lombok.jar!/" />
+-      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/" />
+     </CLASSES>
+     <JAVADOC />
+     <SOURCES />
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/0325.iml\" filepath=\"$PROJECT_DIR$/.idea/0325.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
++++ b/.idea/modules.xml	(date 1742911900931)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/0325.iml" filepath="$PROJECT_DIR$/.idea/0325.iml" />
++      <module fileurl="file://$PROJECT_DIR$/mainmain.iml" filepath="$PROJECT_DIR$/mainmain.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_23\" default=\"true\" project-jdk-name=\"openjdk-23\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 00c61876868c21bc63dc4123933f9ee075a6e8f8)
++++ b/.idea/misc.xml	(date 1742948270498)
+@@ -1,6 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
+-    <output url="file://$PROJECT_DIR$/out" />
+-  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_18" default="true" project-jdk-name="corretto-18" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file

@@ -1,0 +1,296 @@
+Index: src/chat/gui/ChatGUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.gui;\r\n\r\nimport lombok.SneakyThrows;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.border.EmptyBorder;\r\nimport java.awt.*;\r\nimport java.awt.event.*;\r\nimport java.io.*;\r\nimport java.net.Socket;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.Date;\r\n\r\npublic class ChatGUI {\r\n\r\n    private JFrame frame;\r\n    private JTextField nameField;\r\n    private JTextArea chatArea;\r\n    private JTextField messageField;\r\n    private JButton sendButton;\r\n    private JButton exitButton;\r\n    private JButton matchButton;\r\n    private JLabel statusLabel;\r\n    private DataOutputStream output;\r\n    private DataInputStream input;\r\n    private String role;\r\n    private String inquiryType;\r\n    private Socket socket;\r\n    public boolean closed = false;\r\n\r\n    public ChatGUI(String serverAddress, int port, String role) {\r\n        this.role = role;\r\n        initialize(serverAddress, port);\r\n        connectToServer(serverAddress, port);\r\n    }\r\n\r\n    private void initialize(String serverAddress, int port) {\r\n        frame = new JFrame(\"정규랜드 고객센터\");\r\n        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);\r\n        frame.setSize(400, 700);\r\n        frame.setLayout(new BorderLayout());\r\n        frame.setBackground(new Color(255, 255, 255));\r\n\r\n\r\n        JPanel headerPanel = new JPanel(new BorderLayout());\r\n        headerPanel.setBackground(new Color(255, 229, 0)); // 카카오톡 노란색\r\n        headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n        headerPanel.setPreferredSize(new Dimension(400, 60));\r\n\r\n        JLabel titleLabel = new JLabel(\"정규랜드 고객센터 [\" + role + \"]\", SwingConstants.CENTER);\r\n        titleLabel.setFont(new Font(\"맑은 고딕\", Font.BOLD, 16));\r\n        titleLabel.setForeground(Color.BLACK);\r\n        headerPanel.add(titleLabel, BorderLayout.CENTER);\r\n\r\n        statusLabel = new JLabel(\"연결 대기중입니다\", SwingConstants.CENTER);\r\n        statusLabel.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 12));\r\n        statusLabel.setForeground(Color.GRAY);\r\n        headerPanel.add(statusLabel, BorderLayout.SOUTH);\r\n\r\n        // 입력 패널 (이름, 문의 유형, 매칭 버튼)\r\n        JPanel inputPanel = new JPanel();\r\n        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));\r\n        inputPanel.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n        inputPanel.setBackground(Color.WHITE);\r\n\r\n        // 이름 입력\r\n        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));\r\n        namePanel.setBackground(Color.WHITE);\r\n        namePanel.add(new JLabel(\"이름: \"));\r\n        nameField = new JTextField(15);\r\n        nameField.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 14));\r\n        nameField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));\r\n        namePanel.add(nameField);\r\n        inputPanel.add(namePanel);\r\n\r\n        // 문의 유형 선택\r\n        JPanel inquiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));\r\n        inquiryPanel.setBackground(Color.WHITE);\r\n        inquiryPanel.add(new JLabel(\"문의 유형: \"));\r\n        JRadioButton reservationButton = new JRadioButton(\"예약 관련 문의\");\r\n        JRadioButton lostButton = new JRadioButton(\"분실물 문의\");\r\n        JRadioButton otherButton = new JRadioButton(\"기타 문의\");\r\n        ButtonGroup inquiryGroup = new ButtonGroup();\r\n        inquiryGroup.add(reservationButton);\r\n        inquiryGroup.add(lostButton);\r\n        inquiryGroup.add(otherButton);\r\n        styleRadioButton(reservationButton);\r\n        styleRadioButton(lostButton);\r\n        styleRadioButton(otherButton);\r\n        inquiryPanel.add(reservationButton);\r\n        inquiryPanel.add(lostButton);\r\n        inquiryPanel.add(otherButton);\r\n        inputPanel.add(inquiryPanel);\r\n\r\n        // 매칭 대기 버튼\r\n        matchButton = new JButton(\"매칭 대기\");\r\n        matchButton.setEnabled(false);\r\n        styleButton(matchButton, new Color(255, 199, 0), Color.BLACK, 120, 40);\r\n        JPanel matchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));\r\n        matchPanel.setBackground(Color.WHITE);\r\n        matchPanel.add(matchButton);\r\n        inputPanel.add(matchPanel);\r\n\r\n        // 채팅 영역\r\n        chatArea = new JTextArea();\r\n        chatArea.setEditable(false);\r\n        chatArea.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 14));\r\n        chatArea.setBackground(new Color(245, 245, 245));\r\n        chatArea.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n        JScrollPane chatScroll = new JScrollPane(chatArea);\r\n        chatScroll.setBorder(null);\r\n//        chatArea.setLineWrap(true);\r\n//        chatScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);\r\n\r\n\r\n        JPanel bottomPanel = new JPanel(new BorderLayout());\r\n        bottomPanel.setBackground(Color.WHITE);\r\n        bottomPanel.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n\r\n        messageField = new JTextField();\r\n        messageField.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 14));\r\n        messageField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));\r\n\r\n        sendButton = new JButton(\"전송\");\r\n        styleButton(sendButton, new Color(255, 199, 0), Color.BLACK, 60, 40);\r\n\r\n        exitButton = new JButton(\"종료\");\r\n        styleButton(exitButton, new Color(200, 200, 200), Color.BLACK, 60, 40);\r\n\r\n        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));\r\n        buttonPanel.setBackground(Color.WHITE);\r\n        buttonPanel.add(sendButton);\r\n        buttonPanel.add(exitButton);\r\n\r\n        bottomPanel.add(messageField, BorderLayout.CENTER);\r\n        bottomPanel.add(buttonPanel, BorderLayout.EAST);\r\n\r\n\r\n      \r\n        frame.add(inputPanel, BorderLayout.NORTH); // 이름, 문의 유형, 매칭 버튼 영역\r\n        frame.add(chatScroll, BorderLayout.CENTER); // 채팅창\r\n        frame.add(bottomPanel, BorderLayout.SOUTH); // 메시지 입력 및 버튼\r\n\r\n\r\n        matchButton.addActionListener(e -> startMatching());\r\n        exitButton.addActionListener(e -> {\r\n            closed = true;\r\n            sendMessage();\r\n        });\r\n        reservationButton.addActionListener(e -> {\r\n            inquiryType = \"예약 관련 문의\";\r\n            checkIfReadyToMatch();\r\n        });\r\n        lostButton.addActionListener(e -> {\r\n            inquiryType = \"분실물 문의\";\r\n            checkIfReadyToMatch();\r\n        });\r\n        otherButton.addActionListener(e -> {\r\n            inquiryType = \"기타 문의\";\r\n            checkIfReadyToMatch();\r\n        });\r\n        sendButton.addActionListener(e -> sendMessage());\r\n        messageField.addActionListener(e -> sendMessage());\r\n\r\n        frame.addWindowListener(new WindowAdapter() {\r\n            @Override\r\n            public void windowClosing(WindowEvent e) {\r\n                closed = true;\r\n                sendMessage();\r\n                closeResources();\r\n            }\r\n        });\r\n\r\n\r\n        frame.setVisible(true);\r\n    }\r\n\r\n    private void styleButton(JButton button, Color bgColor, Color fgColor, int width, int height) {\r\n        button.setBackground(bgColor);\r\n        button.setForeground(fgColor);\r\n        button.setFont(new Font(\"맑은 고딕\", Font.BOLD, 14));\r\n        button.setPreferredSize(new Dimension(width, height));\r\n        button.setFocusPainted(false);\r\n        button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));\r\n        button.setOpaque(true);\r\n        button.setCursor(new Cursor(Cursor.HAND_CURSOR));\r\n        button.addMouseListener(new java.awt.event.MouseAdapter() {\r\n            public void mouseEntered(java.awt.event.MouseEvent evt) {\r\n                button.setBackground(bgColor.brighter());\r\n            }\r\n            public void mouseExited(java.awt.event.MouseEvent evt) {\r\n                button.setBackground(bgColor);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void styleRadioButton(JRadioButton radio) {\r\n        radio.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 12));\r\n        radio.setBackground(Color.WHITE);\r\n        radio.setFocusPainted(false);\r\n    }\r\n    Thread t=null;\r\n    private void connectToServer(String serverAddress, int port) {\r\n        try {\r\n            socket = new Socket(serverAddress, port);\r\n            output = new DataOutputStream(socket.getOutputStream());\r\n            input = new DataInputStream(socket.getInputStream());\r\n\r\n            statusLabel.setText(\"연결되었습니다\");\r\n\r\n            new Thread(new Runnable() {\r\n                @SneakyThrows\r\n                @Override\r\n                public void run() {\r\n                    try {\r\n\r\n\r\n                        System.out.println(\"시작\");\r\n                        while (true) {\r\n\r\n                            String message = input.readUTF();\r\n                            chatArea.append(message + \"\\n\");\r\n                        }\r\n                    } catch (EOFException e) {\r\n                        System.out.println(\"예외 : \" + e);\r\n                        statusLabel.setText(\"서버 연결 끊어짐\");\r\n                    } catch (IOException e) {\r\n                        System.out.println(\"예외 발생: \" + e);\r\n                        statusLabel.setText(\"네트워크 오류 발생\");\r\n                    } finally {\r\n                        closeResources();\r\n                    }\r\n                }\r\n            }).start();\r\n\r\n        } catch (IOException e) {\r\n            statusLabel.setText(\"서버 연결 실패\");\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void closeResources() {\r\n        try {\r\n            if (input != null) input.close();\r\n        } catch (IOException e) {\r\n            System.out.println(\"input 닫기 실패\");\r\n            e.printStackTrace();\r\n        }\r\n        try {\r\n            if (output != null) output.close();\r\n        } catch (IOException e) {\r\n            System.out.println(\"output 닫기 실패\");\r\n            e.printStackTrace();\r\n        }\r\n        try {\r\n            if (socket != null) socket.close();\r\n            System.out.println(\"성공이요\");\r\n        } catch (IOException e) {\r\n            System.out.println(\"socket 닫기 실패\");\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void startMatching() {\r\n        String name = nameField.getText().trim();\r\n        if (name.isEmpty() || role == null || inquiryType == null) {\r\n            JOptionPane.showMessageDialog(frame, \"이름,문의 유형을 모두 선택하세요.\");\r\n            return;\r\n        }\r\n\r\n        statusLabel.setText(\"매칭 대기중...\");\r\n        matchButton.setEnabled(false);\r\n\r\n        try {\r\n            output.writeUTF(role);\r\n            output.flush();\r\n\r\n            output.writeUTF(name);\r\n            output.flush();\r\n\r\n            output.writeUTF(inquiryType);\r\n            output.flush();\r\n\r\n\r\n        } catch (IOException e) {\r\n            JOptionPane.showMessageDialog(frame, \"서버 전송 실패\");\r\n            e.printStackTrace();\r\n        }\r\n\r\n    }\r\n\r\n    private void checkIfReadyToMatch() {\r\n        if (role != null && inquiryType != null) {\r\n            matchButton.setEnabled(true);\r\n        }\r\n    }\r\n\r\n    private void sendMessage() {\r\n        String name = nameField.getText().trim();\r\n        String message = messageField.getText().trim();\r\n        if (name.isEmpty() || role == null || inquiryType == null) {\r\n            JOptionPane.showMessageDialog(frame, \"이름, 역할, 문의 유형, 메시지를 모두 입력하세요.\");\r\n            return;\r\n        }\r\n        if (closed) {\r\n            message = \"/exit\";\r\n        }\r\n\r\n        String timestamp = new SimpleDateFormat(\"HH:mm\").format(new Date());\r\n        String formattedMessage = String.format(\"%s [%s]: %s\", timestamp, name, message);\r\n\r\n        chatArea.append(formattedMessage + \"\\n\");\r\n        messageField.setText(\"\");\r\n\r\n        try {\r\n            output.writeUTF(message);\r\n            output.flush();\r\n        } catch (IOException ex) {\r\n            ex.printStackTrace();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/gui/ChatGUI.java b/src/chat/gui/ChatGUI.java
+--- a/src/chat/gui/ChatGUI.java	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/src/chat/gui/ChatGUI.java	(date 1742978406558)
+@@ -7,6 +7,7 @@
+ import java.awt.*;
+ import java.awt.event.*;
+ import java.io.*;
++import java.net.ConnectException;
+ import java.net.Socket;
+ import java.text.SimpleDateFormat;
+ import java.util.Date;
+@@ -144,8 +145,12 @@
+ 
+         matchButton.addActionListener(e -> startMatching());
+         exitButton.addActionListener(e -> {
+-            closed = true;
+-            sendMessage();
++            closed = true; // 닫힘 플래그 설정
++            if (socket != null && !socket.isClosed()) { // 서버 연결 확인
++                sendMessage(); // 연결된 경우에만 메시지 전송
++            }
++            closeResources(); // 리소스 정리
++            frame.dispose(); // 창 닫기
+         });
+         reservationButton.addActionListener(e -> {
+             inquiryType = "예약 관련 문의";
+@@ -221,7 +226,8 @@
+                             String message = input.readUTF();
+                             chatArea.append(message + "\n");
+                         }
+-                    } catch (EOFException e) {
++                    }
++                    catch (EOFException e) {
+                         System.out.println("예외 : " + e);
+                         statusLabel.setText("서버 연결 끊어짐");
+                     } catch (IOException e) {
+@@ -233,6 +239,10 @@
+                 }
+             }).start();
+ 
++        }catch (ConnectException e){
++            JOptionPane.showMessageDialog(null,"서버연결 불가능");
++            frame.dispose();
++           //
+         } catch (IOException e) {
+             statusLabel.setText("서버 연결 실패");
+             e.printStackTrace();
+Index: src/Service/LoginG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.Service;\r\n\r\nimport javaproject.AdminMenu1;\r\nimport javaproject.DAO.MemDAO;\r\nimport javaproject.Map;\r\n\r\nimport javax.swing.*;\r\nimport java.awt.*;\r\nimport java.awt.event.ActionEvent;\r\nimport java.awt.event.ActionListener;\r\nimport java.awt.event.KeyAdapter;\r\nimport java.awt.event.KeyEvent;\r\n\r\n\r\npublic class LoginG extends JFrame implements ActionListener {\r\n    String[] select = {\"관리자\", \"회원\"};\r\n    boolean s_flag = true;\r\n\r\n    JLabel label = new JLabel(new ImageIcon(\"resource/images/메인.png\"));\r\n    JComboBox<String> Combo = new JComboBox<String>(select);\r\n    JLabel id = new JLabel(\"id\");\r\n    JLabel pw = new JLabel(\"pw\");\r\n    JTextField idField = new JTextField(22);\r\n    JPasswordField pwField = new JPasswordField(22);\r\n    ImageIcon submitImage=new ImageIcon(\"resource/images/로그인.png\");\r\n    ImageIcon signinImage=new ImageIcon(\"resource/images/회원가입.png\");\r\n    JButton submit = new JButton(submitImage);\r\n    JButton signin = new JButton(signinImage);\r\n    JPanel center = new JPanel();\r\n\r\n    private final Image image = new ImageIcon(\"resource/images/놀이공원3.jpg\").getImage();\r\n    private JPanel jpImage = new JPanel() {\r\n        public void paint(Graphics g) {\r\n            super.paint(g);\r\n            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);\r\n            g.drawImage(image, 0, 0, 290,300, null);\r\n            this.setOpaque(false);\r\n            super.paintComponents(g);\r\n        }\r\n    };\r\n    JPanel pp=new JPanel();\r\n    CardLayout cl=new CardLayout(10,10);\r\n    SignInG signInG=new SignInG(pp);\r\n\r\n    public LoginG() {\r\n        this.setTitle(\"놀이공원 예약 시스템\");\r\n        this.setLayout(new GridLayout(2,1));\r\n\r\n        this.add(jpImage);\r\n        this.add(pp);\r\n\r\n        pp.setBackground(Color.WHITE);\r\n        pp.setLayout(cl);\r\n        pp.add(center);\r\n        pp.add(signInG);\r\n\r\n\r\n        center.setBackground(Color.WHITE);\r\n        center.setLayout(new GridBagLayout());\r\n        GridBagConstraints c = new GridBagConstraints();\r\n        c.insets = new Insets(5, 5, 5, 5);\r\n        idField.setOpaque(false);\r\n        pwField.setOpaque(false);\r\n        //idField.setText(\"aaa\");\r\n        //pwField.setText(\"aaa\");\r\n        Combo.setBackground(Color.WHITE);\r\n        Combo.setBorder(null);\r\n        Combo.setSelectedIndex(1);\r\n        submit.setBorder(null);\r\n        submit.setBackground(null);\r\n        signin.setBackground(null);\r\n        signin.setBorder(null);\r\n        idField.setBorder(null);\r\n        pwField.setBorder(null);\r\n        JPanel underline1 = new JPanel() {\r\n            @Override\r\n            protected void paintComponent(Graphics g) {\r\n                super.paintComponent(g);\r\n                g.setColor(Color.BLACK); // 밑줄 색상\r\n                g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1); // 밑줄 그리기\r\n                if(idField.getText().isEmpty()) {\r\n                    ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);\r\n                    g.setColor(Color.GRAY); // 밑줄 색상\r\n                    g.setFont(new Font(\"Arial\", Font.PLAIN, 12)); // 글자 폰트 설정\r\n                    g.drawString(\"ID\", 5, getHeight() / 2 + 5); // 원하는 위치에 텍스트 그리기\r\n                }\r\n\r\n\r\n            }\r\n        };\r\n        JPanel underline2 = new JPanel() {\r\n            @Override\r\n            protected void paintComponent(Graphics g) {\r\n                super.paintComponent(g);\r\n                g.setColor(Color.BLACK); // 밑줄 색상\r\n                g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1); // 밑줄 그리기\r\n                if(pwField.getText().isEmpty()) {\r\n                    ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);\r\n                    g.setColor(Color.GRAY); // 밑줄 색상\r\n                    g.setFont(new Font(\"Arial\", Font.PLAIN, 12)); // 글자 폰트 설정\r\n                    g.drawString(\"PW\", 5, getHeight() / 2 + 5); // 원하는 위치에 텍스트 그리기\r\n                }\r\n            }\r\n        };\r\n\r\n        underline1.setBounds(idField.getX(), idField.getY() + idField.getHeight(), idField.getWidth(), 1);\r\n        underline1.add(idField);\r\n        underline1.setBackground(Color.WHITE);\r\n        underline2.setBounds(idField.getX(), idField.getY() + idField.getHeight(), idField.getWidth(), 1);\r\n        underline2.add(pwField);\r\n        underline2.setBackground(Color.WHITE);\r\n        c.ipady=5;\r\n        c.gridx = 0;\r\n        c.gridy = 0;\r\n        c.gridwidth = 3;\r\n        center.add(label, c);\r\n\r\n        c.gridx = 0;\r\n        c.gridy = 1;\r\n        c.gridwidth = 3;\r\n        c.fill = GridBagConstraints.HORIZONTAL;\r\n        center.add(Combo, c);\r\n\r\n\r\n        c.gridx = 0;\r\n        c.gridy = 2;\r\n        c.gridwidth = 4;\r\n\r\n\r\n        center.add(underline1, c);\r\n\r\n        c.gridx = 0;\r\n        c.gridy = 3;\r\n\r\n        center.add(underline2, c);\r\n\r\n        c.gridx = 0;\r\n        c.gridy = 5;\r\n        c.fill = 1;\r\n\r\n        center.add(submit, c);\r\n\r\n        // 회원가입 버튼\r\n        c.gridx = 0;\r\n        c.gridy = 6;\r\n        c.gridwidth = 3;\r\n        c.weightx = 1;\r\n        c.gridheight = 2;\r\n        center.add(signin, c);\r\n\r\n        this.setSize(300, 600);\r\n        this.setVisible(true);\r\n        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n        setLocationRelativeTo(null); // 화면 중앙 배치\r\n\r\n\r\n        Combo.addActionListener(this);\r\n        submit.addActionListener(this);\r\n        signin.addActionListener(this);\r\n\r\n\r\n        s_flag=Combo.getSelectedIndex() == 0;\r\n\r\n\r\n        KeyAdapter adapter = new KeyAdapter() {\r\n            @Override\r\n            public void keyPressed(KeyEvent e) {\r\n                if (e.getKeyCode() == KeyEvent.VK_ENTER) { // Enter 키 입력 확인\r\n                    submit(); // 공통 동작 호출\r\n                }\r\n            }\r\n        };\r\n        Combo.addKeyListener(adapter);\r\n        idField.addKeyListener(adapter);\r\n        pwField.addKeyListener(adapter);\r\n        idField.requestFocus();\r\n    }\r\n\r\n    @Override\r\n    public void actionPerformed(ActionEvent arg0) {\r\n        if (arg0.getSource() == Combo) {\r\n            if (Combo.getSelectedIndex() == 0) {\r\n                s_flag = true;\r\n            } else {\r\n                s_flag = false;\r\n            }\r\n        } else if (arg0.getSource() == submit) {\r\n            submit();\r\n        } else if (arg0.getSource() == signin) {\r\n            cl.next(pp);\r\n\r\n        }\r\n    }\r\n\r\n    private void submit() {\r\n        String id = idField.getText();\r\n        String pw = pwField.getText();\r\n        idField.setText(\"\");\r\n        pwField.setText(\"\");\r\n        boolean success = false;\r\n        MemDAO memDAO = new MemDAO();\r\n        if (s_flag)\r\n            success = memDAO.idPassDuplicate(1, id, pw);\r\n        else\r\n            success = memDAO.idPassDuplicate(2, id, pw);\r\n\r\n        if (success && s_flag) {\r\n            this.setVisible(false);\r\n            new AdminMenu1(this,id);\r\n        } else if (success) {\r\n            this.setVisible(false);\r\n            new Map(id,this);\r\n            new TimeTable();\r\n        } else {\r\n            JOptionPane.showMessageDialog(null, \"로그인 실패\");\r\n        }\r\n    }\r\n\r\n//    // SignInG 창에서 로그인 창을 다시 활성화하도록 수정\r\n//    public void enableLoginWindow() {\r\n//        this.setEnabled(true);  // 로그인 창 활성화\r\n//        this.toFront();  // 로그인 창을 최상위로 가져오기\r\n//    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/LoginG.java b/src/Service/LoginG.java
+--- a/src/Service/LoginG.java	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/src/Service/LoginG.java	(date 1742968475086)
+@@ -43,6 +43,7 @@
+     SignInG signInG=new SignInG(pp);
+ 
+     public LoginG() {
++
+         this.setTitle("놀이공원 예약 시스템");
+         this.setLayout(new GridLayout(2,1));
+ 
+Index: src/DAO/SuperDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.DAO;\r\n\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.DriverManager;\r\nimport java.sql.SQLException;\r\nimport java.util.List;\r\n\r\npublic class SuperDAO<T> {\r\n    private String driver = \"org.mariadb.jdbc.Driver\";\r\n    private String url = \"jdbc:mariadb://localhost:3306/mysql\";\r\n    private String user = \"root\";\r\n    //private String password = \"park1676\";\r\n    private String password = \"1111\";\r\n    private Connection conn;\r\n\r\n    public SuperDAO() {\r\n        init();\r\n    }\r\n\r\n    private void init() {\r\n        try {\r\n            Class.forName(driver);\r\n            System.out.println(\"클래스 load\");\r\n        } catch (ClassNotFoundException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    public Connection getConnection() {\r\n        try {\r\n            this.conn = DriverManager.getConnection(url, user, password);\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n        return conn;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/DAO/SuperDAO.java b/src/DAO/SuperDAO.java
+--- a/src/DAO/SuperDAO.java	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/src/DAO/SuperDAO.java	(date 1742965892836)
+@@ -11,7 +11,7 @@
+     private String url = "jdbc:mariadb://localhost:3306/mysql";
+     private String user = "root";
+     //private String password = "park1676";
+-    private String password = "1111";
++    private String password = "park1676";
+     private Connection conn;
+ 
+     public SuperDAO() {
+Index: src/chat/server/ServerMain.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.server;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class ServerMain {\r\n\r\n    private  static final int PORT = 4321;\r\n\r\n    public static void main(String[] args) throws IOException {\r\n        SessionManager sessionManager = new SessionManager();\r\n\r\n        CommandManager commandManager = new CommandManagerV2(sessionManager);\r\n\r\n        Server server = new Server(PORT, commandManager, sessionManager);\r\n        server.start();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/server/ServerMain.java b/src/chat/server/ServerMain.java
+--- a/src/chat/server/ServerMain.java	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/src/chat/server/ServerMain.java	(date 1742966350716)
+@@ -1,5 +1,7 @@
+ package javaproject.chat.server;
+ 
++import javaproject.Map;
++
+ import java.io.IOException;
+ 
+ public class ServerMain {
+@@ -13,5 +15,6 @@
+ 
+         Server server = new Server(PORT, commandManager, sessionManager);
+         server.start();
++        Map.serverStart = true;
+     }
+ }
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ /dev/null	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
+@@ -1,8 +0,0 @@
+-# 디폴트 무시된 파일
+-/shelf/
+-/workspace.xml
+-# 에디터 기반 HTTP 클라이언트 요청
+-/httpRequests/
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+Index: .idea/dataSources.xml
+===================================================================
+diff --git a/.idea/dataSources.xml b/.idea/dataSources.xml
+deleted file mode 100644
+--- a/.idea/dataSources.xml	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ /dev/null	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
+@@ -1,17 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+-    <data-source source="LOCAL" name="@localhost" uuid="472492a3-7f85-4274-a426-76fa3ac0d19b">
+-      <driver-ref>mariadb</driver-ref>
+-      <synchronize>true</synchronize>
+-      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+-      <jdbc-url>jdbc:mariadb://localhost:3306</jdbc-url>
+-      <jdbc-additional-properties>
+-        <property name="com.intellij.clouds.kubernetes.db.host.port" />
+-        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+-        <property name="com.intellij.clouds.kubernetes.db.container.port" />
+-      </jdbc-additional-properties>
+-      <working-dir>$ProjectFileDir$</working-dir>
+-    </data-source>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/git_toolbox_prj.xml
+===================================================================
+diff --git a/.idea/git_toolbox_prj.xml b/.idea/git_toolbox_prj.xml
+deleted file mode 100644
+--- a/.idea/git_toolbox_prj.xml	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ /dev/null	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
+@@ -1,15 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="GitToolBoxProjectSettings">
+-    <option name="commitMessageIssueKeyValidationOverride">
+-      <BoolValueOverride>
+-        <option name="enabled" value="true" />
+-      </BoolValueOverride>
+-    </option>
+-    <option name="commitMessageValidationEnabledOverride">
+-      <BoolValueOverride>
+-        <option name="enabled" value="true" />
+-      </BoolValueOverride>
+-    </option>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/material_theme_project_new.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"MaterialThemeProjectNewConfig\">\r\n    <option name=\"metadata\">\r\n      <MTProjectMetadataState>\r\n        <option name=\"migrated\" value=\"true\" />\r\n        <option name=\"pristineConfig\" value=\"false\" />\r\n        <option name=\"userId\" value=\"-3144c146:19511d5513f:-7ffe\" />\r\n      </MTProjectMetadataState>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/material_theme_project_new.xml b/.idea/material_theme_project_new.xml
+--- a/.idea/material_theme_project_new.xml	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/.idea/material_theme_project_new.xml	(date 1742970490240)
+@@ -5,7 +5,7 @@
+       <MTProjectMetadataState>
+         <option name="migrated" value="true" />
+         <option name="pristineConfig" value="false" />
+-        <option name="userId" value="-3144c146:19511d5513f:-7ffe" />
++        <option name="userId" value="-5cafb0fe:19565a6a901:-7ffe" />
+       </MTProjectMetadataState>
+     </option>
+   </component>
+Index: .idea/libraries/lombok.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"libraryTable\">\r\n  <library name=\"lombok\">\r\n    <CLASSES>\r\n      <root url=\"jar://$PROJECT_DIR$/lib/lombok.jar!/\" />\r\n      <root url=\"jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/\" />\r\n    </CLASSES>\r\n    <JAVADOC />\r\n    <SOURCES />\r\n  </library>\r\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/lombok.xml b/.idea/libraries/lombok.xml
+--- a/.idea/libraries/lombok.xml	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/.idea/libraries/lombok.xml	(date 1742948623052)
+@@ -2,7 +2,6 @@
+   <library name="lombok">
+     <CLASSES>
+       <root url="jar://$PROJECT_DIR$/lib/lombok.jar!/" />
+-      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/" />
+     </CLASSES>
+     <JAVADOC />
+     <SOURCES />
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/0324-1.iml\" filepath=\"$PROJECT_DIR$/0324-1.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/.idea/modules.xml	(date 1742948635049)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/0324-1.iml" filepath="$PROJECT_DIR$/0324-1.iml" />
++      <module fileurl="file://$PROJECT_DIR$/mainmain.iml" filepath="$PROJECT_DIR$/mainmain.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/libraries/mariadb_java_client_3_5_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/mariadb_java_client_3_5_2.xml b/.idea/libraries/mariadb_java_client_3_5_2.xml
+new file mode 100644
+--- /dev/null	(date 1742948546118)
++++ b/.idea/libraries/mariadb_java_client_3_5_2.xml	(date 1742948546118)
+@@ -0,0 +1,9 @@
++<component name="libraryTable">
++  <library name="mariadb-java-client-3.5.2">
++    <CLASSES>
++      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/" />
++    </CLASSES>
++    <JAVADOC />
++    <SOURCES />
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/lib.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/lib.xml b/.idea/libraries/lib.xml
+new file mode 100644
+--- /dev/null	(date 1742911900947)
++++ b/.idea/libraries/lib.xml	(date 1742911900947)
+@@ -0,0 +1,10 @@
++<component name="libraryTable">
++  <library name="lib">
++    <CLASSES>
++      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/lombok.jar!/" />
++    </CLASSES>
++    <JAVADOC />
++    <SOURCES />
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_23\" default=\"true\" project-jdk-name=\"openjdk-23\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision ca275a2213f1e7b9e196d91db5c442cacdd41c98)
++++ b/.idea/misc.xml	(date 1742948635065)
+@@ -1,6 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
+-    <output url="file://$PROJECT_DIR$/out" />
+-  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_18" default="true" project-jdk-name="corretto-18" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file
