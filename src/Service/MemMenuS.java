@@ -2,21 +2,35 @@ package javaproject.Service;
 
 import javaproject.chat.gui.ChatClient;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import javaproject.urlTool;
+
 
 public class MemMenuS extends JFrame implements ActionListener {
 
-    private final Image image = new ImageIcon("resource/images/map.jpg").getImage();
-    private final Image image2 = new ImageIcon("resource/images/menubutton2.png").getImage();
+    urlTool utool = new urlTool();
+
+    private final ImageIcon image = utool.getImageIcon("/javaproject/resource/images/map.jpg");
+
+
+//    private final Image image = new ImageIcon("resource/images/map.jpg").getImage();
+
+
+
+    private final ImageIcon image2 = utool.getImageIcon("/javaproject/resource/images/menubutton2.PNG");
     private String id;
     private LoginS LoginS;
     private JPanel jpImage = new JPanel() {
         public void paint(Graphics g) {
             super.paint(g);
-            g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+            g.drawImage(image.getImage(), 0, 0, getWidth(), getHeight(), null);
             this.setOpaque(false);
             super.paintComponents(g);
         }
@@ -24,7 +38,7 @@ public class MemMenuS extends JFrame implements ActionListener {
     private JPanel jpImage2 = new JPanel() {
         public void paint(Graphics g) {
             super.paint(g);
-            g.drawImage(image2, 0, 0, getWidth(), getHeight(), null);
+            g.drawImage(image2.getImage(), 0, 0, getWidth(), getHeight(), null);
             this.setOpaque(false);
             super.paintComponents(g);
         }

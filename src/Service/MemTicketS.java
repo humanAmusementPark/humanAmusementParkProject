@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import javaproject.urlTool;
 
 public class MemTicketS extends JFrame implements ActionListener {
 
@@ -32,9 +33,12 @@ public class MemTicketS extends JFrame implements ActionListener {
         //mac 용
 //        String imagePath = "resource/images/티켓.jpg";
         //window용
-        String imagePath = "resource\\images\\티켓.jpg";
+        String imagePath = "/javaproject/resource/images/티켓.jpg";
 
-        Image image = new ImageIcon(imagePath).getImage();
+        urlTool utool = new urlTool();
+        ImageIcon image = utool.getImageIcon(imagePath);
+
+//        Image image = new ImageIcon(imagePath).getImage();
 
 
         // 배경 이미지를 그리는 JPanel
@@ -42,7 +46,7 @@ public class MemTicketS extends JFrame implements ActionListener {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);  // paintComponent를 먼저 호출해야 합니다.
-                g.drawImage(image, 0, 0, getWidth(), getHeight(), this); // 이미지를 패널 크기에 맞게 그리기
+                g.drawImage(image.getImage(), 0, 0, getWidth(), getHeight(), this); // 이미지를 패널 크기에 맞게 그리기
             }
         };
 
@@ -64,7 +68,7 @@ public class MemTicketS extends JFrame implements ActionListener {
                     "</b><br>가격: " + ticket.getTPrice() + "원</center></html>");
             ticketButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             ticketButton.setPreferredSize(new Dimension(350, 50));
-            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTName()));
+            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTPass()));
             panel.add(ticketButton);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
         }

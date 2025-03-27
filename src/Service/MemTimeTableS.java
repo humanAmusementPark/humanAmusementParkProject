@@ -2,11 +2,18 @@ package javaproject.Service;
 
 import javaproject.DAO.TimeTableDAO;
 import javaproject.DTO.TimeTableDTO;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import javaproject.urlTool;
 
 
 public class MemTimeTableS extends JFrame {
@@ -14,7 +21,7 @@ public class MemTimeTableS extends JFrame {
     private GridBagConstraints gbc;
     private GridBagLayout grid;
 
-    public MemTimeTableS() {
+    public MemTimeTableS() throws IOException {
 
         getTimeTableInfo();
         setDisplay();
@@ -32,16 +39,26 @@ public class MemTimeTableS extends JFrame {
 
 
 
-    public void setDisplay() {
 
-        Image image = new ImageIcon("resource\\images\\일정표.jpeg").getImage();
+    public void setDisplay() throws IOException {
+
+//        Image image = new ImageIcon("/javaproject/resource/images/일정표.jpeg").getImage();
+//        ImageIcon image = new ImageIcon("/javaproject/resource/images/일정표.jpeg");
         //mac용
 //        Image image = new ImageIcon("resource/images/일정표.jpeg").getImage();
+
+//        InputStream is = getClass().getResourceAsStream("/javaproject/resource/images/일정표.jpeg");
+//        BufferedImage img = ImageIO.read(is);
+//        ImageIcon image = getImageIcon("/javaproject/resource/images/일정표.jpeg");
+
+        urlTool urlTool = new urlTool();
+
+        ImageIcon image = urlTool.getImageIcon("/javaproject/resource/images/일정표.jpeg");
 
         JPanel ImagePanel = new JPanel(){
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.drawImage(image,0,0,getWidth(),getHeight(),this);
+                g.drawImage(image.getImage(),0,0,getWidth(),getHeight(),this);
                 this.setOpaque(true);
                 super.paintComponents(g);
             }
@@ -135,9 +152,6 @@ public class MemTimeTableS extends JFrame {
         setResizable(false);
 
         setVisible(true);
-    }
-    public static void main(String[] args){
-        new MemTimeTableS();
     }
 
 }
