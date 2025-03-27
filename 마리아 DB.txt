@@ -78,21 +78,21 @@ VALUES ('T001', '일일권', 50000),
 
 -- 놀이기구 테이블 샘플 데이터
 INSERT INTO attraction (atId, atName, atUrl, atMax, atOnoff)
-VALUES ('AT001', 'lost', 'resource\\images\\lost.gif', 20, 1),
-       ('AT002', 't익스', 'resource\\images\\t익스.gif', 30, 1),
-       ('AT003', '더블락', 'resource\\images\\더블락.gif', 10, 1),
-       ('AT004', '콜롬버스', 'resource\\images\\콜롬버스.gif', 15, 0),
-       ('AT005', '롤링', 'resource\\images\\롤링.gif', 25, 1),
-       ('AT006', '버드', 'resource\\images\\버드.gif', 20, 1),
-       ('AT007', '범퍼', 'resource\\images\\범퍼.gif', 15, 0),
-       ('AT008', '사파리', 'resource\\images\\사파리.gif', 25, 1),
-       ('AT009', '썬더폴스', 'resource\\images\\썬더폴스.gif', 20, 1),
-       ('AT010', '씨라이언', 'resource\\images\\씨라이언.gif', 30, 1),
-       ('AT011', '애니멀원더 스테이지', 'resource\\images\\애니멀원더 스테이지.jpg', 35, 1),
-       ('AT012', '애니멀원더 월드', 'resource\\images\\애니멀원더 월드.jpg', 20, 1),
-       ('AT013', '이솝', 'resource\\images\\이솝.jpg', 30, 1),
-       ('AT014', '판다', 'resource\\images\\판다.gif', 30, 1),
-       ('AT015', '카니발광장', 'resource\\images\\카니발광장.gif', 30, 1);
+VALUES ('AT001', 'lost', '/javaproject/resource/images/lost.gif', 20, 1),
+       ('AT002', 't익스', '/javaproject/resource/images/t익스.gif', 30, 1),
+       ('AT003', '더블락', '/javaproject/resource/images/더블락.gif', 10, 1),
+       ('AT004', '콜롬버스', '/javaproject/resource/images/콜롬버스.gif', 15, 0),
+       ('AT005', '롤링', '/javaproject/resource/images/롤링.gif', 25, 1),
+       ('AT006', '버드', '/javaproject/resource/images/버드.gif', 20, 1),
+       ('AT007', '범퍼', '/javaproject/resource/images/범퍼.gif', 15, 0),
+       ('AT008', '사파리', '/javaproject/resource/images/사파리.gif', 25, 1),
+       ('AT009', '썬더폴스', '/javaproject/resource/images/썬더폴스.gif', 20, 1),
+       ('AT010', '씨라이언', '/javaproject/resource/images/씨라이언.gif', 30, 1),
+       ('AT011', '애니멀원더 스테이지', '/javaproject/resource/images/애니멀원더 스테이지.jpg', 35, 1),
+       ('AT012', '애니멀원더 월드', '/javaproject/resource/images/애니멀원더 월드.jpg', 20, 1),
+       ('AT013', '이솝', '/javaproject/resource/images/이솝.jpg', 30, 1),
+       ('AT014', '판다', '/javaproject/resource/images/판다.gif', 30, 1),
+       ('AT015', '카니발광장', '/javaproject/resource/images/카니발광장.gif', 30, 1);
 
 
 -- 일정표 테이블 샘플 데이터
