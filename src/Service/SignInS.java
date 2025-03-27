@@ -276,7 +276,7 @@ public class SignInS extends JPanel implements ActionListener {
                     .aId(i_field.getText())
                     .aPass(p_field.getText())
                     .aName(n_field.getText())
-                    .aGender(m.isSelected() ? 1 : 0)
+                    .aGender(m.isSelected() ? 0 : 1)
                     .aBirth(Date.valueOf(aBirth))
                     .aPosition(position)
                     .build();

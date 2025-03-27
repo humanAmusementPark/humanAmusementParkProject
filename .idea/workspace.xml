@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="03241250">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lombok.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mariadb_java_client_3_5_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="12121212">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DAO/SuperDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/SuperDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/AdMenuS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdMenuS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/AdTicketS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdTicketS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/AdTimeTableS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdTimeTableS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/ServerMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/SignInS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/SignInS.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,10 +65,18 @@
     "vue.rearranger.settings.migration": "true",
     "애플리케이션.Main.executor": "Run",
     "애플리케이션.Main1.executor": "Run",
-    "애플리케이션.ServerMain.executor": "Run"
+    "애플리케이션.ServerMain.executor": "Run",
+    "애플리케이션.이름이 지정되지 않았습니다.executor": "Run"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="애플리케이션.이름이 지정되지 않았습니다">
+    <configuration name="이름이 지정되지 않았습니다" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="javaproject.Main" />
+      <module name="0324-1" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="javaproject.Main" />
       <module name="0324-1" />
@@ -117,6 +117,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="애플리케이션.이름이 지정되지 않았습니다" />
       <item itemvalue="애플리케이션.Main" />
       <item itemvalue="애플리케이션.MemMenuS" />
       <item itemvalue="애플리케이션.ServerMain" />
@@ -149,8 +150,17 @@
       <workItem from="1742975472734" duration="476000" />
       <workItem from="1742975978609" duration="1175000" />
       <workItem from="1743034492453" duration="3312000" />
-      <workItem from="1743038098386" duration="10775000" />
+      <workItem from="1743038098386" duration="16997000" />
     </task>
+    <task id="LOCAL-00001" summary="12121212">
+      <option name="closed" value="true" />
+      <created>1743057049626</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1743057049626</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,7 +191,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="03241250" />
-    <option name="LAST_COMMIT_MESSAGE" value="03241250" />
+    <MESSAGE value="12121212" />
+    <option name="LAST_COMMIT_MESSAGE" value="12121212" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
