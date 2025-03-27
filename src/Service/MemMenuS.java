@@ -7,12 +7,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
-public class Map extends JFrame implements ActionListener {
+public class MemMenuS extends JFrame implements ActionListener {
 
     private final Image image = new ImageIcon("resource/images/map.jpg").getImage();
     private final Image image2 = new ImageIcon("resource/images/menubutton2.png").getImage();
     private String id;
-    private LoginG LoginG;
+    private LoginS LoginS;
     private JPanel jpImage = new JPanel() {
         public void paint(Graphics g) {
             super.paint(g);
@@ -29,14 +29,14 @@ public class Map extends JFrame implements ActionListener {
             super.paintComponents(g);
         }
     };
-    Map m = this;
+    MemMenuS m = this;
 
     public static void main(String[] args) {
-        new Map(null, null);
+        new MemMenuS(null, null);
     }
 
-    public Map(String id, LoginG before) {
-        this.LoginG = before;
+    public MemMenuS(String id, LoginS before) {
+        this.LoginS = before;
         this.id = id;
         this.setTitle("정규랜드 지도");
         this.setSize(1200, 7000);
@@ -112,7 +112,7 @@ public class Map extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
                 dispose();
-                LoginG.setVisible(true);
+                LoginS.setVisible(true);
             }
         });
         jpImage.add(obnt);
@@ -148,7 +148,7 @@ public class Map extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
-                new ReservationMemG(id, m);
+                new MemReservationS(id, m);
 
             }
         });
@@ -167,7 +167,7 @@ public class Map extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    new ticketGUI(id);
+                    new MemTicketS(id);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -190,7 +190,7 @@ public class Map extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent
                                                 e) {
                 System.out.println("연결해야댐");
-                new MemG(id, m);
+                new MemS(id, m);
 
             }
 
@@ -238,7 +238,7 @@ public class Map extends JFrame implements ActionListener {
                 System.out.println("놀이기구 이름: " + rideName);
                 try {
                     System.out.println("ddddddddd");
-                    new Reservation(m, rideName, id);
+                    new ReservationS(m, rideName, id);
                 } catch (SQLException ex) {
                     System.out.println("aaaaaa");
                     throw new RuntimeException(ex);

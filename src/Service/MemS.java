@@ -1,7 +1,8 @@
 package javaproject.Service;
 
-import javaproject.DAO.AdminDAO;
-import javaproject.DTO.AdminDTO;
+
+import javaproject.DAO.MemDAO;
+import javaproject.DTO.MemDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,28 +10,26 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
 
-
-public class AdG extends JFrame {
-
+// 회원 회원정보수정
+public class MemS extends JFrame {
     private String id;
     private JPanel center = new JPanel();
-    private String[] labelName = {"아이디", "비밀번호", "이름", "성별", "생년월일", "직책"};
-    private String[] positionName = {"매니저", "부매니저", "놀이공원관리자", "예약관리자", "티켓관리자"};
-    private JLabel aId;
-    private JTextField aPass;
-    private JTextField aName;
+    private String[] labelName = {"아이디", "비밀번호", "이름", "성별", "생년월일", "티켓번호"};
+    private JLabel mId;
+    private JTextField mPass;
+    private JTextField mName;
     private JRadioButton radioMan = new JRadioButton("남자");
     private JRadioButton radioWoman = new JRadioButton("여자");
     private ButtonGroup group = new ButtonGroup();
     private JComboBox yearCom;
     private JComboBox monthCom;
     private JComboBox dayCom;
-    private JComboBox aPos = new JComboBox(positionName);
+    private JLabel tPass;
     private JButton updateBut = new JButton("수정");
 
-    public AdG(String id, AdminMenu1 before) {
+    public MemS(String id, MemMenuS before) {
         this.id = id;
-        setTitle("관리자정보");
+        setTitle("회원정보");
         setSize(600, 400);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -52,9 +51,9 @@ public class AdG extends JFrame {
     }
 
     private void update() {
-        AdminDAO adminDAO = new AdminDAO();
-        String newPass = aPass.getText();
-        String newName = aName.getText();
+        MemDAO memDAO = new MemDAO();
+        String newPass = mPass.getText();
+        String newName = mName.getText();
         if (newPass.isEmpty() || newName.isEmpty()) {
             JOptionPane.showMessageDialog(null, "빈칸 발생.", "Warning",
                     JOptionPane.WARNING_MESSAGE);
@@ -63,16 +62,14 @@ public class AdG extends JFrame {
         int newGender = radioMan.isSelected() ? 1 : 0;
         String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString()
                 + "-" + dayCom.getSelectedItem().toString();
-        String newPos = aPos.getSelectedItem().toString();
-        AdminDTO adminDTO = AdminDTO.builder()
-                .aId(id)
-                .aPass(newPass)
-                .aName(newName)
-                .aGender(newGender)
-                .aBirth(Date.valueOf(newBirth))
-                .aPosition(newPos)
+        MemDTO memDTO = MemDTO.builder()
+                .mId(id)
+                .mPass(newPass)
+                .mName(newName)
+                .mGender(newGender)
+                .mBirth(Date.valueOf(newBirth))
                 .build();
-        if (adminDAO.update(adminDTO)) {
+        if (memDAO.update(memDTO)) {
             JOptionPane.showMessageDialog(null, "수정 완료");
             this.remove(center);
             centerLayout();
@@ -86,7 +83,7 @@ public class AdG extends JFrame {
         center.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
-        // label
+        //label
         c.anchor = GridBagConstraints.WEST;
         c.gridx = 0;
         c.gridy = 0;
@@ -107,40 +104,40 @@ public class AdG extends JFrame {
         c.gridy = 5;
         center.add(new JLabel(labelName[5]), c);
         // Text
-        AdminDAO adminDAO = new AdminDAO();
-        AdminDTO adminDTO = adminDAO.select(id);
+        MemDAO memDAO = new MemDAO();
+        MemDTO memDTO = memDAO.select(id);
         c.gridx = 1;
         c.gridy = 0;
         c.gridwidth = 2;
-        aId = new JLabel(adminDTO.getAId());
-        center.add(aId, c);
+        mId = new JLabel(memDTO.getMId());
+        center.add(mId, c);
         c.gridx = 1;
         c.gridy = 1;
-        aPass = new JPasswordField(adminDTO.getAPass(), 10);
-        center.add(aPass, c);
+        c.gridwidth = 2;
+        mPass = new JPasswordField(memDTO.getMPass(), 10);
+        center.add(mPass, c);
         c.gridx = 1;
         c.gridy = 2;
-        aName = new JTextField(adminDTO.getAName(), 10);
-        center.add(aName, c);
+        mName = new JTextField(memDTO.getMName(), 10);
+        center.add(mName, c);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
-        JPanel aGender = makeGenderPanel(adminDTO.getAGender());
-        center.add(aGender, c);
+        JPanel mGender = makeGenderPanel(memDTO.getMGender());
+        center.add(mGender, c);
         c.gridx = 1;
         c.gridy = 4;
-        JPanel aBirth = makerBirthPanel(adminDTO);
-        center.add(aBirth, c);
+        JPanel mBirth = makerBirthPanel(memDTO);
+        center.add(mBirth, c);
         c.fill = GridBagConstraints.NONE;
         c.gridx = 1;
         c.gridy = 5;
-        c.gridwidth = 1;
-        aPos.setBackground(Color.WHITE);
-        aPos.setSelectedItem(adminDTO.getAPosition());
-        center.add(aPos, c);
-        c.fill = GridBagConstraints.BOTH;
+        tPass = new JLabel(memDTO.getTPass());
+        center.add(tPass, c);
+        c.anchor = GridBagConstraints.EAST;
         c.gridx = 2;
         c.gridy = 6;
+        c.gridwidth = 1;
         updateBut.setFont(new Font("맑은고딕", Font.BOLD, 12));
         center.add(updateBut, c);
 
@@ -162,7 +159,7 @@ public class AdG extends JFrame {
         return panel;
     }
 
-    private JPanel makerBirthPanel(AdminDTO adminDTO) {
+    private JPanel makerBirthPanel(MemDTO memDTO) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         String[] year = new String[46];
         String[] month = new String[12];
@@ -189,13 +186,13 @@ public class AdG extends JFrame {
         panel.add(dayCom);
         panel.add(new JLabel("일"));
 
-        int BYear = Integer.parseInt(adminDTO.getYear());
-        int BMonth = Integer.parseInt(adminDTO.getMonth());
-        int BDay = Integer.parseInt(adminDTO.getDay());
+        int mBYear = Integer.parseInt(memDTO.getYear());
+        int mBMonth = Integer.parseInt(memDTO.getMonth());
+        int mBDay = Integer.parseInt(memDTO.getDay());
 
-        yearCom.setSelectedIndex(BYear - 1980);
-        monthCom.setSelectedIndex(BMonth - 1);
-        dayCom.setSelectedIndex(BDay - 1);
+        yearCom.setSelectedIndex(mBYear - 1980);
+        monthCom.setSelectedIndex(mBMonth - 1);
+        dayCom.setSelectedIndex(mBDay - 1);
 
         return panel;
     }

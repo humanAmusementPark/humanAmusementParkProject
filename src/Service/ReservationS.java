@@ -18,7 +18,7 @@ import javaproject.DAO.TicketDAO;
 import javaproject.DTO.AttractionDTO;
 import javaproject.DTO.ReservationDTO;
 
-public class Reservation extends JFrame {
+public class ReservationS extends JFrame {
     String mId = null;
     AttractionDAO adao = new AttractionDAO();
     ReservationDAO rdao = new ReservationDAO();
@@ -39,7 +39,7 @@ public class Reservation extends JFrame {
     };
     JTable t = new JTable(model);
 
-    public Reservation(Map before, String atname, String id) throws SQLException {
+    public ReservationS(MemMenuS before, String atname, String id) throws SQLException {
         this.setTitle("기구 예약");
         System.out.println("atname =  " + atname);
         AttractionDTO attract = adao.getAttract(atname);

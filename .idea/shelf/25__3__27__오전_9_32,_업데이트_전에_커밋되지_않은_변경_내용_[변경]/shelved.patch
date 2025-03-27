@@ -1,0 +1,627 @@
+Index: src/Service/Reservation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/Reservation.java b/src/Service/ReservationS.java
+rename from src/Service/Reservation.java
+rename to src/Service/ReservationS.java
+--- a/src/Service/Reservation.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/ReservationS.java	(date 1743035056044)
+@@ -18,7 +18,7 @@
+ import javaproject.DTO.AttractionDTO;
+ import javaproject.DTO.ReservationDTO;
+ 
+-public class Reservation extends JFrame {
++public class ReservationS extends JFrame {
+     String mId = null;
+     AttractionDAO adao = new AttractionDAO();
+     ReservationDAO rdao = new ReservationDAO();
+@@ -39,7 +39,7 @@
+     };
+     JTable t = new JTable(model);
+ 
+-    public Reservation(Map before, String atname, String id) throws SQLException {
++    public ReservationS(MemMenuS before, String atname, String id) throws SQLException {
+         this.setTitle("기구 예약");
+         System.out.println("atname =  " + atname);
+         AttractionDTO attract = adao.getAttract(atname);
+Index: src/Service/SignInG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/SignInG.java b/src/Service/SignInS.java
+rename from src/Service/SignInG.java
+rename to src/Service/SignInS.java
+--- a/src/Service/SignInG.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/SignInS.java	(date 1743034933815)
+@@ -7,7 +7,6 @@
+ 
+ import javax.swing.*;
+ import javax.swing.border.LineBorder;
+-import javax.swing.plaf.basic.BasicComboBoxUI;
+ import java.awt.*;
+ import java.awt.event.ActionEvent;
+ import java.awt.event.ActionListener;
+@@ -17,7 +16,7 @@
+ //import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+ //import net.sourceforge.jdatepicker.impl.UtilDateModel;
+ 
+-public class SignInG extends JPanel implements ActionListener {
++public class SignInS extends JPanel implements ActionListener {
+ 
+     JLabel title = new JLabel("회원가입");
+ 
+@@ -45,7 +44,7 @@
+     boolean flag = false;
+     JPanel rankPanel = new JPanel();
+ 
+-    public SignInG(JPanel before) {
++    public SignInS(JPanel before) {
+         this.before = before;
+         this.setBorder(new LineBorder(Color.black, 1, true));
+ 
+Index: src/Service/Map.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/Map.java b/src/Service/MemMenuS.java
+rename from src/Service/Map.java
+rename to src/Service/MemMenuS.java
+--- a/src/Service/Map.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/MemMenuS.java	(date 1743035110676)
+@@ -7,12 +7,12 @@
+ import java.awt.event.*;
+ import java.sql.SQLException;
+ 
+-public class Map extends JFrame implements ActionListener {
++public class MemMenuS extends JFrame implements ActionListener {
+ 
+     private final Image image = new ImageIcon("resource/images/map.jpg").getImage();
+     private final Image image2 = new ImageIcon("resource/images/menubutton2.png").getImage();
+     private String id;
+-    private LoginG LoginG;
++    private LoginS LoginS;
+     private JPanel jpImage = new JPanel() {
+         public void paint(Graphics g) {
+             super.paint(g);
+@@ -29,14 +29,14 @@
+             super.paintComponents(g);
+         }
+     };
+-    Map m = this;
++    MemMenuS m = this;
+ 
+     public static void main(String[] args) {
+-        new Map(null, null);
++        new MemMenuS(null, null);
+     }
+ 
+-    public Map(String id, LoginG before) {
+-        this.LoginG = before;
++    public MemMenuS(String id, LoginS before) {
++        this.LoginS = before;
+         this.id = id;
+         this.setTitle("정규랜드 지도");
+         this.setSize(1200, 7000);
+@@ -112,7 +112,7 @@
+             public void actionPerformed(ActionEvent e) {
+                 System.out.println("연결해야댐");
+                 dispose();
+-                LoginG.setVisible(true);
++                LoginS.setVisible(true);
+             }
+         });
+         jpImage.add(obnt);
+@@ -148,7 +148,7 @@
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 System.out.println("연결해야댐");
+-                new ReservationMemG(id, m);
++                new MemReservationS(id, m);
+ 
+             }
+         });
+@@ -167,7 +167,7 @@
+             public void actionPerformed(ActionEvent e) {
+ 
+                 try {
+-                    new ticketGUI(id);
++                    new MemTicketS(id);
+                 } catch (SQLException ex) {
+                     throw new RuntimeException(ex);
+                 }
+@@ -238,7 +238,7 @@
+                 System.out.println("놀이기구 이름: " + rideName);
+                 try {
+                     System.out.println("ddddddddd");
+-                    new Reservation(m, rideName, id);
++                    new ReservationS(m, rideName, id);
+                 } catch (SQLException ex) {
+                     System.out.println("aaaaaa");
+                     throw new RuntimeException(ex);
+Index: src/Service/ManagerTicket.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/ManagerTicket.java b/src/Service/AdTicketS.java
+rename from src/Service/ManagerTicket.java
+rename to src/Service/AdTicketS.java
+--- a/src/Service/ManagerTicket.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/AdTicketS.java	(date 1743034818670)
+@@ -2,18 +2,15 @@
+ 
+ import javaproject.DAO.TicketDAO;
+ import javaproject.DTO.TicketDTO;
+-import javaproject.DTO.TimeTableDTO;
+ 
+ import javax.swing.*;
+ import javax.swing.table.DefaultTableModel;
+-import javax.swing.table.TableColumnModel;
+ import java.awt.*;
+ import java.awt.event.*;
+ import java.sql.SQLException;
+-import java.sql.Time;
+ import java.util.List;
+ 
+-public class ManagerTicket extends JFrame {
++public class AdTicketS extends JFrame {
+     //setDisplay 부분
+     private List<TicketDTO> ticketDTOList;
+     private TicketDAO ticketDAO;
+@@ -26,7 +23,7 @@
+     private JTextField tickNameTextField;
+     private JTextField ticketPriceTextField;
+ 
+-    public ManagerTicket() throws SQLException {
++    public AdTicketS() throws SQLException {
+         getTimeTableInfo();
+         setDisplay();
+         showFrame();
+Index: src/Service/LoginG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/LoginG.java b/src/Service/LoginS.java
+rename from src/Service/LoginG.java
+rename to src/Service/LoginS.java
+--- a/src/Service/LoginG.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/LoginS.java	(date 1743035299343)
+@@ -10,7 +10,7 @@
+ import java.awt.event.KeyEvent;
+ 
+ 
+-public class LoginG extends JFrame implements ActionListener {
++public class LoginS extends JFrame implements ActionListener {
+     String[] select = {"관리자", "회원"};
+     boolean s_flag = true;
+ 
+@@ -38,9 +38,9 @@
+     };
+     JPanel pp=new JPanel();
+     CardLayout cl=new CardLayout(10,10);
+-    SignInG signInG=new SignInG(pp);
++    SignInS signInS =new SignInS(pp);
+ 
+-    public LoginG() {
++    public LoginS() {
+         this.setTitle("놀이공원 예약 시스템");
+         this.setLayout(new GridLayout(2,1));
+ 
+@@ -50,7 +50,7 @@
+         pp.setBackground(Color.WHITE);
+         pp.setLayout(cl);
+         pp.add(center);
+-        pp.add(signInG);
++        pp.add(signInS);
+ 
+ 
+         center.setBackground(Color.WHITE);
+@@ -204,11 +204,11 @@
+ 
+         if (success && s_flag) {
+             this.setVisible(false);
+-            new AdminMenu1(this,id);
++            new AdMenuS(this,id);
+         } else if (success) {
+             this.setVisible(false);
+-            new Map(id,this);
+-            new TimeTable();
++            new MemMenuS(id,this);
++            new MemTimeTableS();
+         } else {
+             JOptionPane.showMessageDialog(null, "로그인 실패");
+         }
+Index: src/Service/AttractionManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/AttractionManager.java b/src/Service/AttractionS.java
+rename from src/Service/AttractionManager.java
+rename to src/Service/AttractionS.java
+--- a/src/Service/AttractionManager.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/AttractionS.java	(date 1743034818732)
+@@ -1,33 +1,23 @@
+ package javaproject.Service;
+ 
+-import java.awt.GridBagConstraints;
+-import java.awt.GridBagLayout;
+-import java.awt.GridLayout;
+-import java.awt.Insets;
+ import java.awt.event.ActionEvent;
+ import java.awt.event.ActionListener;
+-import java.awt.event.MouseEvent;
+-import java.awt.event.MouseListener;
+ import java.awt.event.WindowAdapter;
+ import java.awt.event.WindowEvent;
+ import java.util.List;
+ 
+-import javax.swing.ButtonGroup;
+ import javax.swing.JButton;
+ import javax.swing.JFrame;
+-import javax.swing.JLabel;
+ import javax.swing.JOptionPane;
+ import javax.swing.JPanel;
+-import javax.swing.JRadioButton;
+ import javax.swing.JScrollPane;
+ import javax.swing.JTable;
+-import javax.swing.JTextField;
+ import javax.swing.table.DefaultTableModel;
+ 
+ import javaproject.DAO.AttractionDAO;
+ import javaproject.DTO.AttractionDTO;
+ 
+-public class AttractionManager extends JFrame{
++public class AttractionS extends JFrame{
+ 	AttractionDAO dao=new AttractionDAO();
+ 	String[] col={"아이디","이름","이미지","최대인원","운영여부"};
+ 	DefaultTableModel model=new DefaultTableModel(col,0){
+@@ -42,7 +32,7 @@
+ 	JTable t=new JTable(model);
+ 	JButton update=new JButton("수정");
+ 
+-	public AttractionManager(JFrame before) {
++	public AttractionS(JFrame before) {
+ 		this.setSize(600, 400);
+ 		this.setTitle("시설관리");
+ 
+Index: src/Service/AdG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/AdG.java b/src/Service/AdS.java
+rename from src/Service/AdG.java
+rename to src/Service/AdS.java
+--- a/src/Service/AdG.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/AdS.java	(date 1743034818748)
+@@ -10,7 +10,7 @@
+ import java.sql.Date;
+ 
+ 
+-public class AdG extends JFrame {
++public class AdS extends JFrame {
+ 
+     private String id;
+     private JPanel center = new JPanel();
+@@ -28,7 +28,7 @@
+     private JComboBox aPos = new JComboBox(positionName);
+     private JButton updateBut = new JButton("수정");
+ 
+-    public AdG(String id, AdminMenu1 before) {
++    public AdS(String id, AdMenuS before) {
+         this.id = id;
+         setTitle("관리자정보");
+         setSize(600, 400);
+Index: src/Service/AdminMenu1.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/AdminMenu1.java b/src/Service/AdMenuS.java
+rename from src/Service/AdminMenu1.java
+rename to src/Service/AdMenuS.java
+--- a/src/Service/AdminMenu1.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/AdMenuS.java	(date 1743035055979)
+@@ -9,7 +9,7 @@
+ import java.awt.event.WindowEvent;
+ import java.sql.SQLException;
+ 
+-public class AdminMenu1 extends JFrame {
++public class AdMenuS extends JFrame {
+     JPanel mainPanel = new JPanel();
+     JPanel headerPanel = new JPanel();
+     JPanel contentPanel = new JPanel();
+@@ -24,12 +24,12 @@
+     JButton update = new JButton("로그아웃");
+     JButton adminManage = new JButton("관리자정보"); // 새로 추가
+ 
+-    LoginG LoginG;
++    LoginS LoginS;
+     String id;
+ 
+-    public AdminMenu1(LoginG before, String id) {
++    public AdMenuS(LoginS before, String id) {
+         this.id = id;
+-        this.LoginG = before;
++        this.LoginS = before;
+         this.setSize(1200, 800);
+         this.setLocationRelativeTo(null);
+         this.setTitle("정규랜드 관리자모드");
+@@ -143,17 +143,17 @@
+ 
+     private void attractClick() {
+         System.out.println("연결");
+-        new AttractionManager(this);
++        new AttractionS(this);
+     }
+ 
+     private void resCLick() {
+         System.out.println("연결");
+-        new ReservationG(this);
++        new AdReservationS(this);
+     }
+ 
+     private void scheduleClick() {
+         try {
+-            new ManagerTimeTable();
++            new AdTimeTableS();
+         } catch (SQLException e) {
+             throw new RuntimeException(e);
+         }
+@@ -161,12 +161,12 @@
+ 
+     private void memberClick() {
+         System.out.println("연결");
+-        new MemAdG(this);
++        new AdmemS(this);
+     }
+ 
+     private void ticketClick() {
+         try {
+-            new ManagerTicket();
++            new AdTicketS();
+         } catch (SQLException e) {
+             throw new RuntimeException(e);
+         }
+@@ -177,13 +177,13 @@
+     private void adminManageClick() {
+         System.out.println("연결");
+         // 여기에 관리자관리 기능 추가 (예: new AdminManagerG();)
+-        new AdG(id,this);
++        new AdS(id,this);
+     }
+ 
+     private void logOut() {
+         System.out.println("연결");
+          dispose();
+-         LoginG.setVisible(true);
++         LoginS.setVisible(true);
+ 
+     }
+ }
+Index: src/Service/MemG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.Service;\r\n\r\n\r\nimport javaproject.DAO.MemDAO;\r\nimport javaproject.DTO.MemDTO;\r\n\r\nimport javax.swing.*;\r\nimport java.awt.*;\r\nimport java.awt.event.WindowAdapter;\r\nimport java.awt.event.WindowEvent;\r\nimport java.sql.Date;\r\n\r\n// 회원 회원정보수정\r\npublic class MemG extends JFrame {\r\n    private String id;\r\n    private JPanel center = new JPanel();\r\n    private String[] labelName = {\"아이디\", \"비밀번호\", \"이름\", \"성별\", \"생년월일\", \"티켓번호\"};\r\n    private JLabel mId;\r\n    private JTextField mPass;\r\n    private JTextField mName;\r\n    private JRadioButton radioMan = new JRadioButton(\"남자\");\r\n    private JRadioButton radioWoman = new JRadioButton(\"여자\");\r\n    private ButtonGroup group = new ButtonGroup();\r\n    private JComboBox yearCom;\r\n    private JComboBox monthCom;\r\n    private JComboBox dayCom;\r\n    private JLabel tPass;\r\n    private JButton updateBut = new JButton(\"수정\");\r\n\r\n    public MemG(String id, Map before) {\r\n        this.id = id;\r\n        setTitle(\"회원정보\");\r\n        setSize(600, 400);\r\n        setLocationRelativeTo(null);\r\n        setVisible(true);\r\n        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);\r\n\r\n        centerLayout();\r\n        updateBut.addActionListener(e -> update());\r\n\r\n        this.addWindowListener(\r\n                new WindowAdapter() {\r\n                    public void windowClosing(WindowEvent e) {\r\n                        before.setEnabled(true);\r\n                        before.toFront();\r\n                        before.setFocusable(true);\r\n                        before.requestFocusInWindow();\r\n                    }\r\n                }\r\n        );\r\n    }\r\n\r\n    private void update() {\r\n        MemDAO memDAO = new MemDAO();\r\n        String newPass = mPass.getText();\r\n        String newName = mName.getText();\r\n        if (newPass.isEmpty() || newName.isEmpty()) {\r\n            JOptionPane.showMessageDialog(null, \"빈칸 발생.\", \"Warning\",\r\n                    JOptionPane.WARNING_MESSAGE);\r\n            return;\r\n        }\r\n        int newGender = radioMan.isSelected() ? 1 : 0;\r\n        String newBirth = yearCom.getSelectedItem().toString() + \"-\" + monthCom.getSelectedItem().toString()\r\n                + \"-\" + dayCom.getSelectedItem().toString();\r\n        MemDTO memDTO = MemDTO.builder()\r\n                .mId(id)\r\n                .mPass(newPass)\r\n                .mName(newName)\r\n                .mGender(newGender)\r\n                .mBirth(Date.valueOf(newBirth))\r\n                .build();\r\n        if (memDAO.update(memDTO)) {\r\n            JOptionPane.showMessageDialog(null, \"수정 완료\");\r\n            this.remove(center);\r\n            centerLayout();\r\n        } else {\r\n            JOptionPane.showMessageDialog(null, \"수정 실패\", \"Warning\",\r\n                    JOptionPane.WARNING_MESSAGE);\r\n        }\r\n    }\r\n\r\n    private void centerLayout() {\r\n        center.setLayout(new GridBagLayout());\r\n        GridBagConstraints c = new GridBagConstraints();\r\n        c.insets = new Insets(5, 5, 5, 5);\r\n        //label\r\n        c.anchor = GridBagConstraints.WEST;\r\n        c.gridx = 0;\r\n        c.gridy = 0;\r\n        center.add(new JLabel(labelName[0]), c);\r\n        c.gridx = 0;\r\n        c.gridy = 1;\r\n        center.add(new JLabel(labelName[1]), c);\r\n        c.gridx = 0;\r\n        c.gridy = 2;\r\n        center.add(new JLabel(labelName[2]), c);\r\n        c.gridx = 0;\r\n        c.gridy = 3;\r\n        center.add(new JLabel(labelName[3]), c);\r\n        c.gridx = 0;\r\n        c.gridy = 4;\r\n        center.add(new JLabel(labelName[4]), c);\r\n        c.gridx = 0;\r\n        c.gridy = 5;\r\n        center.add(new JLabel(labelName[5]), c);\r\n        // Text\r\n        MemDAO memDAO = new MemDAO();\r\n        MemDTO memDTO = memDAO.select(id);\r\n        c.gridx = 1;\r\n        c.gridy = 0;\r\n        c.gridwidth = 2;\r\n        mId = new JLabel(memDTO.getMId());\r\n        center.add(mId, c);\r\n        c.gridx = 1;\r\n        c.gridy = 1;\r\n        c.gridwidth = 2;\r\n        mPass = new JPasswordField(memDTO.getMPass(), 10);\r\n        center.add(mPass, c);\r\n        c.gridx = 1;\r\n        c.gridy = 2;\r\n        mName = new JTextField(memDTO.getMName(), 10);\r\n        center.add(mName, c);\r\n        c.fill = GridBagConstraints.HORIZONTAL;\r\n        c.gridx = 1;\r\n        c.gridy = 3;\r\n        JPanel mGender = makeGenderPanel(memDTO.getMGender());\r\n        center.add(mGender, c);\r\n        c.gridx = 1;\r\n        c.gridy = 4;\r\n        JPanel mBirth = makerBirthPanel(memDTO);\r\n        center.add(mBirth, c);\r\n        c.fill = GridBagConstraints.NONE;\r\n        c.gridx = 1;\r\n        c.gridy = 5;\r\n        tPass = new JLabel(memDTO.getTPass());\r\n        center.add(tPass, c);\r\n        c.anchor = GridBagConstraints.EAST;\r\n        c.gridx = 2;\r\n        c.gridy = 6;\r\n        c.gridwidth = 1;\r\n        updateBut.setFont(new Font(\"맑은고딕\", Font.BOLD, 12));\r\n        center.add(updateBut, c);\r\n\r\n        this.add(center);\r\n    }\r\n\r\n    private JPanel makeGenderPanel(int a) {\r\n        JPanel panel = new JPanel(new GridLayout(1, 2));\r\n        panel.add(radioMan);\r\n        panel.add(radioWoman);\r\n        if (a == 0) {\r\n            radioMan.setSelected(true);\r\n        } else if (a == 1) {\r\n            radioWoman.setSelected(true);\r\n        }\r\n        group.add(radioMan);\r\n        group.add(radioWoman);\r\n\r\n        return panel;\r\n    }\r\n\r\n    private JPanel makerBirthPanel(MemDTO memDTO) {\r\n        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));\r\n        String[] year = new String[46];\r\n        String[] month = new String[12];\r\n        String[] day = new String[31];\r\n        for (int i = 0; i < year.length; i++) {\r\n            year[i] = String.valueOf(i + 1980);\r\n        }\r\n        for (int i = 0; i < month.length; i++) {\r\n            month[i] = String.valueOf(i + 1);\r\n        }\r\n        for (int i = 0; i < day.length; i++) {\r\n            day[i] = String.valueOf(i + 1);\r\n        }\r\n        yearCom = new JComboBox(year);\r\n        yearCom.setBackground(Color.WHITE);\r\n        monthCom = new JComboBox(month);\r\n        monthCom.setBackground(Color.WHITE);\r\n        dayCom = new JComboBox(day);\r\n        dayCom.setBackground(Color.WHITE);\r\n        panel.add(yearCom);\r\n        panel.add(new JLabel(\"년\"));\r\n        panel.add(monthCom);\r\n        panel.add(new JLabel(\"월\"));\r\n        panel.add(dayCom);\r\n        panel.add(new JLabel(\"일\"));\r\n\r\n        int mBYear = Integer.parseInt(memDTO.getYear());\r\n        int mBMonth = Integer.parseInt(memDTO.getMonth());\r\n        int mBDay = Integer.parseInt(memDTO.getDay());\r\n\r\n        yearCom.setSelectedIndex(mBYear - 1980);\r\n        monthCom.setSelectedIndex(mBMonth - 1);\r\n        dayCom.setSelectedIndex(mBDay - 1);\r\n\r\n        return panel;\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/MemG.java b/src/Service/MemG.java
+--- a/src/Service/MemG.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/MemG.java	(date 1743034933799)
+@@ -27,7 +27,7 @@
+     private JLabel tPass;
+     private JButton updateBut = new JButton("수정");
+ 
+-    public MemG(String id, Map before) {
++    public MemG(String id, MemMenuS before) {
+         this.id = id;
+         setTitle("회원정보");
+         setSize(600, 400);
+Index: src/Service/MemAdG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/MemAdG.java b/src/Service/AdmemS.java
+rename from src/Service/MemAdG.java
+rename to src/Service/AdmemS.java
+--- a/src/Service/MemAdG.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/AdmemS.java	(date 1743034933815)
+@@ -12,13 +12,13 @@
+ import java.sql.Date;
+ import java.util.List;
+ 
+-public class MemAdG extends JFrame {
++public class AdmemS extends JFrame {
+     private JButton update = new JButton("수정");
+     private JButton delete = new JButton("삭제");
+     private JTable table = null;
+     private JScrollPane scrollPane = null;
+ 
+-    public MemAdG(AdminMenu1 before) {
++    public AdmemS(AdMenuS before) {
+         setTitle("회원관리");
+         setSize(600, 400);
+         setLocationRelativeTo(null);
+Index: src/Service/ManagerTimeTable.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/ManagerTimeTable.java b/src/Service/AdTimeTableS.java
+rename from src/Service/ManagerTimeTable.java
+rename to src/Service/AdTimeTableS.java
+--- a/src/Service/ManagerTimeTable.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/AdTimeTableS.java	(date 1743034818748)
+@@ -14,7 +14,7 @@
+ import java.sql.Time;
+ import java.util.List;
+ 
+-public class ManagerTimeTable extends JFrame implements MouseListener {
++public class AdTimeTableS extends JFrame implements MouseListener {
+     private TimeTableDAO timeTableDAO;
+     private List<TimeTableDTO> timeTableDTOList;
+     private JTable table;
+@@ -31,7 +31,7 @@
+     private JTextField paradeTextField;
+     private JFrame newFrame;
+ 
+-    public ManagerTimeTable() throws SQLException {
++    public AdTimeTableS() throws SQLException {
+         getTimeTableInfo();
+         setDisplay();
+         showFrame();
+Index: src/Service/TimeTable.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/TimeTable.java b/src/Service/MemTimeTableS.java
+rename from src/Service/TimeTable.java
+rename to src/Service/MemTimeTableS.java
+--- a/src/Service/TimeTable.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/MemTimeTableS.java	(date 1743035299249)
+@@ -9,12 +9,12 @@
+ import java.util.List;
+ 
+ 
+-public class TimeTable extends JFrame {
++public class MemTimeTableS extends JFrame {
+     private List<TimeTableDTO> timeTableDTOList;
+     private GridBagConstraints gbc;
+     private GridBagLayout grid;
+ 
+-    public TimeTable() {
++    public MemTimeTableS() {
+ 
+         getTimeTableInfo();
+         setDisplay();
+@@ -137,7 +137,7 @@
+         setVisible(true);
+     }
+     public static void main(String[] args){
+-        new TimeTable();
++        new MemTimeTableS();
+     }
+ 
+ }
+\ No newline at end of file
+Index: src/Main1.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Main1.java b/src/Main.java
+rename from src/Main1.java
+rename to src/Main.java
+--- a/src/Main1.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Main.java	(date 1743035299334)
+@@ -1,11 +1,11 @@
+ package javaproject;
+ 
+-import javaproject.Service.LoginG;
++import javaproject.Service.LoginS;
+ 
+ import java.sql.SQLException;
+ 
+-public class Main1  {
++public class Main {
+     public static void main(String[] args) throws SQLException {
+-        new LoginG();
++        new LoginS();
+     }
+ }
+Index: src/Service/ReservationMemG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/ReservationMemG.java b/src/Service/MemReservationS.java
+rename from src/Service/ReservationMemG.java
+rename to src/Service/MemReservationS.java
+--- a/src/Service/ReservationMemG.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/MemReservationS.java	(date 1743035055993)
+@@ -14,7 +14,7 @@
+ import java.util.List;
+ 
+ // 회원, 관리자 예약현황 둘다 전체 조회 삭제만 가능
+-public class ReservationMemG extends JFrame implements ActionListener {
++public class MemReservationS extends JFrame implements ActionListener {
+ 
+     private JButton update = new JButton("수정");
+     private JButton delete = new JButton("취소");
+@@ -23,7 +23,7 @@
+     private JScrollPane scrollPane;
+     private String id;
+ 
+-    public ReservationMemG(String id, Map before) {
++    public MemReservationS(String id, MemMenuS before) {
+         this.id = id;
+         setTitle("예약현황");
+         setSize(600, 400);
+Index: src/Service/ReservationG.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/ReservationG.java b/src/Service/AdReservationS.java
+rename from src/Service/ReservationG.java
+rename to src/Service/AdReservationS.java
+--- a/src/Service/ReservationG.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/AdReservationS.java	(date 1743035056001)
+@@ -20,7 +20,7 @@
+ import java.util.List;
+ 
+ // 회원, 관리자 예약현황 둘다 전체 조회 삭제만 가능
+-public class ReservationG extends JFrame implements ActionListener {
++public class AdReservationS extends JFrame implements ActionListener {
+     private JButton insert = new JButton("등록");
+     private JButton update = new JButton("수정");
+     private JButton delete = new JButton("취소");
+@@ -28,7 +28,7 @@
+     private String[] info;
+     private JScrollPane scrollPane;
+ 
+-    public ReservationG(AdminMenu1 before) {
++    public AdReservationS(AdMenuS before) {
+         setTitle("예약현황");
+         setSize(600, 400);
+         setLocationRelativeTo(null);
+Index: src/Service/ticketGUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/ticketGUI.java b/src/Service/MemTicketS.java
+rename from src/Service/ticketGUI.java
+rename to src/Service/MemTicketS.java
+--- a/src/Service/ticketGUI.java	(revision 332629c17bcb27884ef9255465252622a6448b69)
++++ b/src/Service/MemTicketS.java	(date 1743035110684)
+@@ -10,17 +10,17 @@
+ import java.awt.event.ActionListener;
+ import java.sql.SQLException;
+ 
+-public class ticketGUI extends JFrame implements ActionListener {
++public class MemTicketS extends JFrame implements ActionListener {
+ 
+     private String userId; // 로그인한 사용자id
+     private TicketDAO ticketDAO = TicketDAO.getInstance();
+     private MemDAO memDAO = new MemDAO();
+ 
+     public static void main(String[] args) throws SQLException {
+-        new ticketGUI("aaa");
++        new MemTicketS("aaa");
+     }
+ 
+-    public ticketGUI(String id) throws SQLException {
++    public MemTicketS(String id) throws SQLException {
+         this.userId = id;
+         this.setSize(800, 400);
+         this.setTitle("티켓 구매");

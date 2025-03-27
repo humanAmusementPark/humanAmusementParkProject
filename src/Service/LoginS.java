@@ -10,7 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
-public class LoginG extends JFrame implements ActionListener {
+public class LoginS extends JFrame implements ActionListener {
     String[] select = {"관리자", "회원"};
     boolean s_flag = true;
 
@@ -38,9 +38,9 @@ public class LoginG extends JFrame implements ActionListener {
     };
     JPanel pp=new JPanel();
     CardLayout cl=new CardLayout(10,10);
-    SignInG signInG=new SignInG(pp);
+    SignInS signInS =new SignInS(pp);
 
-    public LoginG() {
+    public LoginS() {
 
         this.setTitle("놀이공원 예약 시스템");
         this.setLayout(new GridLayout(2,1));
@@ -51,7 +51,7 @@ public class LoginG extends JFrame implements ActionListener {
         pp.setBackground(Color.WHITE);
         pp.setLayout(cl);
         pp.add(center);
-        pp.add(signInG);
+        pp.add(signInS);
 
 
         center.setBackground(Color.WHITE);
@@ -205,11 +205,11 @@ public class LoginG extends JFrame implements ActionListener {
 
         if (success && s_flag) {
             this.setVisible(false);
-            new AdminMenu1(this,id);
+            new AdMenuS(this,id);
         } else if (success) {
             this.setVisible(false);
-            new Map(id,this);
-            new TimeTable();
+            new MemMenuS(id,this);
+            new MemTimeTableS();
         } else {
             JOptionPane.showMessageDialog(null, "로그인 실패");
         }

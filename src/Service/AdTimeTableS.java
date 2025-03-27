@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
 
-public class ManagerTimeTable extends JFrame implements MouseListener {
+public class AdTimeTableS extends JFrame implements MouseListener {
     private TimeTableDAO timeTableDAO;
     private List<TimeTableDTO> timeTableDTOList;
     private JTable table;
@@ -31,7 +31,7 @@ public class ManagerTimeTable extends JFrame implements MouseListener {
     private JTextField paradeTextField;
     private JFrame newFrame;
 
-    public ManagerTimeTable() throws SQLException {
+    public AdTimeTableS() throws SQLException {
         getTimeTableInfo();
         setDisplay();
         showFrame();
