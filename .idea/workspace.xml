@@ -10,38 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="03241250">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/main_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/urlTool.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/lost.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/lost.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/map.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/map.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/menubutton2.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/menubutton2.PNG" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/t익스.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/t익스.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/놀이공원3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/놀이공원3.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/더블락.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/더블락.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/로그인.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/로그인.PNG" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/롤링.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/롤링.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/버드.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/버드.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/범퍼.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/범퍼.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/사파리.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/사파리.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/썬더폴스.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/썬더폴스.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/씨라이언.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/씨라이언.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/애니멀원더 스테이지.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/애니멀원더 스테이지.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/애니멀원더 월드.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/애니멀원더 월드.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/이솝.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/이솝.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/일정표.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/일정표.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/카니발광장.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/카니발광장.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/콜롬버스.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/콜롬버스.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/티켓.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/티켓.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/판다.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/판다.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource/images/회원가입.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/회원가입.PNG" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DAO/SuperDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/SuperDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/LoginS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/LoginS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/MemMenuS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemMenuS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/MemTicketS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemTicketS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/MemTimeTableS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemTimeTableS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/ReservationS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ReservationS.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,42 +53,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "true",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/hu-19/Desktop/main/src/resource",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/hu-19/Desktop/main/src/Main.java",
-    "project.structure.last.edited": "아티팩트",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propCompiler",
-    "vue.rearranger.settings.migration": "true",
-    "애플리케이션.Main.executor": "Run",
-    "애플리케이션.Main1.executor": "Run",
-    "애플리케이션.MemMenuS.executor": "Run",
-    "애플리케이션.MemTimeTableS.executor": "Run",
-    "애플리케이션.ServerMain.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hu-19/Desktop/main/src/resource&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/hu-19/Desktop/main/src/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;아티팩트&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main1.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.MemMenuS.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.MemTicketS.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.MemTimeTableS.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.ServerMain.executor&quot;: &quot;Run&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\hu-19\Desktop\main\src\resource\images" />
       <recent name="C:\Users\hu-19\Desktop\main\src" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="애플리케이션.Main">
     <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="javaproject.Main" />
       <module name="0324-1" />
@@ -195,7 +165,7 @@
       <workItem from="1743038098386" duration="10775000" />
       <workItem from="1743063074585" duration="4840000" />
       <workItem from="1743068260538" duration="456000" />
-      <workItem from="1743068734138" duration="12604000" />
+      <workItem from="1743068734138" duration="13168000" />
     </task>
     <servers />
   </component>
