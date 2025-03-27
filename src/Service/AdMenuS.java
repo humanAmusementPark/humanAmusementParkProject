@@ -9,14 +9,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
-public class AdminMenu1 extends JFrame {
+public class AdMenuS extends JFrame {
     JPanel mainPanel = new JPanel();
     JPanel headerPanel = new JPanel();
     JPanel contentPanel = new JPanel();
     JLabel titleLabel = new JLabel("정규랜드 관리모드", SwingConstants.CENTER);
 
     JButton chating = new JButton("회원상담");
-    JButton attraction = new JButton("어트랙션");
+    JButton attraction = new JButton("시설관리");
     JButton reservation = new JButton("예약관리");
     JButton schedule = new JButton("일정표 관리");
     JButton member = new JButton("회원");
@@ -24,12 +24,12 @@ public class AdminMenu1 extends JFrame {
     JButton update = new JButton("로그아웃");
     JButton adminManage = new JButton("관리자정보"); // 새로 추가
 
-    LoginG LoginG;
+    LoginS LoginS;
     String id;
 
-    public AdminMenu1(LoginG before, String id) {
+    public AdMenuS(LoginS before, String id) {
         this.id = id;
-        this.LoginG = before;
+        this.LoginS = before;
         this.setSize(1200, 800);
         this.setLocationRelativeTo(null);
         this.setTitle("정규랜드 관리자모드");
@@ -90,7 +90,7 @@ public class AdminMenu1 extends JFrame {
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
         styleButton(chating, new Color(33, 150, 243), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
-        styleButton(attraction, new Color(33, 150, 243), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
+        styleButton(attraction, new Color(15, 76, 233), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
         styleButton(reservation, new Color(76, 175, 80), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70); // 크기 조정
         styleButton(adminManage, new Color(156, 39, 176), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70); // 관리자관리 스타일
         styleButton(member, new Color(255, 152, 0), Color.WHITE, new Font("맑은 고딕", Font.BOLD, 18), 250, 70);
@@ -143,17 +143,17 @@ public class AdminMenu1 extends JFrame {
 
     private void attractClick() {
         System.out.println("연결");
-        new AttractionManager(this);
+        new AttractionS(this);
     }
 
     private void resCLick() {
         System.out.println("연결");
-        new ReservationG(this);
+        new AdReservationS(this);
     }
 
     private void scheduleClick() {
         try {
-            new ManagerTimeTable();
+            new AdTimeTableS();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -161,12 +161,12 @@ public class AdminMenu1 extends JFrame {
 
     private void memberClick() {
         System.out.println("연결");
-        new MemAdG(this);
+        new AdmemS(this);
     }
 
     private void ticketClick() {
         try {
-            new ManagerTicket();
+            new AdTicketS();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -177,13 +177,13 @@ public class AdminMenu1 extends JFrame {
     private void adminManageClick() {
         System.out.println("연결");
         // 여기에 관리자관리 기능 추가 (예: new AdminManagerG();)
-        new AdG(id,this);
+        new AdS(id,this);
     }
 
     private void logOut() {
         System.out.println("연결");
          dispose();
-         LoginG.setVisible(true);
+         LoginS.setVisible(true);
 
     }
 }

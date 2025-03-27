@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TimeTable extends JFrame {
+public class MemTimeTableS extends JFrame {
     private List<TimeTableDTO> timeTableDTOList;
     private GridBagConstraints gbc;
     private GridBagLayout grid;
 
-    public TimeTable() {
+    public MemTimeTableS() {
 
         getTimeTableInfo();
         setDisplay();
@@ -137,7 +137,7 @@ public class TimeTable extends JFrame {
         setVisible(true);
     }
     public static void main(String[] args){
-        new TimeTable();
+        new MemTimeTableS();
     }
 
 }

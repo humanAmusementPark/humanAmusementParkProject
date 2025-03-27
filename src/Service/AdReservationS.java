@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 // 회원, 관리자 예약현황 둘다 전체 조회 삭제만 가능
-public class ReservationG extends JFrame implements ActionListener {
+public class AdReservationS extends JFrame implements ActionListener {
     private JButton insert = new JButton("등록");
     private JButton update = new JButton("수정");
     private JButton delete = new JButton("취소");
@@ -28,7 +28,7 @@ public class ReservationG extends JFrame implements ActionListener {
     private String[] info;
     private JScrollPane scrollPane;
 
-    public ReservationG(AdminMenu1 before) {
+    public AdReservationS(AdMenuS before) {
         setTitle("예약현황");
         setSize(600, 400);
         setLocationRelativeTo(null);

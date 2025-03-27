@@ -1,33 +1,23 @@
 package javaproject.Service;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import javaproject.DAO.AttractionDAO;
 import javaproject.DTO.AttractionDTO;
 
-public class AttractionManager extends JFrame{
+public class AttractionS extends JFrame{
 	AttractionDAO dao=new AttractionDAO();
 	String[] col={"아이디","이름","이미지","최대인원","운영여부"};
 	DefaultTableModel model=new DefaultTableModel(col,0){
@@ -42,7 +32,7 @@ public class AttractionManager extends JFrame{
 	JTable t=new JTable(model);
 	JButton update=new JButton("수정");
 
-	public AttractionManager(JFrame before) {
+	public AttractionS(JFrame before) {
 		this.setSize(600, 400);
 		this.setTitle("시설관리");
 

@@ -12,13 +12,13 @@ import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.util.List;
 
-public class MemAdG extends JFrame {
+public class AdmemS extends JFrame {
     private JButton update = new JButton("수정");
     private JButton delete = new JButton("삭제");
     private JTable table = null;
     private JScrollPane scrollPane = null;
 
-    public MemAdG(AdminMenu1 before) {
+    public AdmemS(AdMenuS before) {
         setTitle("회원관리");
         setSize(600, 400);
         setLocationRelativeTo(null);

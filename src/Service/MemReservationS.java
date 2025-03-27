@@ -14,7 +14,7 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 
 // 회원, 관리자 예약현황 둘다 전체 조회 삭제만 가능
-public class ReservationMemG extends JFrame implements ActionListener {
+public class MemReservationS extends JFrame implements ActionListener {
 
     private JButton update = new JButton("수정");
     private JButton delete = new JButton("취소");
@@ -23,7 +23,7 @@ public class ReservationMemG extends JFrame implements ActionListener {
     private JScrollPane scrollPane;
     private String id;
 
-    public ReservationMemG(String id, Map before) {
+    public MemReservationS(String id, MemMenuS before) {
         this.id = id;
         setTitle("예약현황");
         setSize(600, 400);

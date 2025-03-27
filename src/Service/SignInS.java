@@ -7,7 +7,6 @@ import javaproject.DTO.MemDTO;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +16,7 @@ import java.sql.Date;
 //import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 //import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
-public class SignInG extends JPanel implements ActionListener {
+public class SignInS extends JPanel implements ActionListener {
 
     JLabel title = new JLabel("회원가입");
 
@@ -45,7 +44,7 @@ public class SignInG extends JPanel implements ActionListener {
     boolean flag = false;
     JPanel rankPanel = new JPanel();
 
-    public SignInG(JPanel before) {
+    public SignInS(JPanel before) {
         this.before = before;
         this.setBorder(new LineBorder(Color.black, 1, true));
 

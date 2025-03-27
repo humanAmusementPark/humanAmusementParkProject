@@ -1,6 +1,6 @@
 package javaproject.chat.server;
 
-import javaproject.Map;
+
 
 import java.io.IOException;
 
@@ -15,6 +15,6 @@ public class ServerMain {
 
         Server server = new Server(PORT, commandManager, sessionManager);
         server.start();
-        Map.serverStart = true;
+
     }
 }

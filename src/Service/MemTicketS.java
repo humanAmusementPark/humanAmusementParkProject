@@ -10,17 +10,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
-public class ticketGUI extends JFrame implements ActionListener {
+public class MemTicketS extends JFrame implements ActionListener {
 
     private String userId; // 로그인한 사용자id
     private TicketDAO ticketDAO = TicketDAO.getInstance();
     private MemDAO memDAO = new MemDAO();
 
     public static void main(String[] args) throws SQLException {
-        new ticketGUI("aaa");
+        new MemTicketS("aaa");
     }
 
-    public ticketGUI(String id) throws SQLException {
+    public MemTicketS(String id) throws SQLException {
         this.userId = id;
         this.setSize(800, 400);
         this.setTitle("티켓 구매");
