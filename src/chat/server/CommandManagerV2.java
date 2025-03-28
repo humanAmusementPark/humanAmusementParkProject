@@ -12,13 +12,14 @@ public class CommandManagerV2 implements CommandManager{
 
 
     @Override
-    public boolean execute(String totalMessage, Session session) throws IOException {
+    public int execute(String totalMessage, Session session) throws IOException {
 
         if (totalMessage.startsWith("/exit")){
-
-            return  true;
+            return  1;
+        }else if(totalMessage.startsWith("/강퇴")){
+            return 2;
         }
 
-        return false;
+        return 0;
     }
 }

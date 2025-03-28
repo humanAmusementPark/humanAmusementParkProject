@@ -62,9 +62,10 @@ public class Session implements Runnable {
                 String received = input.readUTF();
                 log("클라 -> 서버 : " + received);
 
+                    int command = commandManager.execute(received,this);
+                if (command==1) {
 
-                if (commandManager.execute(received, this)) {
-                   if(matchedSession != null) {
+                    if(matchedSession != null) {
                        matchedSession.setFlag(true);
                        matchedSession.setMatchedSession(null);
                        sessionManager.matchCustomerToAdmin(matchedSession);
@@ -73,6 +74,25 @@ public class Session implements Runnable {
                    }
                     sessionManager.remove(this);
                     close();
+                    Thread.sleep(5000);
+
+                } else if (command==2) {
+                    if(matchedSession != null && role.equals("상담사")){
+                       try {
+                           send("강퇴입니다. 착하게 사십쇼");
+                           matchedSession.getOutput().flush();
+                           matchedSession.getOutput().writeUTF("/강퇴");
+                           matchedSession.getOutput().flush();
+                            matchedSession.close();
+                           sessionManager.remove(matchedSession);
+                           this.setMatchedSession(null);
+                           sessionManager.matchCustomerToAdmin(this);
+                           this.setFlag(true);
+
+                       }catch (IOException e){
+                           log("강퇴중 오류 : "+e);
+                       }
+                    }
                 } else {
                     send(received);
                 }
@@ -80,6 +100,8 @@ public class Session implements Runnable {
 
         } catch (IOException e) {
             log(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -107,16 +129,4 @@ public class Session implements Runnable {
 
     }
 
-    public boolean conn() {
-        try {
-            getOutput().writeUTF("시작");
-            getOutput().flush();
-            input.readUTF();
-            System.out.println("연결");
-            return true;
-        }catch (Exception e){
-            System.out.println("탈출");
-        }
-        return false;
-    }
 }
