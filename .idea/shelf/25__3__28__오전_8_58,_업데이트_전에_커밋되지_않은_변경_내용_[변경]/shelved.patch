@@ -1,0 +1,131 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ArtifactsWorkspaceSettings\">\r\n    <artifacts-to-build>\r\n      <artifact name=\"main:jar\" />\r\n    </artifacts-to-build>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9\" name=\"변경\" comment=\"03241250\">\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/artifacts/main_jar.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/urlTool.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/lost.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/lost.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/map.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/map.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/menubutton2.PNG\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/menubutton2.PNG\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/t익스.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/t익스.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/놀이공원3.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/놀이공원3.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/더블락.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/더블락.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/로그인.PNG\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/로그인.PNG\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/롤링.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/롤링.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/버드.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/버드.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/범퍼.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/범퍼.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/사파리.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/사파리.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/썬더폴스.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/썬더폴스.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/씨라이언.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/씨라이언.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/애니멀원더 스테이지.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/애니멀원더 스테이지.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/애니멀원더 월드.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/애니멀원더 월드.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/이솝.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/이솝.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/일정표.jpeg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/일정표.jpeg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/카니발광장.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/카니발광장.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/콜롬버스.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/콜롬버스.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/티켓.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/티켓.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/판다.gif\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/판다.gif\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/resource/images/회원가입.PNG\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/resource/images/회원가입.PNG\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/DAO/SuperDAO.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/DAO/SuperDAO.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Main.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/LoginS.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/LoginS.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/MemMenuS.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/MemMenuS.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/MemTicketS.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/MemTicketS.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/MemTimeTableS.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/MemTimeTableS.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/ReservationS.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/ReservationS.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;kangeyoung&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/humanAmusementPark/humanAmusementParkProject.git&quot;,\r\n    &quot;accountId&quot;: &quot;ce997ee5-0cad-4086-9b1d-f0f67e5e2908&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 4\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2upXm7ZGCcqYNG5UXOAVtrjnHkp\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Downloaded.Files.Path.Enabled\": \"false\",\r\n    \"Repository.Attach.Annotations\": \"true\",\r\n    \"Repository.Attach.JavaDocs\": \"false\",\r\n    \"Repository.Attach.Sources\": \"false\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/hu-19/Desktop/main/src/resource\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"onboarding.tips.debug.path\": \"C:/Users/hu-19/Desktop/main/src/Main.java\",\r\n    \"project.structure.last.edited\": \"아티팩트\",\r\n    \"project.structure.proportion\": \"0.15\",\r\n    \"project.structure.side.proportion\": \"0.2\",\r\n    \"settings.editor.selected.configurable\": \"project.propCompiler\",\r\n    \"vue.rearranger.settings.migration\": \"true\",\r\n    \"애플리케이션.Main.executor\": \"Run\",\r\n    \"애플리케이션.Main1.executor\": \"Run\",\r\n    \"애플리케이션.MemMenuS.executor\": \"Run\",\r\n    \"애플리케이션.MemTimeTableS.executor\": \"Run\",\r\n    \"애플리케이션.ServerMain.executor\": \"Run\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\hu-19\\Desktop\\main\\src\\resource\\images\" />\r\n      <recent name=\"C:\\Users\\hu-19\\Desktop\\main\\src\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" singleton=\"false\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.Main\" />\r\n      <module name=\"0324-1\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.Service.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"MemMenuS\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.Service.MemMenuS\" />\r\n      <module name=\"0324-1\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.Service.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ServerMain\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.chat.server.ServerMain\" />\r\n      <module name=\"0324-1\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.chat.server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"애플리케이션.Main\" />\r\n      <item itemvalue=\"애플리케이션.MemMenuS\" />\r\n      <item itemvalue=\"애플리케이션.ServerMain\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"애플리케이션.Main\" />\r\n        <item itemvalue=\"애플리케이션.ServerMain\" />\r\n        <item itemvalue=\"애플리케이션.MemMenuS\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"애플리케이션 수준\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"디폴트 작업\">\r\n      <changelist id=\"42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9\" name=\"변경\" comment=\"03241250\" />\r\n      <created>1742946646194</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1742946646194</updated>\r\n      <workItem from=\"1742946647738\" duration=\"17209000\" />\r\n      <workItem from=\"1742975472734\" duration=\"476000\" />\r\n      <workItem from=\"1742975978609\" duration=\"1175000\" />\r\n      <workItem from=\"1743034492453\" duration=\"3312000\" />\r\n      <workItem from=\"1743038098386\" duration=\"10775000\" />\r\n      <workItem from=\"1743063074585\" duration=\"4840000\" />\r\n      <workItem from=\"1743068260538\" duration=\"456000\" />\r\n      <workItem from=\"1743068734138\" duration=\"12604000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"origin/main\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"03241250\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"03241250\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/src/Main.java</url>\r\n          <line>12</line>\r\n          <option name=\"timeStamp\" value=\"1\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 50b218d9bb41ed9310813482e7bfe7ab7a3ad9e9)
++++ b/.idea/workspace.xml	(date 1743119891694)
+@@ -10,38 +10,7 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="03241250">
+-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/main_jar.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/urlTool.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/lost.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/lost.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/map.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/map.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/menubutton2.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/menubutton2.PNG" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/t익스.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/t익스.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/놀이공원3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/놀이공원3.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/더블락.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/더블락.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/로그인.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/로그인.PNG" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/롤링.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/롤링.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/버드.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/버드.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/범퍼.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/범퍼.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/사파리.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/사파리.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/썬더폴스.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/썬더폴스.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/씨라이언.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/씨라이언.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/애니멀원더 스테이지.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/애니멀원더 스테이지.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/애니멀원더 월드.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/애니멀원더 월드.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/이솝.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/이솝.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/일정표.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/일정표.jpeg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/카니발광장.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/카니발광장.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/콜롬버스.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/콜롬버스.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/티켓.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/티켓.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/판다.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/판다.gif" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/resource/images/회원가입.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource/images/회원가입.PNG" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/DAO/SuperDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/SuperDAO.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Service/LoginS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/LoginS.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Service/MemMenuS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemMenuS.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Service/MemTicketS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemTicketS.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Service/MemTimeTableS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemTimeTableS.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Service/ReservationS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ReservationS.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -84,42 +53,43 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Downloaded.Files.Path.Enabled": "false",
+-    "Repository.Attach.Annotations": "true",
+-    "Repository.Attach.JavaDocs": "false",
+-    "Repository.Attach.Sources": "false",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "git-widget-placeholder": "main",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "C:/Users/hu-19/Desktop/main/src/resource",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "onboarding.tips.debug.path": "C:/Users/hu-19/Desktop/main/src/Main.java",
+-    "project.structure.last.edited": "아티팩트",
+-    "project.structure.proportion": "0.15",
+-    "project.structure.side.proportion": "0.2",
+-    "settings.editor.selected.configurable": "project.propCompiler",
+-    "vue.rearranger.settings.migration": "true",
+-    "애플리케이션.Main.executor": "Run",
+-    "애플리케이션.Main1.executor": "Run",
+-    "애플리케이션.MemMenuS.executor": "Run",
+-    "애플리케이션.MemTimeTableS.executor": "Run",
+-    "애플리케이션.ServerMain.executor": "Run"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
++    &quot;Repository.Attach.Annotations&quot;: &quot;true&quot;,
++    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
++    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/hu-19/Desktop/main/src/resource&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/hu-19/Desktop/main/src/Main.java&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;아티팩트&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
++    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.Main1.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.MemMenuS.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.MemTicketS.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.MemTimeTableS.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.ServerMain.executor&quot;: &quot;Run&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
+       <recent name="C:\Users\hu-19\Desktop\main\src\resource\images" />
+       <recent name="C:\Users\hu-19\Desktop\main\src" />
+     </key>
+   </component>
+-  <component name="RunManager">
++  <component name="RunManager" selected="애플리케이션.Main">
+     <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="javaproject.Main" />
+       <module name="0324-1" />
+@@ -195,7 +165,7 @@
+       <workItem from="1743038098386" duration="10775000" />
+       <workItem from="1743063074585" duration="4840000" />
+       <workItem from="1743068260538" duration="456000" />
+-      <workItem from="1743068734138" duration="12604000" />
++      <workItem from="1743068734138" duration="13168000" />
+     </task>
+     <servers />
+   </component>

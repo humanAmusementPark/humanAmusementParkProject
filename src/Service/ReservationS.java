@@ -17,6 +17,7 @@ import javaproject.DAO.ReservationDAO;
 import javaproject.DAO.TicketDAO;
 import javaproject.DTO.AttractionDTO;
 import javaproject.DTO.ReservationDTO;
+import javaproject.urlTool;
 
 public class ReservationS extends JFrame {
     String mId = null;
@@ -54,6 +55,7 @@ public class ReservationS extends JFrame {
         String atId = attract.getAtId();
         mId = id; //회원 아이디
         String tpass = mdao.select(mId).getTPass();
+        System.out.println("tpass == " + tpass);
         String tname = tdao.selectti(tpass).getTName();
 
         int count = 0; //현재 대기인원
@@ -80,7 +82,10 @@ public class ReservationS extends JFrame {
 
         int vcount = 0;
 
-        ImageIcon icon = new ImageIcon(attract.getAtUrl());
+        //ImageIcon icon = new ImageIcon(attract.getAtUrl());
+        urlTool utool = new urlTool();
+        ImageIcon icon = utool.getImageIcon(attract.getAtUrl());
+
         this.setSize(icon.getIconWidth() + 150, icon.getIconHeight() + 40); //프레임 크기를 이미지에 맞추기
 
 

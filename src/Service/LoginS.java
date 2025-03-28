@@ -2,36 +2,57 @@ package javaproject.Service;
 
 import javaproject.DAO.MemDAO;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+import javaproject.urlTool;
 
 public class LoginS extends JFrame implements ActionListener {
     String[] select = {"관리자", "회원"};
     boolean s_flag = true;
 
-    JLabel label = new JLabel(new ImageIcon("resource/images/메인.png"));
+    urlTool urTool = new urlTool();
+
+//    ImageIcon image2 = urTool.getImageIcon("/javaproject/resource/images/로그인.PNG");
+//
+//    JLabel label = new JLabel(image2);
+
+    JLabel label = new JLabel(new ImageIcon("javaproject/Service/resource/images/메인.png"));
     JComboBox<String> Combo = new JComboBox<String>(select);
+
+
+
     JLabel id = new JLabel("id");
     JLabel pw = new JLabel("pw");
     JTextField idField = new JTextField(22);
     JPasswordField pwField = new JPasswordField(22);
-    ImageIcon submitImage=new ImageIcon("resource/images/로그인.png");
-    ImageIcon signinImage=new ImageIcon("resource/images/회원가입.png");
+
+//    ImageIcon submitImage=new ImageIcon("src/resource/images/로그인.png");
+    ImageIcon submitImage = urTool.getImageIcon("/javaproject/resource/images/로그인.PNG");
+
+//    ImageIcon signinImage=new ImageIcon("src/resource/images/회원가입.png");
+    ImageIcon signinImage = urTool.getImageIcon("/javaproject/resource/images/회원가입.PNG");
+
+
     JButton submit = new JButton(submitImage);
     JButton signin = new JButton(signinImage);
     JPanel center = new JPanel();
 
-    private final Image image = new ImageIcon("resource/images/놀이공원3.jpg").getImage();
+//    private final Image image = new ImageIcon("resource/images/놀이공원3.jpg").getImage();
+    private final ImageIcon image = urTool.getImageIcon("/javaproject/resource/images/놀이공원3.jpg");
     private JPanel jpImage = new JPanel() {
         public void paint(Graphics g) {
             super.paint(g);
             ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            g.drawImage(image, 0, 0, 290,300, null);
+            g.drawImage(image.getImage(), 0, 0, 290,300, null);
             this.setOpaque(false);
             super.paintComponents(g);
         }
@@ -40,7 +61,7 @@ public class LoginS extends JFrame implements ActionListener {
     CardLayout cl=new CardLayout(10,10);
     SignInS signInS =new SignInS(pp);
 
-    public LoginS() {
+    public LoginS() throws IOException {
 
         this.setTitle("놀이공원 예약 시스템");
         this.setLayout(new GridLayout(2,1));
@@ -165,7 +186,11 @@ public class LoginS extends JFrame implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) { // Enter 키 입력 확인
-                    submit(); // 공통 동작 호출
+                    try {
+                        submit(); // 공통 동작 호출
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         };
@@ -184,14 +209,18 @@ public class LoginS extends JFrame implements ActionListener {
                 s_flag = false;
             }
         } else if (arg0.getSource() == submit) {
-            submit();
+            try {
+                submit();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         } else if (arg0.getSource() == signin) {
             cl.next(pp);
 
         }
     }
 
-    private void submit() {
+    private void submit() throws IOException {
         String id = idField.getText();
         String pw = pwField.getText();
         idField.setText("");

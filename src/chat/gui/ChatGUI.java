@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ChatGUI {
+    private JRadioButton reservationButton;
+    private JRadioButton lostButton;
+    private JRadioButton otherButton;
 
     private JFrame frame;
     private JTextField nameField;
@@ -78,9 +81,9 @@ public class ChatGUI {
         JPanel inquiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         inquiryPanel.setBackground(Color.WHITE);
         inquiryPanel.add(new JLabel("문의 유형: "));
-        JRadioButton reservationButton = new JRadioButton("예약 관련 문의");
-        JRadioButton lostButton = new JRadioButton("분실물 문의");
-        JRadioButton otherButton = new JRadioButton("기타 문의");
+         reservationButton = new JRadioButton("예약 관련 문의");
+        lostButton = new JRadioButton("분실물 문의");
+        otherButton = new JRadioButton("기타 문의");
         ButtonGroup inquiryGroup = new ButtonGroup();
         inquiryGroup.add(reservationButton);
         inquiryGroup.add(lostButton);
@@ -110,6 +113,7 @@ public class ChatGUI {
         chatArea.setBorder(new EmptyBorder(10, 10, 10, 10));
         JScrollPane chatScroll = new JScrollPane(chatArea);
         chatScroll.setBorder(null);
+        frame.add(chatScroll, BorderLayout.CENTER);
 //        chatArea.setLineWrap(true);
 //        chatScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -224,7 +228,20 @@ public class ChatGUI {
                         while (true) {
 
                             String message = input.readUTF();
+                            if(message.equals("/강퇴")){
+
+                                chatArea.setCaretPosition(chatArea.getDocument().getLength());
+                                closed = true; // closed 플래그 설정
+                               Thread.sleep(4000);
+                               frame.dispose();
+                                closeResources();
+//                                frame.dispose();
+                                break;
+
+                            }
                             chatArea.append(message + "\n");
+                            chatArea.setCaretPosition(chatArea.getDocument().getLength());
+
                         }
                     }
                     catch (EOFException e) {
@@ -235,6 +252,7 @@ public class ChatGUI {
                         statusLabel.setText("네트워크 오류 발생");
                     } finally {
                         closeResources();
+
                     }
                 }
             }).start();
@@ -281,6 +299,11 @@ public class ChatGUI {
         statusLabel.setText("매칭 대기중...");
         matchButton.setEnabled(false);
 
+        reservationButton.setEnabled(false); //변경사항 매칭중 다시선택 불가능
+        lostButton.setEnabled(false);
+        otherButton.setEnabled(false);
+
+
         try {
             output.writeUTF(role);
             output.flush();
@@ -320,6 +343,7 @@ public class ChatGUI {
         String formattedMessage = String.format("%s [%s]: %s", timestamp, name, message);
 
         chatArea.append(formattedMessage + "\n");
+        chatArea.setCaretPosition(chatArea.getDocument().getLength());
         messageField.setText("");
 
         try {
