@@ -154,10 +154,11 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     }
 
     public List<ReservationDTO> selectatt(String id) {
+        Connection conn = null;
         PreparedStatement ptmt=null;
         List<ReservationDTO> rlist=new ArrayList<>();
         try {
-            Connection conn=super.getConnection();
+            conn=super.getConnection();
             String sql = "select * from reservation where atId=? and DATE(rTime) = CURDATE()";
             ptmt = conn.prepareStatement(sql);
             ptmt.setString(1,id);
@@ -178,6 +179,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
         } finally {
             try {
                 ptmt.close();
+                conn.close();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -188,11 +190,12 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     }
 
     public List<ReservationDTO> selectvip(String id) {
+        Connection conn = null;
         PreparedStatement ptmt=null;
         List<ReservationDTO> rlist=new ArrayList<>();
 
         try {
-            Connection conn=super.getConnection();
+            conn=super.getConnection();
             String sql = "select * from reservation r inner join ticket t on r.tpass="
                     + "t.tpass where atId=? and DATE(rTime) = CURDATE() and tname='vip'";
             ptmt = conn.prepareStatement(sql);
@@ -216,6 +219,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
         } finally {
             try {
                 ptmt.close();
+                conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -226,10 +230,10 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
 
     public int getcount(String id) {
         int count = 0;
-
+        Connection conn = null;
         PreparedStatement ptmt = null;
         try {
-            Connection conn = super.getConnection();
+            conn = super.getConnection();
             String sql = "select count(*) from reservation where mId=?";
             ptmt = conn.prepareStatement(sql);
             ptmt.setString(1, id);
@@ -245,6 +249,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
         } finally {
             try {
                 ptmt.close();
+                conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -254,10 +259,11 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     }
 
     public boolean insertres(ReservationDTO r) {
+        Connection conn = null;
         PreparedStatement ptmt=null;
         boolean flag=false;
         try {
-            Connection  conn=super.getConnection();
+            conn=super.getConnection();
             String sql = "insert into reservation (mId, tPass, atId, rTime)values(?,?,?,sysdate())";
             ptmt = conn.prepareStatement(sql);
 
@@ -277,7 +283,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
         } finally {
             try {
                 ptmt.close();
-
+                conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

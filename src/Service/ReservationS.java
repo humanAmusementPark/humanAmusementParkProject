@@ -57,6 +57,12 @@ public class ReservationS extends JFrame {
         String tpass = mdao.select(mId).getTPass();
         System.out.println("tpass == " + tpass);
         String tname = tdao.selectti(tpass).getTName();
+        if(attract.getAtOnoff() == 0){
+            JOptionPane.showMessageDialog(null,"시설 운행 안함");
+            before.setEnabled(true);
+            this.dispose();
+            return;
+        }
 
         int count = 0; //현재 대기인원
         List<ReservationDTO> rlist = null;

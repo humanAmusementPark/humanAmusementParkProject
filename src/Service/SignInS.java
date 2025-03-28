@@ -265,7 +265,7 @@ public class SignInS extends JPanel implements ActionListener {
             String adNum = JOptionPane.showInputDialog(null, "관리자비밀번호");
 
             String position = null;
-            if (adNum.equals("1111")) {
+            if (adNum.equals("wjdrbfosem")) {
                 position = Combo.getSelectedItem().toString();
             } else {
                 JOptionPane.showMessageDialog(null, "비밀번호 오류");
