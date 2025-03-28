@@ -1,0 +1,73 @@
+Index: src/chat/server/ServerMain.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.server;\r\n\r\nimport javaproject.Map;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class ServerMain {\r\n\r\n    private  static final int PORT = 4321;\r\n\r\n    public static void main(String[] args) throws IOException {\r\n        SessionManager sessionManager = new SessionManager();\r\n\r\n        CommandManager commandManager = new CommandManagerV2(sessionManager);\r\n\r\n        Server server = new Server(PORT, commandManager, sessionManager);\r\n        server.start();\r\n        Map.serverStart = true;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/server/ServerMain.java b/src/chat/server/ServerMain.java
+--- a/src/chat/server/ServerMain.java	(revision 7861a988479c07f8d2e8e2260fc64e42e5830492)
++++ b/src/chat/server/ServerMain.java	(date 1742981925845)
+@@ -1,6 +1,5 @@
+ package javaproject.chat.server;
+ 
+-import javaproject.Map;
+ 
+ import java.io.IOException;
+ 
+@@ -15,6 +14,6 @@
+ 
+         Server server = new Server(PORT, commandManager, sessionManager);
+         server.start();
+-        Map.serverStart = true;
++
+     }
+ }
+Index: src/Service/ticketGUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.Service;\r\n\r\nimport javaproject.DAO.MemDAO;\r\nimport javaproject.DAO.TicketDAO;\r\nimport javaproject.DTO.TicketDTO;\r\nimport java.util.List;\r\nimport javax.swing.*;\r\nimport java.awt.*;\r\nimport java.awt.event.ActionEvent;\r\nimport java.awt.event.ActionListener;\r\nimport java.sql.SQLException;\r\n\r\npublic class ticketGUI extends JFrame implements ActionListener {\r\n\r\n    private String userId; // 로그인한 사용자id\r\n    private TicketDAO ticketDAO = TicketDAO.getInstance();\r\n    private MemDAO memDAO = new MemDAO();\r\n\r\n    public static void main(String[] args) throws SQLException {\r\n        new ticketGUI(\"aaa\");\r\n    }\r\n\r\n    public ticketGUI(String id) throws SQLException {\r\n        this.userId = id;\r\n        this.setSize(800, 400);\r\n        this.setTitle(\"티켓 구매\");\r\n\r\n\r\n        setLayout(new GridLayout(1, 2));\r\n\r\n        // 이미지 경로 확인\r\n        //mac 용\r\n//        String imagePath = \"resource/images/티켓.jpg\";\r\n        //window용\r\n        String imagePath = \"resource\\\\images\\\\티켓.jpg\";\r\n\r\n        Image image = new ImageIcon(imagePath).getImage();\r\n\r\n\r\n        // 배경 이미지를 그리는 JPanel\r\n        JPanel ImagePanel = new JPanel() {\r\n            @Override\r\n            protected void paintComponent(Graphics g) {\r\n                super.paintComponent(g);  // paintComponent를 먼저 호출해야 합니다.\r\n                g.drawImage(image, 0, 0, getWidth(), getHeight(), this); // 이미지를 패널 크기에 맞게 그리기\r\n            }\r\n        };\r\n\r\n        ImagePanel.setLayout(new BorderLayout()); // 레이아웃을 BorderLayout으로 설정하여 배경 위에 스크롤 패널 배치\r\n        ImagePanel.setOpaque(true); // 배경을 불투명하게 설정하여 이미지가 제대로 보이도록 함\r\n\r\n        add(ImagePanel); // JFrame에 ImagePanel을 추가\r\n\r\n\r\n        // 티켓 버튼 패널 설정\r\n        JPanel panel = new JPanel();\r\n        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));\r\n\r\n\r\n\r\n        List<TicketDTO> tickets = ticketDAO.getTicketList();\r\n        for (TicketDTO ticket : tickets) {\r\n            JButton ticketButton = new JButton(\"<html><center><b>\" + ticket.getTName() +\r\n                    \"</b><br>가격: \" + ticket.getTPrice() + \"원</center></html>\");\r\n            ticketButton.setAlignmentX(Component.CENTER_ALIGNMENT);\r\n            ticketButton.setPreferredSize(new Dimension(350, 50));\r\n            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTName()));\r\n            panel.add(ticketButton);\r\n            panel.add(Box.createRigidArea(new Dimension(0, 10)));\r\n        }\r\n\r\n        panel.setPreferredSize(new Dimension(380, tickets.size() * 70));\r\n\r\n        // 스크롤 패널 설정\r\n        JScrollPane scrollPane = new JScrollPane(panel);\r\n        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);\r\n        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);\r\n\r\n        add(scrollPane);\r\n\r\n        setLocationRelativeTo(null);\r\n        //창크기조절막기\r\n        setResizable(false);\r\n\r\n        setVisible(true);\r\n    }\r\n\r\n    public void purchaseTicket(String ticket) {\r\n        if (memDAO.select(userId).getTPass() != null) {\r\n            JOptionPane.showMessageDialog(this, \"이미 티켓을 구매하셨습니다!\");\r\n            return;\r\n        }\r\n        memDAO.edit(5, ticket, userId); // 티켓 구매 처리\r\n        JOptionPane.showMessageDialog(this, ticket + \"가 성공적으로 구매되었습니다\");\r\n    }\r\n\r\n    @Override\r\n    public void actionPerformed(ActionEvent e) {\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/ticketGUI.java b/src/Service/ticketGUI.java
+--- a/src/Service/ticketGUI.java	(revision 7861a988479c07f8d2e8e2260fc64e42e5830492)
++++ b/src/Service/ticketGUI.java	(date 1743056762630)
+@@ -64,7 +64,7 @@
+                     "</b><br>가격: " + ticket.getTPrice() + "원</center></html>");
+             ticketButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+             ticketButton.setPreferredSize(new Dimension(350, 50));
+-            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTName()));
++            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTPass()));
+             panel.add(ticketButton);
+             panel.add(Box.createRigidArea(new Dimension(0, 10)));
+         }
+@@ -91,9 +91,8 @@
+             return;
+         }
+         memDAO.edit(5, ticket, userId); // 티켓 구매 처리
+-        JOptionPane.showMessageDialog(this, ticket + "가 성공적으로 구매되었습니다");
++        JOptionPane.showMessageDialog(this, "티켓이 성공적으로 구매되었습니다");
+     }
+-
+     @Override
+     public void actionPerformed(ActionEvent e) {
+     }
+Index: src/Service/AdminMenu1.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.Service;\r\n\r\nimport javaproject.chat.gui.ChatClient;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.border.EmptyBorder;\r\nimport java.awt.*;\r\nimport java.awt.event.WindowAdapter;\r\nimport java.awt.event.WindowEvent;\r\nimport java.sql.SQLException;\r\n\r\npublic class AdminMenu1 extends JFrame {\r\n    JPanel mainPanel = new JPanel();\r\n    JPanel headerPanel = new JPanel();\r\n    JPanel contentPanel = new JPanel();\r\n    JLabel titleLabel = new JLabel(\"정규랜드 관리모드\", SwingConstants.CENTER);\r\n\r\n    JButton chating = new JButton(\"회원상담\");\r\n    JButton attraction = new JButton(\"어트랙션\");\r\n    JButton reservation = new JButton(\"예약관리\");\r\n    JButton schedule = new JButton(\"일정표 관리\");\r\n    JButton member = new JButton(\"회원\");\r\n    JButton ticket = new JButton(\"티켓\");\r\n    JButton update = new JButton(\"로그아웃\");\r\n    JButton adminManage = new JButton(\"관리자정보\"); // 새로 추가\r\n\r\n    LoginG LoginG;\r\n    String id;\r\n\r\n    public AdminMenu1(LoginG before, String id) {\r\n        this.id = id;\r\n        this.LoginG = before;\r\n        this.setSize(1200, 800);\r\n        this.setLocationRelativeTo(null);\r\n        this.setTitle(\"정규랜드 관리자모드\");\r\n        setupUI();\r\n        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n        this.setVisible(true);\r\n\r\n        this.addWindowListener(\r\n                new WindowAdapter() {\r\n                    public void windowClosing(WindowEvent e) {\r\n                        before.setEnabled(true);\r\n                        before.toFront();\r\n                        before.setFocusable(true);\r\n                        before.requestFocusInWindow();\r\n                    }\r\n                }\r\n        );\r\n    }\r\n\r\n    private void setupUI() {\r\n        mainPanel.setLayout(new BorderLayout());\r\n        mainPanel.setBackground(new Color(240, 242, 245));\r\n\r\n        headerPanel.setLayout(new BorderLayout());\r\n        headerPanel.setBackground(new Color(26, 35, 126));\r\n        headerPanel.setPreferredSize(new Dimension(1200, 80));\r\n        titleLabel.setFont(new Font(\"맑은 고딕\", Font.BOLD, 28));\r\n        titleLabel.setForeground(Color.WHITE);\r\n        headerPanel.add(titleLabel, BorderLayout.CENTER);\r\n        headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n\r\n        contentPanel.setLayout(new GridBagLayout());\r\n        contentPanel.setBackground(new Color(240, 242, 245));\r\n        contentPanel.setBorder(new EmptyBorder(30, 30, 30, 30));\r\n\r\n        GridBagConstraints gbc = new GridBagConstraints();\r\n        gbc.insets = new Insets(15, 15, 15, 15);\r\n        gbc.fill = GridBagConstraints.HORIZONTAL;\r\n\r\n        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1;\r\n        contentPanel.add(chating, gbc);\r\n        gbc.gridx = 1; gbc.gridy = 0;\r\n        contentPanel.add(attraction, gbc);\r\n        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1; // 예약관리 한 칸으로 줄임\r\n        contentPanel.add(reservation, gbc);\r\n        gbc.gridx = 1; gbc.gridy = 1; // 관리자관리 추가\r\n        contentPanel.add(adminManage, gbc);\r\n        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1;\r\n        contentPanel.add(member, gbc);\r\n        gbc.gridx = 1; gbc.gridy = 2;\r\n        contentPanel.add(ticket, gbc);\r\n        gbc.gridx = 0; gbc.gridy = 3;\r\n        contentPanel.add(schedule, gbc);\r\n        gbc.gridx = 1; gbc.gridy = 3;\r\n        contentPanel.add(update, gbc);\r\n\r\n        mainPanel.add(headerPanel, BorderLayout.NORTH);\r\n        mainPanel.add(contentPanel, BorderLayout.CENTER);\r\n\r\n        styleButton(chating, new Color(33, 150, 243), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70);\r\n        styleButton(attraction, new Color(33, 150, 243), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70);\r\n        styleButton(reservation, new Color(76, 175, 80), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70); // 크기 조정\r\n        styleButton(adminManage, new Color(156, 39, 176), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70); // 관리자관리 스타일\r\n        styleButton(member, new Color(255, 152, 0), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70);\r\n        styleButton(ticket, new Color(255, 102, 0), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70);\r\n        styleButton(schedule, new Color(97, 97, 97), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70);\r\n        styleButton(update, new Color(244, 67, 54), Color.WHITE, new Font(\"맑은 고딕\", Font.BOLD, 18), 250, 70);\r\n\r\n        setupActions();\r\n\r\n        this.add(mainPanel);\r\n    }\r\n\r\n    private void styleButton(JButton button, Color bgColor, Color fgColor, Font font, int width, int height) {\r\n        button.setBackground(bgColor);\r\n        button.setForeground(fgColor);\r\n        button.setFont(font);\r\n        button.setPreferredSize(new Dimension(width, height));\r\n        button.setFocusPainted(false);\r\n        button.setBorder(BorderFactory.createCompoundBorder(\r\n                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),\r\n                BorderFactory.createEmptyBorder(10, 20, 10, 20)\r\n        ));\r\n        button.setOpaque(true);\r\n        button.setCursor(new Cursor(Cursor.HAND_CURSOR));\r\n        button.addMouseListener(new java.awt.event.MouseAdapter() {\r\n            public void mouseEntered(java.awt.event.MouseEvent evt) {\r\n                button.setBackground(bgColor.brighter());\r\n            }\r\n            public void mouseExited(java.awt.event.MouseEvent evt) {\r\n                button.setBackground(bgColor);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void setupActions() {\r\n        chating.addActionListener(e -> chatClick());\r\n        attraction.addActionListener(e -> attractClick());\r\n        reservation.addActionListener(e -> resCLick());\r\n        schedule.addActionListener(e -> scheduleClick());\r\n        member.addActionListener(e -> memberClick());\r\n        ticket.addActionListener(e -> ticketClick());\r\n        update.addActionListener(e -> logOut());\r\n        adminManage.addActionListener(e -> adminManageClick()); // 새로 추가\r\n    }\r\n\r\n    private void chatClick() {\r\n        System.out.println(\"연결\");\r\n        new ChatClient(\"상담사\");\r\n    }\r\n\r\n    private void attractClick() {\r\n        System.out.println(\"연결\");\r\n        new AttractionManager(this);\r\n    }\r\n\r\n    private void resCLick() {\r\n        System.out.println(\"연결\");\r\n        new ReservationG(this);\r\n    }\r\n\r\n    private void scheduleClick() {\r\n        try {\r\n            new ManagerTimeTable();\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    private void memberClick() {\r\n        System.out.println(\"연결\");\r\n        new MemAdG(this);\r\n    }\r\n\r\n    private void ticketClick() {\r\n        try {\r\n            new ManagerTicket();\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n\r\n\r\n    private void adminManageClick() {\r\n        System.out.println(\"연결\");\r\n        // 여기에 관리자관리 기능 추가 (예: new AdminManagerG();)\r\n        new AdG(id,this);\r\n    }\r\n\r\n    private void logOut() {\r\n        System.out.println(\"연결\");\r\n         dispose();\r\n         LoginG.setVisible(true);\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/AdminMenu1.java b/src/Service/AdminMenu1.java
+--- a/src/Service/AdminMenu1.java	(revision 7861a988479c07f8d2e8e2260fc64e42e5830492)
++++ b/src/Service/AdminMenu1.java	(date 1742981892232)
+@@ -138,6 +138,7 @@
+ 
+     private void chatClick() {
+         System.out.println("연결");
++
+         new ChatClient("상담사");
+     }
+ 
