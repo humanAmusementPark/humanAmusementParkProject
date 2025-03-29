@@ -1,12 +1,8 @@
 package javaproject.chat.gui;
 
+import javaproject.Service.AdMenuS;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ChatClient {
 

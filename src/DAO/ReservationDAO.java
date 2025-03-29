@@ -26,7 +26,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                         .mId(rs.getString("mId"))
                         .tPass(rs.getString("tPass"))
                         .atId(rs.getString("atId"))
-                        .rTime(rs.getDate("rTime"))
+                        .rTime(rs.getTimestamp("rTime"))
                         .build();
                 reservations.add(reservation);
             }
@@ -56,7 +56,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                         .mId(rs.getString("mId"))
                         .tPass(rs.getString("tPass"))
                         .atId(rs.getString("atId"))
-                        .rTime(rs.getDate("rTime"))
+                        .rTime(rs.getTimestamp("rTime"))
                         .build();
                 reservations.add(reservation);
             }
@@ -106,14 +106,16 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
     @Override
     public boolean update(ReservationDTO r) {
         Connection conn = super.getConnection();
-        String sql = "update reservation set mid = ?, tPass = ?,atId = ? where no = ?";
+        String sql = "update reservation set mid = ?, tPass = ?,atId = ?,rTime = ? where no = ?";
         try {
             PreparedStatement ptmt = conn.prepareStatement(sql);
             ptmt.setString(1, r.getMId());
             ptmt.setString(2, r.getTPass());
             ptmt.setString(3, r.getAtId());
-            ptmt.setInt(4, r.getNo());
+            ptmt.setTimestamp(4, r.getRTime());
+            ptmt.setInt(5, r.getNo());
             int rq = ptmt.executeUpdate();
+
             System.out.println(rq + "건 완료");
             if (rq > 0) {
                 return true;
@@ -170,7 +172,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                         .mId(rs.getString("mId"))
                         .tPass(rs.getString("tPass"))
                         .atId(rs.getString("atId"))
-                        .rTime(rs.getDate("rTime"))
+                        .rTime(rs.getTimestamp("rTime"))
                         .build();
                 rlist.add(reservation);
             }
@@ -208,7 +210,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                         .mId(rs.getString("mId"))
                         .tPass(rs.getString("tPass"))
                         .atId(rs.getString("atId"))
-                        .rTime(rs.getDate("rTime"))
+                        .rTime(rs.getTimestamp("rTime"))
                         .build();
                 rlist.add(reservation);
             }

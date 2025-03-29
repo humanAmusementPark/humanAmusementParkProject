@@ -23,10 +23,20 @@ public class AdTicketS extends JFrame {
     private JTextField tickNameTextField;
     private JTextField ticketPriceTextField;
 
-    public AdTicketS() throws SQLException {
+    public AdTicketS(AdMenuS before) throws SQLException {
         getTimeTableInfo();
         setDisplay();
         showFrame();
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
     }
 
 

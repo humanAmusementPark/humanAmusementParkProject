@@ -60,7 +60,7 @@ public class AdS extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int newGender = radioMan.isSelected() ? 1 : 0;
+        int newGender = radioMan.isSelected() ? 0 : 1;
         String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString()
                 + "-" + dayCom.getSelectedItem().toString();
         String newPos = aPos.getSelectedItem().toString();

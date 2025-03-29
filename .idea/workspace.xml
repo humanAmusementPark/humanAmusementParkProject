@@ -9,18 +9,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="03241250">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/0324_1_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/commons_io_2_18.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/main_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="ㅁㅁㅁ">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DAO/AttractionDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/AttractionDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DAO/ReservationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/ReservationDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DAO/SuperDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/SuperDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/ReservationS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ReservationS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/SignInS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/SignInS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/urlTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/urlTool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DTO/ReservationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DTO/ReservationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/AdMenuS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdMenuS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/AdReservationS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdReservationS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/AdS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/AdTicketS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdTicketS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/AdTimeTableS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdTimeTableS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/AdmemS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdmemS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/MemMenuS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemMenuS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/MemReservationS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemReservationS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/MemTicketS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemTicketS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chat/gui/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/gui/ChatClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chat/gui/ChatGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/gui/ChatGUI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,36 +66,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "true",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/hu-01/Downloads/commons-io-2.18.0-bin/commons-io-2.18.0",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/hu-19/Desktop/main/src/Main.java",
-    "project.structure.last.edited": "라이브러리",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propCompiler",
-    "vue.rearranger.settings.migration": "true",
-    "애플리케이션.Main.executor": "Run",
-    "애플리케이션.Main1.executor": "Run",
-    "애플리케이션.MemMenuS.executor": "Run",
-    "애플리케이션.MemTicketS.executor": "Run",
-    "애플리케이션.MemTimeTableS.executor": "Run",
-    "애플리케이션.ServerMain.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hu-01/Downloads/commons-io-2.18.0-bin/commons-io-2.18.0&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/hu-19/Desktop/main/src/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;라이브러리&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main1.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.MemMenuS.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.MemTicketS.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.MemTimeTableS.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.ServerMain.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.dateTest.executor&quot;: &quot;Run&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\hu-19\Desktop\main\src\resource\images" />
@@ -139,7 +143,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="dateTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="javaproject.dateTest" />
+      <module name="0324-1" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="javaproject.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
+      <item itemvalue="애플리케이션.dateTest" />
       <item itemvalue="애플리케이션.Main" />
       <item itemvalue="애플리케이션.MemMenuS" />
       <item itemvalue="애플리케이션.ServerMain" />
@@ -148,6 +166,7 @@
       <list>
         <item itemvalue="애플리케이션.Main" />
         <item itemvalue="애플리케이션.ServerMain" />
+        <item itemvalue="애플리케이션.dateTest" />
         <item itemvalue="애플리케이션.MemMenuS" />
       </list>
     </recent_temporary>
@@ -155,8 +174,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
+        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
       </set>
     </attachedChunks>
   </component>
@@ -176,7 +195,18 @@
       <workItem from="1743063074585" duration="4840000" />
       <workItem from="1743068260538" duration="456000" />
       <workItem from="1743068734138" duration="13168000" />
+      <workItem from="1743209801809" duration="5398000" />
+      <workItem from="1743215806429" duration="7183000" />
     </task>
+    <task id="LOCAL-00001" summary="ㅁㅁㅁ">
+      <option name="closed" value="true" />
+      <created>1743146193843</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1743146193843</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,7 +237,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="03241250" />
-    <option name="LAST_COMMIT_MESSAGE" value="03241250" />
+    <MESSAGE value="ㅁㅁㅁ" />
+    <option name="LAST_COMMIT_MESSAGE" value="ㅁㅁㅁ" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -25,7 +25,6 @@ public class AdmemS extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-
         tableLayout();
         butLayout();
 
@@ -65,6 +64,10 @@ public class AdmemS extends JFrame {
             JOptionPane.showMessageDialog(null, "선택한 행 없음", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        String tPass = null;
+        if (table.getValueAt(row, 5)!=null){
+            tPass = table.getValueAt(row, 5).toString();
+        }
         MemDAO memDAO = new MemDAO();
         MemDTO memDTO = MemDTO.builder()
                 .mId(table.getValueAt(row, 0).toString())
@@ -72,7 +75,7 @@ public class AdmemS extends JFrame {
                 .mName(table.getValueAt(row, 2).toString())
                 .mGender(table.getValueAt(row, 3).toString().equals("남자") ? 1 : 0)
                 .mBirth(Date.valueOf(table.getValueAt(row, 4).toString()))
-                .tPass(table.getValueAt(row, 5).toString())
+                .tPass(tPass)
                 .build();
         if (memDAO.update(memDTO)) {
             JOptionPane.showMessageDialog(null, "수정 완료");
@@ -118,7 +121,7 @@ public class AdmemS extends JFrame {
             data[i][4] = member.BirthToString();
             data[i][5] = member.getTPass();
         }
-        DefaultTableModel mod = new DefaultTableModel(data, header){
+        DefaultTableModel mod = new DefaultTableModel(data, header) {
             public boolean isCellEditable(int row, int column) {
                 return column != 0;
             }

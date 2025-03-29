@@ -6,10 +6,7 @@ import javaproject.DTO.TimeTableDTO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
@@ -31,10 +28,20 @@ public class AdTimeTableS extends JFrame implements MouseListener {
     private JTextField paradeTextField;
     private JFrame newFrame;
 
-    public AdTimeTableS() throws SQLException {
+    public AdTimeTableS(AdMenuS before) throws SQLException {
         getTimeTableInfo();
         setDisplay();
         showFrame();
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
     }
 
     public void getTimeTableInfo() {
