@@ -32,6 +32,7 @@ public class ChatGUI {
     private Socket socket;
     public boolean closed = false;
 
+
     public ChatGUI(String serverAddress, int port, String role) {
         this.role = role;
         initialize(serverAddress, port);
@@ -81,7 +82,7 @@ public class ChatGUI {
         JPanel inquiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         inquiryPanel.setBackground(Color.WHITE);
         inquiryPanel.add(new JLabel("문의 유형: "));
-         reservationButton = new JRadioButton("예약 관련 문의");
+        reservationButton = new JRadioButton("예약 관련 문의");
         lostButton = new JRadioButton("분실물 문의");
         otherButton = new JRadioButton("기타 문의");
         ButtonGroup inquiryGroup = new ButtonGroup();
@@ -125,13 +126,13 @@ public class ChatGUI {
         messageField = new JTextField();
         messageField.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         messageField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
-
+        messageField.setEditable(false);
         sendButton = new JButton("전송");
         styleButton(sendButton, new Color(255, 199, 0), Color.BLACK, 60, 40);
-
+        sendButton.setEnabled(false);
         exitButton = new JButton("종료");
         styleButton(exitButton, new Color(200, 200, 200), Color.BLACK, 60, 40);
-
+        exitButton.setEnabled(false);
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(sendButton);
@@ -141,7 +142,6 @@ public class ChatGUI {
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
 
 
-      
         frame.add(inputPanel, BorderLayout.NORTH); // 이름, 문의 유형, 매칭 버튼 영역
         frame.add(chatScroll, BorderLayout.CENTER); // 채팅창
         frame.add(bottomPanel, BorderLayout.SOUTH); // 메시지 입력 및 버튼
@@ -197,6 +197,7 @@ public class ChatGUI {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(bgColor.brighter());
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(bgColor);
             }
@@ -208,7 +209,9 @@ public class ChatGUI {
         radio.setBackground(Color.WHITE);
         radio.setFocusPainted(false);
     }
-    Thread t=null;
+
+    Thread t = null;
+
     private void connectToServer(String serverAddress, int port) {
         try {
             socket = new Socket(serverAddress, port);
@@ -228,12 +231,12 @@ public class ChatGUI {
                         while (true) {
 
                             String message = input.readUTF();
-                            if(message.equals("/강퇴")){
+                            if (message.equals("/강퇴")) {
 
                                 chatArea.setCaretPosition(chatArea.getDocument().getLength());
                                 closed = true; // closed 플래그 설정
-                               Thread.sleep(4000);
-                               frame.dispose();
+                                Thread.sleep(4000);
+                                frame.dispose();
                                 closeResources();
 //                                frame.dispose();
                                 break;
@@ -243,8 +246,7 @@ public class ChatGUI {
                             chatArea.setCaretPosition(chatArea.getDocument().getLength());
 
                         }
-                    }
-                    catch (EOFException e) {
+                    } catch (EOFException e) {
                         System.out.println("예외 : " + e);
                         statusLabel.setText("서버 연결 끊어짐");
                     } catch (IOException e) {
@@ -257,10 +259,10 @@ public class ChatGUI {
                 }
             }).start();
 
-        }catch (ConnectException e){
-            JOptionPane.showMessageDialog(null,"서버연결 불가능");
+        } catch (ConnectException e) {
+            JOptionPane.showMessageDialog(null, "서버연결 불가능");
             frame.dispose();
-           //
+            //
         } catch (IOException e) {
             statusLabel.setText("서버 연결 실패");
             e.printStackTrace();
@@ -303,6 +305,9 @@ public class ChatGUI {
         lostButton.setEnabled(false);
         otherButton.setEnabled(false);
 
+        messageField.setEnabled(true);
+        sendButton.setEnabled(true);
+        exitButton.setEnabled(true);
 
         try {
             output.writeUTF(role);
@@ -331,13 +336,13 @@ public class ChatGUI {
     private void sendMessage() {
         String name = nameField.getText().trim();
         String message = messageField.getText().trim();
-        if (name.isEmpty() || role == null || inquiryType == null) {
+        if (closed) {
+            message = "/exit";
+        } else if (name.isEmpty() || role == null || inquiryType == null) {
             JOptionPane.showMessageDialog(frame, "이름, 역할, 문의 유형, 메시지를 모두 입력하세요.");
             return;
         }
-        if (closed) {
-            message = "/exit";
-        }
+
 
         String timestamp = new SimpleDateFormat("HH:mm").format(new Date());
         String formattedMessage = String.format("%s [%s]: %s", timestamp, name, message);

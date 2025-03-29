@@ -3,12 +3,16 @@ package javaproject.Service;
 import javaproject.DAO.MemDAO;
 import javaproject.DAO.TicketDAO;
 import javaproject.DTO.TicketDTO;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+
 import javaproject.urlTool;
 
 public class MemTicketS extends JFrame implements ActionListener {
@@ -17,15 +21,10 @@ public class MemTicketS extends JFrame implements ActionListener {
     private TicketDAO ticketDAO = TicketDAO.getInstance();
     private MemDAO memDAO = new MemDAO();
 
-    public static void main(String[] args) throws SQLException {
-        new MemTicketS("aaa");
-    }
-
-    public MemTicketS(String id) throws SQLException {
+    public MemTicketS(String id, MemMenuS before) throws SQLException {
         this.userId = id;
         this.setSize(800, 400);
         this.setTitle("티켓 구매");
-
 
         setLayout(new GridLayout(1, 2));
 
@@ -61,7 +60,6 @@ public class MemTicketS extends JFrame implements ActionListener {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 
-
         List<TicketDTO> tickets = ticketDAO.getTicketList();
         for (TicketDTO ticket : tickets) {
             JButton ticketButton = new JButton("<html><center><b>" + ticket.getTName() +
@@ -85,8 +83,18 @@ public class MemTicketS extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         //창크기조절막기
         setResizable(false);
-
         setVisible(true);
+
+        this.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        before.setEnabled(true);
+                        before.toFront();
+                        before.setFocusable(true);
+                        before.requestFocusInWindow();
+                    }
+                }
+        );
     }
 
     public void purchaseTicket(String ticket) {

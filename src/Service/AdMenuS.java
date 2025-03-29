@@ -144,16 +144,19 @@ public class AdMenuS extends JFrame {
     private void attractClick() {
         System.out.println("연결");
         new AttractionS(this);
+        this.setEnabled(false);
     }
 
     private void resCLick() {
         System.out.println("연결");
         new AdReservationS(this);
+        this.setEnabled(false);
     }
 
     private void scheduleClick() {
         try {
-            new AdTimeTableS();
+            new AdTimeTableS(this);
+            this.setEnabled(false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -162,28 +165,28 @@ public class AdMenuS extends JFrame {
     private void memberClick() {
         System.out.println("연결");
         new AdmemS(this);
+        this.setEnabled(false);
     }
 
     private void ticketClick() {
         try {
-            new AdTicketS();
+            new AdTicketS(this);
+            this.setEnabled(false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-
     private void adminManageClick() {
         System.out.println("연결");
         // 여기에 관리자관리 기능 추가 (예: new AdminManagerG();)
         new AdS(id,this);
+        this.setEnabled(false);
     }
 
     private void logOut() {
         System.out.println("연결");
          dispose();
          LoginS.setVisible(true);
-
     }
 }

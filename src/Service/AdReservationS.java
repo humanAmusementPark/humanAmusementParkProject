@@ -15,8 +15,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
+import java.sql.Date;
 import java.util.List;
 
 // 회원, 관리자 예약현황 둘다 전체 조회 삭제만 가능
@@ -67,12 +71,14 @@ public class AdReservationS extends JFrame implements ActionListener {
     }
 
     private void update(int row) {
+        String rTime = table.getValueAt(row, 4).toString()+":00";
         ReservationDAO reservationDAO = new ReservationDAO();
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .no(Integer.parseInt(table.getValueAt(row, 0).toString()))
                 .mId(table.getValueAt(row, 1).toString())
                 .tPass(table.getValueAt(row, 2).toString())
                 .atId(table.getValueAt(row, 3).toString())
+                .rTime(Timestamp.valueOf(rTime))
                 .build();
         if (reservationDAO.update(reservationDTO)) {
             JOptionPane.showMessageDialog(null, "수정 완료");
@@ -110,7 +116,7 @@ public class AdReservationS extends JFrame implements ActionListener {
         System.out.println(id);
         MemDAO memDAO = new MemDAO();
         MemDTO memDTO = memDAO.select(id);
-        if(memDTO == null) {
+        if (memDTO == null) {
             JOptionPane.showMessageDialog(this, "회원 없음", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }

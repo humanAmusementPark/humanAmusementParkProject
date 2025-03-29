@@ -38,6 +38,12 @@ public class AttractionDAO extends SuperDAO {
             
         } catch (SQLException e) {
             e.printStackTrace(System.err);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return attractionDTOList;
@@ -56,7 +62,13 @@ public class AttractionDAO extends SuperDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
     }
 
     public void update(int choiceNum) {
@@ -79,7 +91,13 @@ public class AttractionDAO extends SuperDAO {
 
                 } catch (SQLException | IOException e) {
                     e.printStackTrace();
-                }
+                }finally {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						throw new RuntimeException(e);
+					}
+				}
 
                 break;
             case 2:
@@ -97,7 +115,13 @@ public class AttractionDAO extends SuperDAO {
 
                 } catch (SQLException | IOException e) {
                     e.printStackTrace();
-                }
+                }finally {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						throw new RuntimeException(e);
+					}
+				}
                 break;
         }
 
@@ -115,7 +139,13 @@ public class AttractionDAO extends SuperDAO {
 
        }catch (Exception e){
            e.printStackTrace();
-       }
+       }finally {
+		   try {
+			   conn.close();
+		   } catch (SQLException e) {
+			   throw new RuntimeException(e);
+		   }
+	   }
     }
     
 	public AttractionDTO getAttract(String atId) {
@@ -144,8 +174,7 @@ public class AttractionDAO extends SuperDAO {
 		} finally {
 			try {
 				ptmt.close();
-				
-
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -189,6 +218,7 @@ public class AttractionDAO extends SuperDAO {
 		} finally {
 			try {
 				ptmt.close();
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -199,7 +229,7 @@ public class AttractionDAO extends SuperDAO {
 	public String[] selectAllId() {
 		ArrayList<String> list = new ArrayList<>();
 		Connection conn = super.getConnection();
-		String sql = "select atId from attraction";
+		String sql = "select atId from attraction where atOnoff = 1";
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);

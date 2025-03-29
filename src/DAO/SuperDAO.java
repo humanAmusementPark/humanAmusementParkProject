@@ -13,7 +13,7 @@ public class SuperDAO<T> {
     private String user = "root";
     //private String password = "park1676";
     private String password = "1111";
-    private Connection conn;
+    private static Connection conn;
     public SuperDAO() {
         init();
     }
@@ -29,7 +29,7 @@ public class SuperDAO<T> {
 
     public Connection getConnection() {
         try {
-            this.conn = DriverManager.getConnection(url, user, password);
+            conn = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

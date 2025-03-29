@@ -2,14 +2,11 @@ package javaproject.Service;
 
 import javaproject.chat.gui.ChatClient;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
+
 import javaproject.urlTool;
 
 
@@ -18,12 +15,7 @@ public class MemMenuS extends JFrame implements ActionListener {
     urlTool utool = new urlTool();
 
     private final ImageIcon image = utool.getImageIcon("/javaproject/resource/images/map.jpg");
-
-
 //    private final Image image = new ImageIcon("resource/images/map.jpg").getImage();
-
-
-
     private final ImageIcon image2 = utool.getImageIcon("/javaproject/resource/images/menubutton2.PNG");
     private String id;
     private LoginS LoginS;
@@ -52,7 +44,7 @@ public class MemMenuS extends JFrame implements ActionListener {
     public MemMenuS(String id, LoginS before) {
         this.LoginS = before;
         this.id = id;
-        this.setTitle("정규랜드 지도");
+        this.setTitle("정규랜드");
         this.setSize(1200, 7000);
         this.setLocation(0, 0);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,7 +53,7 @@ public class MemMenuS extends JFrame implements ActionListener {
 
         jpImage.setLayout(null);
 
-        jpImage2.setBounds(380,0,500,40);
+        jpImage2.setBounds(380, 0, 500, 40);
         jpImage.add(jpImage2);
         this.setVisible(true);
         add();
@@ -82,7 +74,6 @@ public class MemMenuS extends JFrame implements ActionListener {
                     }
                 }
         );
-
     }
 
     public void add() {
@@ -120,7 +111,6 @@ public class MemMenuS extends JFrame implements ActionListener {
         obnt.setBorder(BorderFactory.createEmptyBorder());
         obnt.setContentAreaFilled(false);
 
-
         obnt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,13 +147,12 @@ public class MemMenuS extends JFrame implements ActionListener {
         rbnt.setBorder(BorderFactory.createEmptyBorder());
         rbnt.setContentAreaFilled(false);
 
-
         rbnt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
                 new MemReservationS(id, m);
-
+                m.setEnabled(false);
             }
         });
         jpImage.add(rbnt);
@@ -179,14 +168,12 @@ public class MemMenuS extends JFrame implements ActionListener {
         tbnt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 try {
-                    new MemTicketS(id);
+                    new MemTicketS(id, m);
+                    m.setEnabled(false);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-
-
             }
         });
         jpImage.add(tbnt);
@@ -201,16 +188,12 @@ public class MemMenuS extends JFrame implements ActionListener {
 
         lbnt.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent
-                                                e) {
+            public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
                 new MemS(id, m);
-
+                m.setEnabled(false);
             }
-
-            ;
         });
-
         jpImage.add(lbnt);
     }
 
@@ -237,8 +220,6 @@ public class MemMenuS extends JFrame implements ActionListener {
 //        jbnt.setContentAreaFilled(false);
 //        jpImage.add(jbnt);
 //        jbnt.addActionListener(createButtonListener(name));
-
-
     }
 
     private ActionListener createButtonListener(String rideName) {
@@ -248,18 +229,14 @@ public class MemMenuS extends JFrame implements ActionListener {
                 // 클릭된 버튼을 가져옴
                 JButton clickedButton = (JButton) e.getSource();  // 클릭된 버튼 객체
                 System.out.println("클릭된 버튼: " + clickedButton);  // 버튼 객체
-
                 System.out.println("놀이기구 이름: " + rideName);
                 try {
-                    System.out.println("ddddddddd");
                     new ReservationS(m, rideName, id);
+                    m.setEnabled(false);
                 } catch (SQLException ex) {
-                    System.out.println("aaaaaa");
                     throw new RuntimeException(ex);
                 }
-
 //               임시 sendDataToTeamMember(rideName, rideId, clickedButton);  // 정진형한테 전달
-
             }
         };
     }
@@ -269,8 +246,7 @@ public class MemMenuS extends JFrame implements ActionListener {
 
 
     }
-
-
+    // 시설 버튼 커스텀
     class OutlineButton extends JButton {
         //     private final Color background = Color.RED; // 클릭 전 색깔
         private final Color foreground = Color.RED; // 클릭 후 색깔
@@ -304,7 +280,6 @@ public class MemMenuS extends JFrame implements ActionListener {
                     revalidate();
                     repaint();
                 }
-
                 @Override
                 public void mouseExited(MouseEvent e) {
                     setBackground(inlineColor);
@@ -328,7 +303,6 @@ public class MemMenuS extends JFrame implements ActionListener {
                 g2.setColor(getBackground());
                 g2.fillRoundRect(1, 1, (int) (w - 1 / 3.5), (int) (h - 1 / 2.8), 35, 35);
             }
-
             g2.setColor(getForeground());
             g2.setStroke(new BasicStroke(3)); // 선 두께
             g2.drawRoundRect(3, 3, w - 10, h - 10, 35, 35); // width, height 곡률과 관련있음
