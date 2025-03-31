@@ -3,6 +3,7 @@ package javaproject.DAO;
 
 import javaproject.DTO.ReservationDTO;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
         Statement stmt = null;
         ResultSet rs = null;
         try {
-
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
@@ -31,6 +31,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                 reservations.add(reservation);
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -61,6 +62,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                 reservations.add(reservation);
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -92,6 +94,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                 return true;
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 입력 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         } finally {
             try {
@@ -115,12 +118,12 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             ptmt.setTimestamp(4, r.getRTime());
             ptmt.setInt(5, r.getNo());
             int rq = ptmt.executeUpdate();
-
             System.out.println(rq + "건 완료");
             if (rq > 0) {
                 return true;
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 수정 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -144,6 +147,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             System.out.println(result + "건 완료");
             if (result > 0) return true;
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 삭제 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -177,6 +181,7 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                 rlist.add(reservation);
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         } finally {
             try {
@@ -188,21 +193,18 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             }
         }
         return rlist;
-
     }
 
     public List<ReservationDTO> selectvip(String id) {
         Connection conn = null;
         PreparedStatement ptmt=null;
         List<ReservationDTO> rlist=new ArrayList<>();
-
         try {
             conn=super.getConnection();
             String sql = "select * from reservation r inner join ticket t on r.tpass="
                     + "t.tpass where atId=? and DATE(rTime) = CURDATE() and tname='vip'";
             ptmt = conn.prepareStatement(sql);
             ptmt.setString(1,id);
-
             ResultSet rs=ptmt.executeQuery();
             while(rs.next()) {
                 ReservationDTO reservation = ReservationDTO.builder()
@@ -214,9 +216,8 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                         .build();
                 rlist.add(reservation);
             }
-
-
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         } finally {
             try {
@@ -227,7 +228,6 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             }
         }
         return rlist;
-
     }
 
     public int getcount(String id) {
@@ -239,14 +239,12 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             String sql = "select count(*) from reservation where mId=?";
             ptmt = conn.prepareStatement(sql);
             ptmt.setString(1, id);
-
             ResultSet rs = ptmt.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
             }
-
-
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 예약 수 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         } finally {
             try {
@@ -256,7 +254,6 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
                 e.printStackTrace();
             }
         }
-
         return count;
     }
 
@@ -268,18 +265,13 @@ public class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {
             conn=super.getConnection();
             String sql = "insert into reservation (mId, tPass, atId, rTime)values(?,?,?,sysdate())";
             ptmt = conn.prepareStatement(sql);
-
             ptmt.setString(1,r.getMId());
             ptmt.setString(2,r.getTPass());
             ptmt.setString(3,r.getAtId());
-
-
             int rq=ptmt.executeUpdate();
             if(rq>0) {
                 flag=true;
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

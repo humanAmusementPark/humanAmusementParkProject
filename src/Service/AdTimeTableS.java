@@ -47,7 +47,7 @@ public class AdTimeTableS extends JFrame implements MouseListener {
     public void getTimeTableInfo() {
         try {
             timeTableDAO = new TimeTableDAO();
-            timeTableDTOList = timeTableDAO.selectT();
+            timeTableDTOList = timeTableDAO.selectAll();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -347,7 +347,7 @@ public class AdTimeTableS extends JFrame implements MouseListener {
                     .build();
 
             //db넣기
-            timeTableDAO.insertT(timeTableDTO);
+            timeTableDAO.insert(timeTableDTO);
 
             timeTableDTOList.add(timeTableDTO);
 

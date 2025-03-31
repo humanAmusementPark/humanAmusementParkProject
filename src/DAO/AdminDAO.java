@@ -3,6 +3,7 @@ package javaproject.DAO;
 
 import javaproject.DTO.AdminDTO;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class AdminDAO extends SuperDAO implements DAOinf<AdminDTO> {
                 return adminDTO;
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 관리자 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -59,6 +61,7 @@ public class AdminDAO extends SuperDAO implements DAOinf<AdminDTO> {
             int result = pstmt.executeUpdate();
             System.out.println(result + "건 완료");
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 관리자 입력 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -86,6 +89,7 @@ public class AdminDAO extends SuperDAO implements DAOinf<AdminDTO> {
             System.out.println(result + "건 완료");
             if (result > 0) return true;
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 관리자 수정 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -116,6 +120,7 @@ public class AdminDAO extends SuperDAO implements DAOinf<AdminDTO> {
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "id 중복 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {

@@ -3,12 +3,9 @@ package javaproject.Service;
 import javaproject.DAO.TimeTableDAO;
 import javaproject.DTO.TimeTableDTO;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +28,7 @@ public class MemTimeTableS extends JFrame {
     public void getTimeTableInfo()  {
         try{
             TimeTableDAO timeTableDAO = new TimeTableDAO();
-            timeTableDTOList = timeTableDAO.selectT();
+            timeTableDTOList = timeTableDAO.selectAll();
         }catch (Exception e){
             e.printStackTrace();
         }

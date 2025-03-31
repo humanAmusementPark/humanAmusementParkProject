@@ -42,7 +42,7 @@ public class AdTicketS extends JFrame {
 
     public void getTimeTableInfo() throws SQLException {
         ticketDAO = new TicketDAO();
-        ticketDTOList = ticketDAO.select();
+        ticketDTOList = ticketDAO.selectAll();
     }
 
     public void setDisplay() {
@@ -199,7 +199,7 @@ public class AdTicketS extends JFrame {
                     .tPrice(tPrice)
                     .build();
             //db넣기
-            ticketDAO.insertT(ticketDTO);
+            ticketDAO.insert(ticketDTO);
             ticketDTOList.add(ticketDTO);
             String[][] updatedData = listToArr();
             //Jtable 부분 바꾸기.
@@ -227,7 +227,7 @@ public class AdTicketS extends JFrame {
             JOptionPane.showMessageDialog(this, "삭제할 행을 선택하세요.", "메세지", JOptionPane.WARNING_MESSAGE);
         } else {
             //db도 지워준다.
-            ticketDAO.deleteT(ticketDTOList.get(index).getTPass());
+            ticketDAO.delete(ticketDTOList.get(index).getTPass());
 
             ticketDTOList.remove(index);
 
@@ -272,7 +272,7 @@ public class AdTicketS extends JFrame {
                             .tPrice(ticketDTOList.get(rowIndex).getTPrice())
                             .build();
                     //db처리
-                    ticketDAO.update(newTicketDTO,id);
+                    ticketDAO.update(newTicketDTO);
                     break;
                 case 2:
                     value = table.getValueAt(rowIndex, 2).toString();
@@ -294,7 +294,7 @@ public class AdTicketS extends JFrame {
                             .tPrice(tPrice)
                             .build();
                     //db처리
-                    ticketDAO.update(newTicketDTO,id);
+                    ticketDAO.update(newTicketDTO);
                     break;
             }
         }

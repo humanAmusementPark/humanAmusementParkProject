@@ -73,7 +73,7 @@ public class AdmemS extends JFrame {
                 .mId(table.getValueAt(row, 0).toString())
                 .mPass(table.getValueAt(row, 1).toString())
                 .mName(table.getValueAt(row, 2).toString())
-                .mGender(table.getValueAt(row, 3).toString().equals("남자") ? 1 : 0)
+                .mGender(table.getValueAt(row, 3).toString().equals("남자") ? 0 : 1)
                 .mBirth(Date.valueOf(table.getValueAt(row, 4).toString()))
                 .tPass(tPass)
                 .build();

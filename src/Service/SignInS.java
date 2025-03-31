@@ -213,14 +213,14 @@ public class SignInS extends JPanel implements ActionListener {
             if (adminDAO.idDuplicate(id)) {
                 idck = true;
             } else {
-                JOptionPane.showMessageDialog(this, "아이디중복");
+                JOptionPane.showMessageDialog(this, "id중복");
                 return true;
             }
         } else if (mm_button.isSelected()) {
             if (memDAO.idDuplicate(id)) {
                 idck = true;
             } else {
-                JOptionPane.showMessageDialog(this, "아이디중복");
+                JOptionPane.showMessageDialog(this, "id중복");
                 return true;
             }
         }

@@ -11,8 +11,8 @@ public class SuperDAO<T> {
 //    private String url = "jdbc:mariadb://192.168.0.18:3306/mysql";
     private String url = "jdbc:mariadb://localhost:3306/mysql";
     private String user = "root";
-    private String password = "park1676";
-//    private String password = "1111";
+//    private String password = "park1676";
+    private String password = "1111";
     private static Connection conn;
     public SuperDAO() {
         init();

@@ -59,7 +59,7 @@ public class MemS extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int newGender = radioMan.isSelected() ? 1 : 0;
+        int newGender = radioMan.isSelected() ? 0 : 1;
         String newBirth = yearCom.getSelectedItem().toString() + "-" + monthCom.getSelectedItem().toString()
                 + "-" + dayCom.getSelectedItem().toString();
         MemDTO memDTO = MemDTO.builder()
@@ -71,8 +71,6 @@ public class MemS extends JFrame {
                 .build();
         if (memDAO.update(memDTO)) {
             JOptionPane.showMessageDialog(null, "수정 완료");
-            this.remove(center);
-            centerLayout();
         } else {
             JOptionPane.showMessageDialog(null, "수정 실패", "Warning",
                     JOptionPane.WARNING_MESSAGE);

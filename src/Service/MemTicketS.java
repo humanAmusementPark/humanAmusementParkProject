@@ -66,7 +66,7 @@ public class MemTicketS extends JFrame implements ActionListener {
                     "</b><br>가격: " + ticket.getTPrice() + "원</center></html>");
             ticketButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             ticketButton.setPreferredSize(new Dimension(350, 50));
-            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTPass()));
+            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTPass(),ticket.getTName()));
             panel.add(ticketButton);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
@@ -97,13 +97,13 @@ public class MemTicketS extends JFrame implements ActionListener {
         );
     }
 
-    public void purchaseTicket(String ticket) {
+    public void purchaseTicket(String ticket, String tName) {
         if (memDAO.select(userId).getTPass() != null) {
             JOptionPane.showMessageDialog(this, "이미 티켓을 구매하셨습니다!");
             return;
         }
-        memDAO.edit(5, ticket, userId); // 티켓 구매 처리
-        JOptionPane.showMessageDialog(this, ticket + "가 성공적으로 구매되었습니다");
+        memDAO.edit(ticket, userId); // 티켓 구매 처리
+        JOptionPane.showMessageDialog(this, tName + "이(가) 성공적으로 구매되었습니다");
     }
 
     @Override

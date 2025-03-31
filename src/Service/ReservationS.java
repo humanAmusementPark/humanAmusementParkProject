@@ -43,7 +43,7 @@ public class ReservationS extends JFrame {
     public ReservationS(MemMenuS before, String atname, String id) throws SQLException {
         this.setTitle("기구 예약");
         System.out.println("atname =  " + atname);
-        AttractionDTO attract = adao.getAttract(atname);
+        AttractionDTO attract = adao.select(atname);
         t.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
         t.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
 
@@ -56,7 +56,7 @@ public class ReservationS extends JFrame {
         mId = id; //회원 아이디
         String tpass = mdao.select(mId).getTPass();
         System.out.println("tpass == " + tpass);
-        String tname = tdao.selectti(tpass).getTName();
+        String tname = tdao.select(tpass).getTName();
         if(attract.getAtOnoff() == 0){
             JOptionPane.showMessageDialog(null,"시설 운행 안함");
             before.setEnabled(true);
@@ -136,7 +136,7 @@ public class ReservationS extends JFrame {
                         .mId(mId)
                         .tPass(tpass)
                         .build();
-                if (rdao.insertres(r)) {
+                if (rdao.insert(r)) {
                     JOptionPane.showMessageDialog(null, "예약되었습니다.");
                     before.setEnabled(true);
                     dispose();

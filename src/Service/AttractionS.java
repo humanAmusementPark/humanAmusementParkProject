@@ -79,7 +79,7 @@ public class AttractionS extends JFrame{
 							.atMax(max)
 							.atOnoff(flag)
 							.build();
-					if(dao.updateat(att))
+					if(dao.update(att))
 						JOptionPane.showMessageDialog(null, "수정완료.");
 					else
 						JOptionPane.showMessageDialog(null, "수정실패.");

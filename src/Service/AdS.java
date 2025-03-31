@@ -74,8 +74,6 @@ public class AdS extends JFrame {
                 .build();
         if (adminDAO.update(adminDTO)) {
             JOptionPane.showMessageDialog(null, "수정 완료");
-            this.remove(center);
-            centerLayout();
         } else {
             JOptionPane.showMessageDialog(null, "수정 실패", "Warning",
                     JOptionPane.WARNING_MESSAGE);

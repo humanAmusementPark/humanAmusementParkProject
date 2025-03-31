@@ -3,6 +3,7 @@ package javaproject.DAO;
 
 import javaproject.DTO.MemDTO;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
                 memberList.add(member);
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 회원 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -60,6 +62,7 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
                 return member;
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 회원 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -87,6 +90,7 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
             System.out.println(result + "건 완료");
             if (result > 0) return true;
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 회원 입력 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -114,6 +118,7 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
             System.out.println(result + "건 완료");
             if (result > 0) return true;
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 회원 수정 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -136,6 +141,7 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
             System.out.println(result + "건 완료");
             if (result > 0) return true;
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 회원 삭제 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -147,49 +153,17 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
         return false;
     }
 
-    public void edit(int num, String text, String mId) {
-        String sql = null;
-        switch (num) {
-            case 1:
-                sql = "update member set mPass = ? where mId = ?";
-                break;
-            case 2:
-                sql = "update member set mName = ? where mId = ?";
-                break;
-            case 3:
-                sql = "update member set mGender = ? where mId = ?";
-                break;
-            case 4:
-                sql = "update member set mBirth = ? where mId = ?";
-                break;
-            case 5:
-                sql = "update member set tPass = ? where mId = ?";
-                break;
-            default:
-                break;
-        }
+    public void edit(String text, String mId) {
         Connection conn = super.getConnection();
+        String sql = "update member set tPass = ? where mId = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            switch (num) {
-                case 1:
-                case 2:
-                case 5:
-                    pstmt.setString(1, text);
-                    break;
-                case 3:
-                    pstmt.setInt(1, Integer.parseInt(text));
-                    break;
-                case 4:
-                    pstmt.setDate(1, Date.valueOf(text));
-                    break;
-                default:
-                    break;
-            }
+            pstmt.setString(1, text);
             pstmt.setString(2, mId);
             int result = pstmt.executeUpdate();
             System.out.println(result + "건 완료");
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 회원 수정 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -224,6 +198,7 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "id 중복 검사 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -248,6 +223,7 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "id 중복 검사 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             throw new RuntimeException(e);
         } finally {
             try {

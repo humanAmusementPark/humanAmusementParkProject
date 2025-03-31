@@ -1,8 +1,5 @@
 package javaproject.DAO;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,14 +10,17 @@ import java.util.List;
 
 import javaproject.DTO.AttractionDTO;
 
-public class AttractionDAO extends SuperDAO {
-	private Connection conn=null;
-	
+import javax.swing.*;
+
+public class AttractionDAO extends SuperDAO implements DAOinf<AttractionDTO> {
+    private Connection conn = null;
+
+    @Override
     public List<AttractionDTO> selectAll() {
         List<AttractionDTO> attractionDTOList = new ArrayList<AttractionDTO>();
         String query = "SELECT * FROM attraction";
         try {
-        	conn = super.getConnection();
+            conn = super.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
@@ -35,8 +35,9 @@ public class AttractionDAO extends SuperDAO {
 
                 attractionDTOList.add(attractionDTO);
             }
-            
+
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 시설 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace(System.err);
         } finally {
             try {
@@ -48,207 +49,115 @@ public class AttractionDAO extends SuperDAO {
 
         return attractionDTOList;
     }
-
-    public void insert() {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String query = "INSERT INTO attraction(attractionName, attrationURL) VALUES(?,?)";
+    @Override
+    public AttractionDTO select(String atId) {
+        AttractionDTO a = null;
+        PreparedStatement ptmt = null;
         try {
-            PreparedStatement stmt = conn.prepareStatement(query);
-            System.out.println("어트랙션 이름 , 어트랙션URL 을 입력하세요.");
-            stmt.setString(1, br.readLine());
-            stmt.setString(2, br.readLine());
+            conn = super.getConnection();
+            String sql = "select * from attraction where atName=?";
+            ptmt = conn.prepareStatement(sql);
+            ptmt.setString(1, atId);
+            ResultSet rs = ptmt.executeQuery();
+            if (rs.next()) {
+                a = AttractionDTO.builder()
+                        .atId(rs.getString("atId"))
+                        .atName(rs.getString("atName"))
+                        .atUrl(parse(rs.getString("atUrl")))
+                        .atMax(rs.getInt("atMax"))
+                        .atOnoff(rs.getInt("atOnoff"))
+                        .build();
 
-            stmt.executeUpdate();
-
-        } catch (Exception e) {
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		}
-    }
-
-    public void update(int choiceNum) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        String query;
-        switch (choiceNum) {
-            case 1:
-                query = "UPDATE attraction SET attractionName = ? WHERE attractionID = ?";
-                try {
-                    PreparedStatement cursor = conn.prepareStatement(query);
-
-                    //sql 파라미터 설정
-                    System.out.println("수정하고 싶은 어트랙션ID와 수정할 어트랙션이름을 적으세요.");
-                    cursor.setInt(1, Integer.parseInt(br.readLine()));
-                    cursor.setString(2, br.readLine());
-
-                    //sql 실행
-                    cursor.executeUpdate();
-
-                } catch (SQLException | IOException e) {
-                    e.printStackTrace();
-                }finally {
-					try {
-						conn.close();
-					} catch (SQLException e) {
-						throw new RuntimeException(e);
-					}
-				}
-
-                break;
-            case 2:
-                query = "update attraction set attrationURL = ? where attractionID = ?";
-                try {
-                    PreparedStatement cursor = conn.prepareStatement(query);
-
-                    //sql 파라미터 설정
-                    System.out.println("수정하고 싶은 어트랙션ID와 수정할 어트랙션URL을 적으세요.");
-                    cursor.setInt(1, Integer.parseInt(br.readLine()));
-                    cursor.setString(2, br.readLine());
-
-                    //sql 실행
-                    cursor.executeUpdate();
-
-                } catch (SQLException | IOException e) {
-                    e.printStackTrace();
-                }finally {
-					try {
-						conn.close();
-					} catch (SQLException e) {
-						throw new RuntimeException(e);
-					}
-				}
-                break;
+        } finally {
+            try {
+                ptmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return a;
+    }
 
+    @Override
+    public boolean insert(AttractionDTO data) {
+        return false;
+    }
 
+    private String parse(String string) {
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) == '\\') {
+                StringBuffer buf = new StringBuffer(string);
+                buf.insert(i, '\\');
+                string = buf.toString();
+                i++;
+                System.out.println(string);
+            }
+        }
+        return string;
+    }
+    @Override
+    public boolean update(AttractionDTO att) {
+        PreparedStatement ptmt = null;
+        boolean flag = false;
+        try {
+            conn = super.getConnection();
+            String sql = "update attraction set atUrl=?, atMax=?, atOnoff=? where atId=?";
+            ptmt = conn.prepareStatement(sql);
+            ptmt.setString(1, att.getAtUrl());
+            ptmt.setInt(2, att.getAtMax());
+            ptmt.setInt(3, att.getAtOnoff());
+            ptmt.setString(4, att.getAtId());
+            int rs = ptmt.executeUpdate();
+            if (rs > 0) {
+                flag = true;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 시설 수정 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
+            e.printStackTrace();
+        } finally {
+            try {
+                ptmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        return false;
+    }
+
+    public String[] selectAllId() {
+        ArrayList<String> list = new ArrayList<>();
+        Connection conn = super.getConnection();
+        String sql = "select atId from attraction where atOnoff = 1";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "db 시설 조회 쿼리 오류", "Warning", JOptionPane.WARNING_MESSAGE);
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        String[] arr = new String[list.size()];
+        arr = list.toArray(arr);
+        return arr;
     }
 
 
-    public void delete(int choiceNum) {
-       String query = "DELETE FROM attraction WHERE attractionID = ?";
-       try{
-           PreparedStatement cursor = conn.prepareStatement(query);
-
-           cursor.setInt(1, choiceNum);
-           cursor.executeUpdate();
-
-       }catch (Exception e){
-           e.printStackTrace();
-       }finally {
-		   try {
-			   conn.close();
-		   } catch (SQLException e) {
-			   throw new RuntimeException(e);
-		   }
-	   }
-    }
-    
-	public AttractionDTO getAttract(String atId) {
-		AttractionDTO a=null;
-		PreparedStatement ptmt=null;
-		try {
-			conn = super.getConnection();
-			String sql = "select * from attraction where atName=?";
-			ptmt = conn.prepareStatement(sql);
-			ptmt.setString(1,atId);
-			
-			ResultSet rs=ptmt.executeQuery();
-			if(rs.next()) {
-				a = AttractionDTO.builder()
-						.atId(rs.getString("atId"))
-						.atName(rs.getString("atName"))
-						.atUrl(parse(rs.getString("atUrl")))
-						.atMax(rs.getInt("atMax"))
-						.atOnoff (rs.getInt("atOnoff"))
-						.build();
-			
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				ptmt.close();
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return a;
-	}
-
-	private String parse(String string) {
-		for(int i=0;i<string.length();i++) {
-			if(string.charAt(i)=='\\') {
-				StringBuffer buf = new StringBuffer(string);
-				buf.insert(i,'\\');
-				string=buf.toString();
-				i++;
-				System.out.println(string);
-			}
-		}
-		return string;
-	}
-
-	public boolean updateat(AttractionDTO att) {
-		PreparedStatement ptmt=null;
-		boolean flag=false;
-		try {
-			conn = super.getConnection();
-			String sql = "update attraction set atUrl=?, atMax=?, atOnoff=? where atId=?";
-			ptmt = conn.prepareStatement(sql);
-			ptmt.setString(1,att.getAtUrl());
-			ptmt.setInt(2,att.getAtMax());
-			ptmt.setInt(3,att.getAtOnoff());
-			ptmt.setString(4,att.getAtId());
-			
-			int rs=ptmt.executeUpdate();
-			if(rs>0) {
-				flag=true;
-			}
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				ptmt.close();
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return flag;
-	}
-
-	public String[] selectAllId() {
-		ArrayList<String> list = new ArrayList<>();
-		Connection conn = super.getConnection();
-		String sql = "select atId from attraction where atOnoff = 1";
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				list.add(rs.getString(1));
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		}
-		String[] arr = new String[list.size()];
-		arr = list.toArray(arr);
-		return arr;
-	}
-	
-	
 }
