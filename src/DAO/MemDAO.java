@@ -105,14 +105,18 @@ public class MemDAO extends SuperDAO implements DAOinf<MemDTO> {
     @Override
     public boolean update(MemDTO member) {
         Connection conn = super.getConnection();
-        String sql = "update member set mPass = ?, mName = ?, mGender = ? ,mBirth = ?, tPass = ? where mId = ?";
+        String sql = "update member set mPass = ?, mName = ?, mGender = ?, mBirth = ?, tPass = ? where mId = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, member.getMPass());
             stmt.setString(2, member.getMName());
             stmt.setInt(3, member.getMGender());
             stmt.setDate(4, Date.valueOf(member.BirthToString()));
-            stmt.setString(5, member.getTPass());
+            if(member.getTPass().isEmpty()) {
+                stmt.setNull(5, Types.VARCHAR);
+            }else {
+                stmt.setString(5, member.getTPass());
+            }
             stmt.setString(6, member.getMId());
             int result = stmt.executeUpdate();
             System.out.println(result + "건 완료");

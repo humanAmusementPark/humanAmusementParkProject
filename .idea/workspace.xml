@@ -10,8 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="테스트 수정">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/commons_io_2_18_0_sources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lombok.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DAO/MemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/MemDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/AdmemS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdmemS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chat/server/CommandManagerV2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/CommandManagerV2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chat/server/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/Session.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +95,7 @@
     </key>
   </component>
   <component name="RunManager" selected="애플리케이션.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="javaproject.Service.Main" />
       <module name="0324-1" />
       <extension name="coverage">
@@ -181,7 +184,7 @@
       <workItem from="1743068734138" duration="13168000" />
       <workItem from="1743209801809" duration="5398000" />
       <workItem from="1743215806429" duration="12942000" />
-      <workItem from="1743385383282" duration="8403000" />
+      <workItem from="1743385383282" duration="17614000" />
     </task>
     <task id="LOCAL-00001" summary="ㅁㅁㅁ">
       <option name="closed" value="true" />
@@ -215,7 +218,31 @@
       <option name="project" value="LOCAL" />
       <updated>1743393806602</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="테스트 수정">
+      <option name="closed" value="true" />
+      <created>1743394426439</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1743394426439</updated>
+    </task>
+    <task id="LOCAL-00006" summary="테스트 수정">
+      <option name="closed" value="true" />
+      <created>1743394492268</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1743394492268</updated>
+    </task>
+    <task id="LOCAL-00007" summary="테스트 수정">
+      <option name="closed" value="true" />
+      <created>1743394525806</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1743394525806</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
