@@ -43,7 +43,7 @@ public class ReservationS extends JFrame {
     public ReservationS(MemMenuS before, String atname, String id) throws SQLException {
         this.setTitle("기구 예약");
         System.out.println("atname =  " + atname);
-        AttractionDTO attract = adao.select(atname);
+        AttractionDTO attract = (AttractionDTO) adao.select(atname);
         t.getTableHeader().setReorderingAllowed(false); // 컬럼들 이동 불가
         t.getTableHeader().setResizingAllowed(false); // 컬럼 크기 조절 불가
 

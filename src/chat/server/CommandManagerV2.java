@@ -1,5 +1,7 @@
 package javaproject.chat.server;
 
+import lombok.Getter;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,10 +9,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 public class CommandManagerV2 implements CommandManager{
 
     private final SessionManager sessionManager;
-
+    @Getter
     private ArrayList<String> badWords = new ArrayList<>();
 
     public CommandManagerV2(SessionManager sessionManager) { //욕설 파일
@@ -18,7 +21,7 @@ public class CommandManagerV2 implements CommandManager{
         loadBadWordsFile("src/badwords.txt");
 
     }
-//    private void loadBadWordsFile(String filename) { src->main->resource 해결못함(나중에)
+    //    private void loadBadWordsFile(String filename) { src->main->resource 해결못함(나중에)
 //        try (BufferedReader reader = new BufferedReader(
 //                new InputStreamReader(
 //                        Objects.requireNonNull(CommandManagerV2.class.getClassLoader()
@@ -31,16 +34,16 @@ public class CommandManagerV2 implements CommandManager{
 //            e.printStackTrace();
 //        }
 //    }
-private void loadBadWordsFile(String filename) { //욕설 파일 읽기
-    try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            addBadWord(line);
+    private void loadBadWordsFile(String filename) { //욕설 파일 읽기
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                addBadWord(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    } catch (IOException e) {
-        e.printStackTrace();
     }
-}
 
     private  void addBadWord(String line){
         if(line != null &&!line.trim().isEmpty()&&!badWords.contains(line)){
@@ -70,3 +73,5 @@ private void loadBadWordsFile(String filename) { //욕설 파일 읽기
         return 0;
     }
 }
+
+

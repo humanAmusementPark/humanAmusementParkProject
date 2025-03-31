@@ -18,7 +18,7 @@ public class SessionManager {
                 if (adminQueue.size() <= 3) {
                     adminQueue.add(session);
                     session.send(("상담사로 대기 중입니다."));
-                    session.send(session.getRole());
+//                    session.send(session.getRole());
                 } else {
                     session.send("현재 상담사는 모두 대기 중입니다. 나중에 다시 시도해 주세요.");
                 }

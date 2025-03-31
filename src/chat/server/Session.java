@@ -8,6 +8,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 import static javaproject.chat.util.MyLogger.log;
@@ -34,6 +37,8 @@ public class Session implements Runnable {
     private String name;
     private String type;
     private boolean flag = true;
+    private boolean startflag = true;
+
 
     @SneakyThrows
     public Session(Socket socket, CommandManager commandManager, SessionManager sessionManager) {
@@ -61,7 +66,7 @@ public class Session implements Runnable {
                 } else if (command==2) {
                     kickCustomer();
                 }else if(command==3){
-                    languageWarning();
+                    languageWarning(received);
                 }
                 else {
                     send(received);
@@ -74,10 +79,25 @@ public class Session implements Runnable {
         }
     }
 
-    private void languageWarning() throws IOException { //욕설경고
+    private void languageWarning(String received) throws IOException { //욕설경고
         this.badWordCnt++;
+        String formattedMessage = null;
+        if (commandManager instanceof CommandManagerV2) {
+            ArrayList<String> badWords = ((CommandManagerV2) commandManager).getBadWords();
+            for (String badWord : badWords) {
+                if (received.contains(badWord)) {
+                    received = received.replace(badWord, "**");
+                    String timestamp = new SimpleDateFormat("HH:mm").format(new Date());
+                     formattedMessage = String.format("%s [%s]: %s", timestamp, name, received);
+                }
+            }
+        }
+        matchedSession.getOutput().writeUTF(formattedMessage);
+        matchedSession.getOutput().flush();
+        output.writeUTF(formattedMessage);
         output.writeUTF("[욕설경고] "+ this.badWordCnt + "회\n 욕설 3회 이상시 강제퇴장입니다.");
         output.flush();
+
         if(this.badWordCnt>=3){
             try{
                 matchedSession.getOutput().writeUTF(matchedSession.getName() + "을 강퇴하였습니다.");
@@ -129,9 +149,12 @@ public class Session implements Runnable {
 
     public void send(String message) throws IOException {
         if (matchedSession != null) {  // 상대방이 매칭되었을 때만 메세지 전송
-            log("클라 - > 클라 : " + message);
-            matchedSession.getOutput().writeUTF(log1() + "[" + name + "]" + message);
-            matchedSession.getOutput().flush();
+
+                matchedSession.getOutput().writeUTF(log1() + "[" + name + "]" + message);
+                matchedSession.getOutput().flush();
+                output.writeUTF(log1() + "[" + name + "]" + message);
+                output.flush();
+
 
         } else {
             log("서버 - > 클라 : " + message);
