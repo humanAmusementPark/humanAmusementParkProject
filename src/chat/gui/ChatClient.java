@@ -7,7 +7,8 @@ import javax.swing.*;
 public class ChatClient {
 
 
-    String serverAddress = "192.168.0.18"; // 서버 주소
+//    String serverAddress = "192.168.0.18"; // 서버 주소
+    String serverAddress = "localhost";
     int port = 4321; // 포트 번호
     String role;
 

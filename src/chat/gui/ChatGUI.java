@@ -1,5 +1,6 @@
 package javaproject.chat.gui;
 
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+@Setter
 public class ChatGUI {
     private JRadioButton reservationButton;
     private JRadioButton lostButton;
@@ -132,7 +133,7 @@ public class ChatGUI {
         sendButton.setEnabled(false);
         exitButton = new JButton("종료");
         styleButton(exitButton, new Color(200, 200, 200), Color.BLACK, 60, 40);
-        exitButton.setEnabled(false);
+        exitButton.setEnabled(true);
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(sendButton);
@@ -210,7 +211,7 @@ public class ChatGUI {
         radio.setFocusPainted(false);
     }
 
-    Thread t = null;
+
 
     private void connectToServer(String serverAddress, int port) {
         try {
@@ -225,11 +226,8 @@ public class ChatGUI {
                 @Override
                 public void run() {
                     try {
-
-
                         System.out.println("시작");
                         while (true) {
-
                             String message = input.readUTF();
                             if (message.equals("/강퇴")) {
 
@@ -241,10 +239,18 @@ public class ChatGUI {
 //                                frame.dispose();
                                 break;
 
+                            }else if (message.contains("고객이 매칭되었습니다. 이제 대화가 가능합니다.") ||
+                                    message.contains("상담사가 매칭되었습니다. 이제 대화가 가능합니다.")) { // 매칭 완료 메시지 감지
+
+                                SwingUtilities.invokeLater(() -> {
+                                    sendButton.setEnabled(true);
+
+                                    messageField.setEditable(true);
+                                    System.out.println("버튼 활성화 완료"); // 디버깅용
+                                });
                             }
                             chatArea.append(message + "\n");
                             chatArea.setCaretPosition(chatArea.getDocument().getLength());
-
                         }
                     } catch (EOFException e) {
                         System.out.println("예외 : " + e);
@@ -306,7 +312,7 @@ public class ChatGUI {
         otherButton.setEnabled(false);
 
         messageField.setEnabled(true);
-        sendButton.setEnabled(true);
+        sendButton.setEnabled(false);
         exitButton.setEnabled(true);
 
         try {

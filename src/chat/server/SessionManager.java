@@ -37,12 +37,12 @@ public class SessionManager {
         Session customer = null;
         Session admin = null;
         if (!customerQueue.isEmpty() && !adminQueue.isEmpty()) {
-            System.out.println("con");
+
             for (Session a : customerQueue) {
                 for (Session b : adminQueue) {
-                    System.out.println("2qksqhr");
+
                     if (a.getType().equals(b.getType()) && a.isFlag() && b.isFlag()) {
-                        System.out.println("통과");
+
                         customer = a;
                         admin = b;
                         customer.setFlag(false);
