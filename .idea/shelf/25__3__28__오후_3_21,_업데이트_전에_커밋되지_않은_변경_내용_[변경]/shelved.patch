@@ -1,0 +1,486 @@
+Index: src/chat/gui/ChatGUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.gui;\r\n\r\nimport lombok.SneakyThrows;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.border.EmptyBorder;\r\nimport java.awt.*;\r\nimport java.awt.event.*;\r\nimport java.io.*;\r\nimport java.net.ConnectException;\r\nimport java.net.Socket;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.Date;\r\n\r\npublic class ChatGUI {\r\n\r\n    private JFrame frame;\r\n    private JTextField nameField;\r\n    private JTextArea chatArea;\r\n    private JTextField messageField;\r\n    private JButton sendButton;\r\n    private JButton exitButton;\r\n    private JButton matchButton;\r\n    private JLabel statusLabel;\r\n    private DataOutputStream output;\r\n    private DataInputStream input;\r\n    private String role;\r\n    private String inquiryType;\r\n    private Socket socket;\r\n    public boolean closed = false;\r\n\r\n    public ChatGUI(String serverAddress, int port, String role) {\r\n        this.role = role;\r\n        initialize(serverAddress, port);\r\n        connectToServer(serverAddress, port);\r\n    }\r\n\r\n    private void initialize(String serverAddress, int port) {\r\n        frame = new JFrame(\"정규랜드 고객센터\");\r\n        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);\r\n        frame.setSize(400, 700);\r\n        frame.setLayout(new BorderLayout());\r\n        frame.setBackground(new Color(255, 255, 255));\r\n\r\n\r\n        JPanel headerPanel = new JPanel(new BorderLayout());\r\n        headerPanel.setBackground(new Color(255, 229, 0)); // 카카오톡 노란색\r\n        headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n        headerPanel.setPreferredSize(new Dimension(400, 60));\r\n\r\n        JLabel titleLabel = new JLabel(\"정규랜드 고객센터 [\" + role + \"]\", SwingConstants.CENTER);\r\n        titleLabel.setFont(new Font(\"맑은 고딕\", Font.BOLD, 16));\r\n        titleLabel.setForeground(Color.BLACK);\r\n        headerPanel.add(titleLabel, BorderLayout.CENTER);\r\n\r\n        statusLabel = new JLabel(\"연결 대기중입니다\", SwingConstants.CENTER);\r\n        statusLabel.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 12));\r\n        statusLabel.setForeground(Color.GRAY);\r\n        headerPanel.add(statusLabel, BorderLayout.SOUTH);\r\n\r\n        // 입력 패널 (이름, 문의 유형, 매칭 버튼)\r\n        JPanel inputPanel = new JPanel();\r\n        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));\r\n        inputPanel.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n        inputPanel.setBackground(Color.WHITE);\r\n\r\n        // 이름 입력\r\n        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));\r\n        namePanel.setBackground(Color.WHITE);\r\n        namePanel.add(new JLabel(\"이름: \"));\r\n        nameField = new JTextField(15);\r\n        nameField.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 14));\r\n        nameField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));\r\n        namePanel.add(nameField);\r\n        inputPanel.add(namePanel);\r\n\r\n        // 문의 유형 선택\r\n        JPanel inquiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));\r\n        inquiryPanel.setBackground(Color.WHITE);\r\n        inquiryPanel.add(new JLabel(\"문의 유형: \"));\r\n        JRadioButton reservationButton = new JRadioButton(\"예약 관련 문의\");\r\n        JRadioButton lostButton = new JRadioButton(\"분실물 문의\");\r\n        JRadioButton otherButton = new JRadioButton(\"기타 문의\");\r\n        ButtonGroup inquiryGroup = new ButtonGroup();\r\n        inquiryGroup.add(reservationButton);\r\n        inquiryGroup.add(lostButton);\r\n        inquiryGroup.add(otherButton);\r\n        styleRadioButton(reservationButton);\r\n        styleRadioButton(lostButton);\r\n        styleRadioButton(otherButton);\r\n        inquiryPanel.add(reservationButton);\r\n        inquiryPanel.add(lostButton);\r\n        inquiryPanel.add(otherButton);\r\n        inputPanel.add(inquiryPanel);\r\n\r\n        // 매칭 대기 버튼\r\n        matchButton = new JButton(\"매칭 대기\");\r\n        matchButton.setEnabled(false);\r\n        styleButton(matchButton, new Color(255, 199, 0), Color.BLACK, 120, 40);\r\n        JPanel matchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));\r\n        matchPanel.setBackground(Color.WHITE);\r\n        matchPanel.add(matchButton);\r\n        inputPanel.add(matchPanel);\r\n\r\n        // 채팅 영역\r\n        chatArea = new JTextArea();\r\n        chatArea.setEditable(false);\r\n        chatArea.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 14));\r\n        chatArea.setBackground(new Color(245, 245, 245));\r\n        chatArea.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n        JScrollPane chatScroll = new JScrollPane(chatArea);\r\n        chatScroll.setBorder(null);\r\n//        chatArea.setLineWrap(true);\r\n//        chatScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);\r\n\r\n\r\n        JPanel bottomPanel = new JPanel(new BorderLayout());\r\n        bottomPanel.setBackground(Color.WHITE);\r\n        bottomPanel.setBorder(new EmptyBorder(10, 10, 10, 10));\r\n\r\n        messageField = new JTextField();\r\n        messageField.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 14));\r\n        messageField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));\r\n\r\n        sendButton = new JButton(\"전송\");\r\n        styleButton(sendButton, new Color(255, 199, 0), Color.BLACK, 60, 40);\r\n\r\n        exitButton = new JButton(\"종료\");\r\n        styleButton(exitButton, new Color(200, 200, 200), Color.BLACK, 60, 40);\r\n\r\n        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));\r\n        buttonPanel.setBackground(Color.WHITE);\r\n        buttonPanel.add(sendButton);\r\n        buttonPanel.add(exitButton);\r\n\r\n        bottomPanel.add(messageField, BorderLayout.CENTER);\r\n        bottomPanel.add(buttonPanel, BorderLayout.EAST);\r\n\r\n\r\n      \r\n        frame.add(inputPanel, BorderLayout.NORTH); // 이름, 문의 유형, 매칭 버튼 영역\r\n        frame.add(chatScroll, BorderLayout.CENTER); // 채팅창\r\n        frame.add(bottomPanel, BorderLayout.SOUTH); // 메시지 입력 및 버튼\r\n\r\n\r\n        matchButton.addActionListener(e -> startMatching());\r\n        exitButton.addActionListener(e -> {\r\n            closed = true; // 닫힘 플래그 설정\r\n            if (socket != null && !socket.isClosed()) { // 서버 연결 확인\r\n                sendMessage(); // 연결된 경우에만 메시지 전송\r\n            }\r\n            closeResources(); // 리소스 정리\r\n            frame.dispose(); // 창 닫기\r\n        });\r\n        reservationButton.addActionListener(e -> {\r\n            inquiryType = \"예약 관련 문의\";\r\n            checkIfReadyToMatch();\r\n        });\r\n        lostButton.addActionListener(e -> {\r\n            inquiryType = \"분실물 문의\";\r\n            checkIfReadyToMatch();\r\n        });\r\n        otherButton.addActionListener(e -> {\r\n            inquiryType = \"기타 문의\";\r\n            checkIfReadyToMatch();\r\n        });\r\n        sendButton.addActionListener(e -> sendMessage());\r\n        messageField.addActionListener(e -> sendMessage());\r\n\r\n        frame.addWindowListener(new WindowAdapter() {\r\n            @Override\r\n            public void windowClosing(WindowEvent e) {\r\n                closed = true;\r\n                sendMessage();\r\n                closeResources();\r\n            }\r\n        });\r\n\r\n\r\n        frame.setVisible(true);\r\n    }\r\n\r\n    private void styleButton(JButton button, Color bgColor, Color fgColor, int width, int height) {\r\n        button.setBackground(bgColor);\r\n        button.setForeground(fgColor);\r\n        button.setFont(new Font(\"맑은 고딕\", Font.BOLD, 14));\r\n        button.setPreferredSize(new Dimension(width, height));\r\n        button.setFocusPainted(false);\r\n        button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));\r\n        button.setOpaque(true);\r\n        button.setCursor(new Cursor(Cursor.HAND_CURSOR));\r\n        button.addMouseListener(new java.awt.event.MouseAdapter() {\r\n            public void mouseEntered(java.awt.event.MouseEvent evt) {\r\n                button.setBackground(bgColor.brighter());\r\n            }\r\n            public void mouseExited(java.awt.event.MouseEvent evt) {\r\n                button.setBackground(bgColor);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void styleRadioButton(JRadioButton radio) {\r\n        radio.setFont(new Font(\"맑은 고딕\", Font.PLAIN, 12));\r\n        radio.setBackground(Color.WHITE);\r\n        radio.setFocusPainted(false);\r\n    }\r\n    Thread t=null;\r\n    private void connectToServer(String serverAddress, int port) {\r\n        try {\r\n            socket = new Socket(serverAddress, port);\r\n            output = new DataOutputStream(socket.getOutputStream());\r\n            input = new DataInputStream(socket.getInputStream());\r\n\r\n            statusLabel.setText(\"연결되었습니다\");\r\n\r\n            new Thread(new Runnable() {\r\n                @SneakyThrows\r\n                @Override\r\n                public void run() {\r\n                    try {\r\n\r\n\r\n                        System.out.println(\"시작\");\r\n                        while (true) {\r\n\r\n                            String message = input.readUTF();\r\n                            chatArea.append(message + \"\\n\");\r\n                        }\r\n                    }\r\n                    catch (EOFException e) {\r\n                        System.out.println(\"예외 : \" + e);\r\n                        statusLabel.setText(\"서버 연결 끊어짐\");\r\n                    } catch (IOException e) {\r\n                        System.out.println(\"예외 발생: \" + e);\r\n                        statusLabel.setText(\"네트워크 오류 발생\");\r\n                    } finally {\r\n                        closeResources();\r\n                    }\r\n                }\r\n            }).start();\r\n\r\n        }catch (ConnectException e){\r\n            JOptionPane.showMessageDialog(null,\"서버연결 불가능\");\r\n            frame.dispose();\r\n           //\r\n        } catch (IOException e) {\r\n            statusLabel.setText(\"서버 연결 실패\");\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void closeResources() {\r\n        try {\r\n            if (input != null) input.close();\r\n        } catch (IOException e) {\r\n            System.out.println(\"input 닫기 실패\");\r\n            e.printStackTrace();\r\n        }\r\n        try {\r\n            if (output != null) output.close();\r\n        } catch (IOException e) {\r\n            System.out.println(\"output 닫기 실패\");\r\n            e.printStackTrace();\r\n        }\r\n        try {\r\n            if (socket != null) socket.close();\r\n            System.out.println(\"성공이요\");\r\n        } catch (IOException e) {\r\n            System.out.println(\"socket 닫기 실패\");\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void startMatching() {\r\n        String name = nameField.getText().trim();\r\n        if (name.isEmpty() || role == null || inquiryType == null) {\r\n            JOptionPane.showMessageDialog(frame, \"이름,문의 유형을 모두 선택하세요.\");\r\n            return;\r\n        }\r\n\r\n        statusLabel.setText(\"매칭 대기중...\");\r\n        matchButton.setEnabled(false);\r\n\r\n        try {\r\n            output.writeUTF(role);\r\n            output.flush();\r\n\r\n            output.writeUTF(name);\r\n            output.flush();\r\n\r\n            output.writeUTF(inquiryType);\r\n            output.flush();\r\n\r\n\r\n        } catch (IOException e) {\r\n            JOptionPane.showMessageDialog(frame, \"서버 전송 실패\");\r\n            e.printStackTrace();\r\n        }\r\n\r\n    }\r\n\r\n    private void checkIfReadyToMatch() {\r\n        if (role != null && inquiryType != null) {\r\n            matchButton.setEnabled(true);\r\n        }\r\n    }\r\n\r\n    private void sendMessage() {\r\n        String name = nameField.getText().trim();\r\n        String message = messageField.getText().trim();\r\n        if (name.isEmpty() || role == null || inquiryType == null) {\r\n            JOptionPane.showMessageDialog(frame, \"이름, 역할, 문의 유형, 메시지를 모두 입력하세요.\");\r\n            return;\r\n        }\r\n        if (closed) {\r\n            message = \"/exit\";\r\n        }\r\n\r\n        String timestamp = new SimpleDateFormat(\"HH:mm\").format(new Date());\r\n        String formattedMessage = String.format(\"%s [%s]: %s\", timestamp, name, message);\r\n\r\n        chatArea.append(formattedMessage + \"\\n\");\r\n        messageField.setText(\"\");\r\n\r\n        try {\r\n            output.writeUTF(message);\r\n            output.flush();\r\n        } catch (IOException ex) {\r\n            ex.printStackTrace();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/gui/ChatGUI.java b/src/chat/gui/ChatGUI.java
+--- a/src/chat/gui/ChatGUI.java	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/src/chat/gui/ChatGUI.java	(date 1743130162879)
+@@ -13,6 +13,9 @@
+ import java.util.Date;
+ 
+ public class ChatGUI {
++    private JRadioButton reservationButton;
++    private JRadioButton lostButton;
++    private JRadioButton otherButton;
+ 
+     private JFrame frame;
+     private JTextField nameField;
+@@ -78,9 +81,9 @@
+         JPanel inquiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+         inquiryPanel.setBackground(Color.WHITE);
+         inquiryPanel.add(new JLabel("문의 유형: "));
+-        JRadioButton reservationButton = new JRadioButton("예약 관련 문의");
+-        JRadioButton lostButton = new JRadioButton("분실물 문의");
+-        JRadioButton otherButton = new JRadioButton("기타 문의");
++         reservationButton = new JRadioButton("예약 관련 문의");
++        lostButton = new JRadioButton("분실물 문의");
++        otherButton = new JRadioButton("기타 문의");
+         ButtonGroup inquiryGroup = new ButtonGroup();
+         inquiryGroup.add(reservationButton);
+         inquiryGroup.add(lostButton);
+@@ -110,6 +113,7 @@
+         chatArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+         JScrollPane chatScroll = new JScrollPane(chatArea);
+         chatScroll.setBorder(null);
++        frame.add(chatScroll, BorderLayout.CENTER);
+ //        chatArea.setLineWrap(true);
+ //        chatScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+ 
+@@ -224,7 +228,20 @@
+                         while (true) {
+ 
+                             String message = input.readUTF();
++                            if(message.equals("/강퇴")){
++
++                                chatArea.setCaretPosition(chatArea.getDocument().getLength());
++                                closed = true; // closed 플래그 설정
++                               Thread.sleep(4000);
++                               frame.dispose();
++                                closeResources();
++//                                frame.dispose();
++                                break;
++
++                            }
+                             chatArea.append(message + "\n");
++                            chatArea.setCaretPosition(chatArea.getDocument().getLength());
++
+                         }
+                     }
+                     catch (EOFException e) {
+@@ -235,6 +252,7 @@
+                         statusLabel.setText("네트워크 오류 발생");
+                     } finally {
+                         closeResources();
++
+                     }
+                 }
+             }).start();
+@@ -281,6 +299,11 @@
+         statusLabel.setText("매칭 대기중...");
+         matchButton.setEnabled(false);
+ 
++        reservationButton.setEnabled(false); //변경사항 매칭중 다시선택 불가능
++        lostButton.setEnabled(false);
++        otherButton.setEnabled(false);
++
++
+         try {
+             output.writeUTF(role);
+             output.flush();
+@@ -320,6 +343,7 @@
+         String formattedMessage = String.format("%s [%s]: %s", timestamp, name, message);
+ 
+         chatArea.append(formattedMessage + "\n");
++        chatArea.setCaretPosition(chatArea.getDocument().getLength());
+         messageField.setText("");
+ 
+         try {
+Index: src/chat/server/CommandManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.server;\r\n\r\nimport java.io.IOException;\r\n\r\npublic interface CommandManager {\r\n    boolean execute(String totalMessage, Session session) throws IOException;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/server/CommandManager.java b/src/chat/server/CommandManager.java
+--- a/src/chat/server/CommandManager.java	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/src/chat/server/CommandManager.java	(date 1743089934653)
+@@ -3,5 +3,5 @@
+ import java.io.IOException;
+ 
+ public interface CommandManager {
+-    boolean execute(String totalMessage, Session session) throws IOException;
++    int execute(String totalMessage, Session session) throws IOException;
+ }
+\ No newline at end of file
+Index: src/chat/server/Session.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.server;\r\n\r\nimport lombok.Getter;\r\nimport lombok.Setter;\r\nimport lombok.SneakyThrows;\r\n\r\nimport java.io.DataInputStream;\r\nimport java.io.DataOutputStream;\r\nimport java.io.IOException;\r\nimport java.net.Socket;\r\nimport java.util.Scanner;\r\n\r\nimport static javaproject.chat.util.MyLogger.log;\r\nimport static javaproject.chat.util.MyLogger.log1;\r\nimport static javaproject.chat.util.SocketCloseUtil.closeAll;\r\n\r\n@Getter\r\n@Setter\r\npublic class Session implements Runnable {\r\n    Scanner in = new Scanner(System.in);\r\n    private final Socket socket;\r\n    private final DataInputStream input;\r\n    private final DataOutputStream output;\r\n    private final CommandManager commandManager;\r\n    private SessionManager sessionManager;\r\n\r\n    private boolean closed = false;\r\n\r\n    private String username;\r\n    private Session adminSession;\r\n    private String role;//역할\r\n    @Setter\r\n    private Session matchedSession;\r\n    private String name;\r\n    private String type;\r\n    private boolean flag = true;\r\n\r\n    @SneakyThrows\r\n    public Session(Socket socket, CommandManager commandManager, SessionManager sessionManager) {\r\n        this.socket = socket;\r\n        this.input = new DataInputStream(socket.getInputStream());\r\n        this.output = new DataOutputStream(socket.getOutputStream());\r\n        this.commandManager = commandManager;\r\n        this.sessionManager = sessionManager;\r\n\r\n    }\r\n\r\n    @Override\r\n    public void run() throws RuntimeException {\r\n        try {\r\n\r\n\r\n            role = input.readUTF();\r\n\r\n            name = input.readUTF();\r\n\r\n            type = input.readUTF();\r\n\r\n            sessionManager.add(this);\r\n\r\n            while (true) {\r\n                String received = input.readUTF();\r\n                log(\"클라 -> 서버 : \" + received);\r\n\r\n\r\n                if (commandManager.execute(received, this)) {\r\n                   if(matchedSession != null) {\r\n                       matchedSession.setFlag(true);\r\n                       matchedSession.setMatchedSession(null);\r\n                       sessionManager.matchCustomerToAdmin(matchedSession);\r\n\r\n                       send(\"님이 퇴장하셨습니다.\");\r\n                   }\r\n                    sessionManager.remove(this);\r\n                    close();\r\n                } else {\r\n                    send(received);\r\n                }\r\n            }\r\n\r\n        } catch (IOException e) {\r\n            log(e);\r\n        }\r\n    }\r\n\r\n    public void send(String message) throws IOException {\r\n        if (matchedSession != null) {  // 상대방이 매칭되었을 때만 메세지 전송\r\n            log(\"클라 - > 클라 : \" + message);\r\n            matchedSession.getOutput().writeUTF(log1() + \"[\" + name + \"]\" + message);\r\n            matchedSession.getOutput().flush();\r\n\r\n        } else {\r\n            log(\"서버 - > 클라 : \" + message);\r\n            output.writeUTF(message);\r\n            output.flush();\r\n\r\n        }\r\n    }\r\n\r\n    public void close() {\r\n        if (closed) {\r\n            return;\r\n        }\r\n        closeAll(socket, input, output);\r\n        closed = true;\r\n        log(\"연결 종료 : \" + socket);\r\n\r\n    }\r\n\r\n    public boolean conn() {\r\n        try {\r\n            getOutput().writeUTF(\"시작\");\r\n            getOutput().flush();\r\n            input.readUTF();\r\n            System.out.println(\"연결\");\r\n            return true;\r\n        }catch (Exception e){\r\n            System.out.println(\"탈출\");\r\n        }\r\n        return false;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/server/Session.java b/src/chat/server/Session.java
+--- a/src/chat/server/Session.java	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/src/chat/server/Session.java	(date 1743093851496)
+@@ -62,9 +62,10 @@
+                 String received = input.readUTF();
+                 log("클라 -> 서버 : " + received);
+ 
++                    int command = commandManager.execute(received,this);
++                if (command==1) {
+ 
+-                if (commandManager.execute(received, this)) {
+-                   if(matchedSession != null) {
++                    if(matchedSession != null) {
+                        matchedSession.setFlag(true);
+                        matchedSession.setMatchedSession(null);
+                        sessionManager.matchCustomerToAdmin(matchedSession);
+@@ -73,6 +74,25 @@
+                    }
+                     sessionManager.remove(this);
+                     close();
++                    Thread.sleep(5000);
++
++                } else if (command==2) {
++                    if(matchedSession != null && role.equals("상담사")){
++                       try {
++                           send("강퇴입니다. 착하게 사십쇼");
++                           matchedSession.getOutput().flush();
++                           matchedSession.getOutput().writeUTF("/강퇴");
++                           matchedSession.getOutput().flush();
++                            matchedSession.close();
++                           sessionManager.remove(matchedSession);
++                           this.setMatchedSession(null);
++                           sessionManager.matchCustomerToAdmin(this);
++                           this.setFlag(true);
++
++                       }catch (IOException e){
++                           log("강퇴중 오류 : "+e);
++                       }
++                    }
+                 } else {
+                     send(received);
+                 }
+@@ -80,6 +100,8 @@
+ 
+         } catch (IOException e) {
+             log(e);
++        } catch (InterruptedException e) {
++            throw new RuntimeException(e);
+         }
+     }
+ 
+@@ -107,16 +129,4 @@
+ 
+     }
+ 
+-    public boolean conn() {
+-        try {
+-            getOutput().writeUTF("시작");
+-            getOutput().flush();
+-            input.readUTF();
+-            System.out.println("연결");
+-            return true;
+-        }catch (Exception e){
+-            System.out.println("탈출");
+-        }
+-        return false;
+-    }
+ }
+Index: src/chat/server/CommandManagerV2.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.server;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class CommandManagerV2 implements CommandManager{\r\n    private static final String DELIMITER = \"\\\\|\";\r\n    private final SessionManager sessionManager;\r\n\r\n    public CommandManagerV2(SessionManager sessionManager) {\r\n        this.sessionManager = sessionManager;\r\n    }\r\n\r\n\r\n    @Override\r\n    public boolean execute(String totalMessage, Session session) throws IOException {\r\n\r\n        if (totalMessage.startsWith(\"/exit\")){\r\n\r\n            return  true;\r\n        }\r\n\r\n        return false;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/server/CommandManagerV2.java b/src/chat/server/CommandManagerV2.java
+--- a/src/chat/server/CommandManagerV2.java	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/src/chat/server/CommandManagerV2.java	(date 1743089934634)
+@@ -12,13 +12,14 @@
+ 
+ 
+     @Override
+-    public boolean execute(String totalMessage, Session session) throws IOException {
++    public int execute(String totalMessage, Session session) throws IOException {
+ 
+         if (totalMessage.startsWith("/exit")){
+-
+-            return  true;
++            return  1;
++        }else if(totalMessage.startsWith("/강퇴")){
++            return 2;
+         }
+ 
+-        return false;
++        return 0;
+     }
+ }
+\ No newline at end of file
+Index: src/DAO/ReservationDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.DAO;\r\n\r\n\r\nimport javaproject.DTO.ReservationDTO;\r\n\r\nimport java.sql.*;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class ReservationDAO extends SuperDAO implements DAOinf<ReservationDTO> {\r\n\r\n    @Override\r\n    public List<ReservationDTO> selectAll() {\r\n        List<ReservationDTO> reservations = new ArrayList<>();\r\n        String sql = \"select * from reservation\";\r\n        Connection conn = super.getConnection();\r\n        Statement stmt = null;\r\n        ResultSet rs = null;\r\n        try {\r\n\r\n            stmt = conn.createStatement();\r\n            rs = stmt.executeQuery(sql);\r\n            while (rs.next()) {\r\n                ReservationDTO reservation = ReservationDTO.builder()\r\n                        .no(rs.getInt(\"no\"))\r\n                        .mId(rs.getString(\"mId\"))\r\n                        .tPass(rs.getString(\"tPass\"))\r\n                        .atId(rs.getString(\"atId\"))\r\n                        .rTime(rs.getDate(\"rTime\"))\r\n                        .build();\r\n                reservations.add(reservation);\r\n            }\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        } finally {\r\n            try {\r\n                conn.close();\r\n            } catch (SQLException e) {\r\n                throw new RuntimeException(e);\r\n            }\r\n        }\r\n        return reservations;\r\n    }\r\n\r\n    public List<ReservationDTO> selectAll(String id) {\r\n        List<ReservationDTO> reservations = new ArrayList<>();\r\n        String sql = \"select * from reservation where mId = ?\";\r\n        Connection conn = super.getConnection();\r\n        try {\r\n            PreparedStatement stmt = conn.prepareStatement(sql);\r\n            stmt.setString(1, id);\r\n            ResultSet rs = stmt.executeQuery();\r\n            while (rs.next()) {\r\n                ReservationDTO reservation = ReservationDTO.builder()\r\n                        .no(rs.getInt(\"no\"))\r\n                        .mId(rs.getString(\"mId\"))\r\n                        .tPass(rs.getString(\"tPass\"))\r\n                        .atId(rs.getString(\"atId\"))\r\n                        .rTime(rs.getDate(\"rTime\"))\r\n                        .build();\r\n                reservations.add(reservation);\r\n            }\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        } finally {\r\n            try {\r\n                conn.close();\r\n            } catch (SQLException e) {\r\n                throw new RuntimeException(e);\r\n            }\r\n        }\r\n        return reservations;\r\n    }\r\n\r\n    @Override\r\n    public ReservationDTO select(String id) {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public boolean insert(ReservationDTO r) {\r\n        Connection conn = super.getConnection();\r\n        PreparedStatement ptmt = null;\r\n        try {\r\n            String sql = \"insert into reservation (mId, tPass, atId, rTime) values(?,?,?,sysdate())\";\r\n            ptmt = conn.prepareStatement(sql);\r\n            ptmt.setString(1, r.getMId());\r\n            ptmt.setString(2, r.getTPass());\r\n            ptmt.setString(3, r.getAtId());\r\n            int rq = ptmt.executeUpdate();\r\n            if (rq > 0) {\r\n                return true;\r\n            }\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        } finally {\r\n            try {\r\n                conn.close();\r\n            } catch (SQLException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n\r\n    @Override\r\n    public boolean update(ReservationDTO r) {\r\n        Connection conn = super.getConnection();\r\n        String sql = \"update reservation set mid = ?, tPass = ?,atId = ? where no = ?\";\r\n        try {\r\n            PreparedStatement ptmt = conn.prepareStatement(sql);\r\n            ptmt.setString(1, r.getMId());\r\n            ptmt.setString(2, r.getTPass());\r\n            ptmt.setString(3, r.getAtId());\r\n            ptmt.setInt(4, r.getNo());\r\n            int rq = ptmt.executeUpdate();\r\n            System.out.println(rq + \"건 완료\");\r\n            if (rq > 0) {\r\n                return true;\r\n            }\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        } finally {\r\n            try {\r\n                conn.close();\r\n            } catch (SQLException e) {\r\n                throw new RuntimeException(e);\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n\r\n    @Override\r\n    public boolean delete(String id) {\r\n        Connection conn = super.getConnection();\r\n        String sql = \"delete from reservation where no = ?\";\r\n        int intNo = Integer.parseInt(id);\r\n        try {\r\n            PreparedStatement stmt = conn.prepareStatement(sql);\r\n            stmt.setInt(1, intNo);\r\n            int result = stmt.executeUpdate();\r\n            System.out.println(result + \"건 완료\");\r\n            if (result > 0) return true;\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        } finally {\r\n            try {\r\n                conn.close();\r\n            } catch (SQLException e) {\r\n                throw new RuntimeException(e);\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n\r\n    public List<ReservationDTO> selectatt(String id) {\r\n        PreparedStatement ptmt=null;\r\n        List<ReservationDTO> rlist=new ArrayList<>();\r\n        try {\r\n            Connection conn=super.getConnection();\r\n            String sql = \"select * from reservation where atId=? and DATE(rTime) = CURDATE()\";\r\n            ptmt = conn.prepareStatement(sql);\r\n            ptmt.setString(1,id);\r\n\r\n            ResultSet rs=ptmt.executeQuery();\r\n            while(rs.next()) {\r\n                ReservationDTO reservation = ReservationDTO.builder()\r\n                        .no(rs.getInt(\"no\"))\r\n                        .mId(rs.getString(\"mId\"))\r\n                        .tPass(rs.getString(\"tPass\"))\r\n                        .atId(rs.getString(\"atId\"))\r\n                        .rTime(rs.getDate(\"rTime\"))\r\n                        .build();\r\n                rlist.add(reservation);\r\n            }\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        } finally {\r\n            try {\r\n                ptmt.close();\r\n\r\n            } catch (SQLException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n        return rlist;\r\n\r\n    }\r\n\r\n    public List<ReservationDTO> selectvip(String id) {\r\n        PreparedStatement ptmt=null;\r\n        List<ReservationDTO> rlist=new ArrayList<>();\r\n\r\n        try {\r\n            Connection conn=super.getConnection();\r\n            String sql = \"select * from reservation r inner join ticket t on r.tpass=\"\r\n                    + \"t.tpass where atId=? and DATE(rTime) = CURDATE() and tname='vip'\";\r\n            ptmt = conn.prepareStatement(sql);\r\n            ptmt.setString(1,id);\r\n\r\n            ResultSet rs=ptmt.executeQuery();\r\n            while(rs.next()) {\r\n                ReservationDTO reservation = ReservationDTO.builder()\r\n                        .no(rs.getInt(\"no\"))\r\n                        .mId(rs.getString(\"mId\"))\r\n                        .tPass(rs.getString(\"tPass\"))\r\n                        .atId(rs.getString(\"atId\"))\r\n                        .rTime(rs.getDate(\"rTime\"))\r\n                        .build();\r\n                rlist.add(reservation);\r\n            }\r\n\r\n\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        } finally {\r\n            try {\r\n                ptmt.close();\r\n            } catch (SQLException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n        return rlist;\r\n\r\n    }\r\n\r\n    public int getcount(String id) {\r\n        int count = 0;\r\n\r\n        PreparedStatement ptmt = null;\r\n        try {\r\n            Connection conn = super.getConnection();\r\n            String sql = \"select count(*) from reservation where mId=?\";\r\n            ptmt = conn.prepareStatement(sql);\r\n            ptmt.setString(1, id);\r\n\r\n            ResultSet rs = ptmt.executeQuery();\r\n            if (rs.next()) {\r\n                count = rs.getInt(1);\r\n            }\r\n\r\n\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        } finally {\r\n            try {\r\n                ptmt.close();\r\n            } catch (SQLException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n\r\n        return count;\r\n    }\r\n\r\n    public boolean insertres(ReservationDTO r) {\r\n        PreparedStatement ptmt=null;\r\n        boolean flag=false;\r\n        try {\r\n            Connection  conn=super.getConnection();\r\n            String sql = \"insert into reservation (mId, tPass, atId, rTime)values(?,?,?,sysdate())\";\r\n            ptmt = conn.prepareStatement(sql);\r\n\r\n            ptmt.setString(1,r.getMId());\r\n            ptmt.setString(2,r.getTPass());\r\n            ptmt.setString(3,r.getAtId());\r\n\r\n\r\n            int rq=ptmt.executeUpdate();\r\n            if(rq>0) {\r\n                flag=true;\r\n            }\r\n\r\n\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        } finally {\r\n            try {\r\n                ptmt.close();\r\n\r\n            } catch (SQLException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n\r\n        return flag;\r\n    }\r\n\r\n\r\n\r\n}\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/DAO/ReservationDAO.java b/src/DAO/ReservationDAO.java
+--- a/src/DAO/ReservationDAO.java	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/src/DAO/ReservationDAO.java	(date 1743076411864)
+@@ -119,7 +119,7 @@
+                 return true;
+             }
+         } catch (SQLException e) {
+-            throw new RuntimeException(e);
++
+         } finally {
+             try {
+                 conn.close();
+Index: src/Service/MemTicketS.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.Service;\r\n\r\nimport javaproject.DAO.MemDAO;\r\nimport javaproject.DAO.TicketDAO;\r\nimport javaproject.DTO.TicketDTO;\r\nimport java.util.List;\r\nimport javax.swing.*;\r\nimport java.awt.*;\r\nimport java.awt.event.ActionEvent;\r\nimport java.awt.event.ActionListener;\r\nimport java.sql.SQLException;\r\n\r\npublic class MemTicketS extends JFrame implements ActionListener {\r\n\r\n    private String userId; // 로그인한 사용자id\r\n    private TicketDAO ticketDAO = TicketDAO.getInstance();\r\n    private MemDAO memDAO = new MemDAO();\r\n\r\n    public static void main(String[] args) throws SQLException {\r\n        new MemTicketS(\"aaa\");\r\n    }\r\n\r\n    public MemTicketS(String id) throws SQLException {\r\n        this.userId = id;\r\n        this.setSize(800, 400);\r\n        this.setTitle(\"티켓 구매\");\r\n\r\n\r\n        setLayout(new GridLayout(1, 2));\r\n\r\n        // 이미지 경로 확인\r\n        //mac 용\r\n//        String imagePath = \"resource/images/티켓.jpg\";\r\n        //window용\r\n        String imagePath = \"resource\\\\images\\\\티켓.jpg\";\r\n\r\n        Image image = new ImageIcon(imagePath).getImage();\r\n\r\n\r\n        // 배경 이미지를 그리는 JPanel\r\n        JPanel ImagePanel = new JPanel() {\r\n            @Override\r\n            protected void paintComponent(Graphics g) {\r\n                super.paintComponent(g);  // paintComponent를 먼저 호출해야 합니다.\r\n                g.drawImage(image, 0, 0, getWidth(), getHeight(), this); // 이미지를 패널 크기에 맞게 그리기\r\n            }\r\n        };\r\n\r\n        ImagePanel.setLayout(new BorderLayout()); // 레이아웃을 BorderLayout으로 설정하여 배경 위에 스크롤 패널 배치\r\n        ImagePanel.setOpaque(true); // 배경을 불투명하게 설정하여 이미지가 제대로 보이도록 함\r\n\r\n        add(ImagePanel); // JFrame에 ImagePanel을 추가\r\n\r\n\r\n        // 티켓 버튼 패널 설정\r\n        JPanel panel = new JPanel();\r\n        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));\r\n\r\n\r\n\r\n        List<TicketDTO> tickets = ticketDAO.getTicketList();\r\n        for (TicketDTO ticket : tickets) {\r\n            JButton ticketButton = new JButton(\"<html><center><b>\" + ticket.getTName() +\r\n                    \"</b><br>가격: \" + ticket.getTPrice() + \"원</center></html>\");\r\n            ticketButton.setAlignmentX(Component.CENTER_ALIGNMENT);\r\n            ticketButton.setPreferredSize(new Dimension(350, 50));\r\n            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTName()));\r\n            panel.add(ticketButton);\r\n            panel.add(Box.createRigidArea(new Dimension(0, 10)));\r\n        }\r\n\r\n        panel.setPreferredSize(new Dimension(380, tickets.size() * 70));\r\n\r\n        // 스크롤 패널 설정\r\n        JScrollPane scrollPane = new JScrollPane(panel);\r\n        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);\r\n        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);\r\n\r\n        add(scrollPane);\r\n\r\n        setLocationRelativeTo(null);\r\n        //창크기조절막기\r\n        setResizable(false);\r\n\r\n        setVisible(true);\r\n    }\r\n\r\n    public void purchaseTicket(String ticket) {\r\n        if (memDAO.select(userId).getTPass() != null) {\r\n            JOptionPane.showMessageDialog(this, \"이미 티켓을 구매하셨습니다!\");\r\n            return;\r\n        }\r\n        memDAO.edit(5, ticket, userId); // 티켓 구매 처리\r\n        JOptionPane.showMessageDialog(this, ticket + \"가 성공적으로 구매되었습니다\");\r\n    }\r\n\r\n    @Override\r\n    public void actionPerformed(ActionEvent e) {\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Service/MemTicketS.java b/src/Service/MemTicketS.java
+--- a/src/Service/MemTicketS.java	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/src/Service/MemTicketS.java	(date 1743088448319)
+@@ -64,7 +64,7 @@
+                     "</b><br>가격: " + ticket.getTPrice() + "원</center></html>");
+             ticketButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+             ticketButton.setPreferredSize(new Dimension(350, 50));
+-            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTName()));
++            ticketButton.addActionListener(e -> purchaseTicket(ticket.getTName(),ticket.getTPass()));
+             panel.add(ticketButton);
+             panel.add(Box.createRigidArea(new Dimension(0, 10)));
+         }
+@@ -85,13 +85,15 @@
+         setVisible(true);
+     }
+ 
+-    public void purchaseTicket(String ticket) {
++    public void purchaseTicket(String tName,String ticket) {
++
+         if (memDAO.select(userId).getTPass() != null) {
+             JOptionPane.showMessageDialog(this, "이미 티켓을 구매하셨습니다!");
+             return;
+         }
+         memDAO.edit(5, ticket, userId); // 티켓 구매 처리
+-        JOptionPane.showMessageDialog(this, ticket + "가 성공적으로 구매되었습니다");
++
++        JOptionPane.showMessageDialog(this,  tName+ "이 성공적으로 구매되었습니다");
+     }
+ 
+     @Override
+Index: src/DAO/SuperDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.DAO;\r\n\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.DriverManager;\r\nimport java.sql.SQLException;\r\nimport java.util.List;\r\n\r\npublic class SuperDAO<T> {\r\n    private String driver = \"org.mariadb.jdbc.Driver\";\r\n    private String url = \"jdbc:mariadb://localhost:3306/mysql\";\r\n    private String user = \"root\";\r\n    //private String password = \"park1676\";\r\n    private String password = \"1111\";\r\n    private Connection conn;\r\n\r\n    public SuperDAO() {\r\n        init();\r\n    }\r\n\r\n    private void init() {\r\n        try {\r\n            Class.forName(driver);\r\n            System.out.println(\"클래스 load\");\r\n        } catch (ClassNotFoundException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    public Connection getConnection() {\r\n        try {\r\n            this.conn = DriverManager.getConnection(url, user, password);\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n        return conn;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/DAO/SuperDAO.java b/src/DAO/SuperDAO.java
+--- a/src/DAO/SuperDAO.java	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/src/DAO/SuperDAO.java	(date 1743123569156)
+@@ -8,10 +8,11 @@
+ 
+ public class SuperDAO<T> {
+     private String driver = "org.mariadb.jdbc.Driver";
+-    private String url = "jdbc:mariadb://localhost:3306/mysql";
+-    private String user = "root";
+-    //private String password = "park1676";
++//    private String url = "jdbc:mariadb://localhost:3306/mysql";
++     private String url = "jdbc:mariadb://192.168.0.18:3306/mysql"; // 이영누나 컴터
++    private String user = "root"; //root 이영누나 컴터
+     private String password = "1111";
++//    private String password = "park1676";
+     private Connection conn;
+ 
+     public SuperDAO() {
+Index: .idea/artifacts/mainmain_jar.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/artifacts/mainmain_jar.xml b/.idea/artifacts/mainmain_jar.xml
+new file mode 100644
+--- /dev/null	(date 1743071099035)
++++ b/.idea/artifacts/mainmain_jar.xml	(date 1743071099035)
+@@ -0,0 +1,12 @@
++<component name="ArtifactManager">
++  <artifact type="jar" name="mainmain:jar">
++    <output-path>$PROJECT_DIR$/out/artifacts/mainmain_jar</output-path>
++    <root id="archive" name="mainmain.jar">
++      <element id="module-output" name="mainmain" />
++      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lombok.jar" path-in-jar="/" />
++      <element id="extracted-dir" path="$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar" path-in-jar="/" />
++      <element id="library" level="project" name="lombok" />
++      <element id="dir-copy" path="$PROJECT_DIR$/resource" />
++    </root>
++  </artifact>
++</component>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"b618394f-11ec-4234-96e0-3d69f4759c35\" name=\"변경\" comment=\"ㅁㅁ\">\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/AdminMenu1.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/AdminMenu1.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/ticketGUI.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/ticketGUI.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/chat/server/ServerMain.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/chat/server/ServerMain.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"editable-svg\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;alex-1676&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/humanAmusementPark/humanAmusementParkProject.git&quot;,\r\n    &quot;accountId&quot;: &quot;6d2f6a3b-f242-4912-8638-ac6be81281e1&quot;\r\n  }\r\n}</component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/src/AdminMenu1.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n    <setting file=\"file://$PROJECT_DIR$/src/DAO/AdminDAO.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n  </component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2uoL2ZCQes2pOUYUdv8QpIiHSDN\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/hu-07/Desktop/mainmain/lib/mariadb-java-client-3.5.2.jar\",\r\n    \"project.structure.last.edited\": \"모듈\",\r\n    \"project.structure.proportion\": \"0.15\",\r\n    \"project.structure.side.proportion\": \"0.2\",\r\n    \"settings.editor.selected.configurable\": \"preferences.pluginManager\",\r\n    \"애플리케이션.Main1.executor\": \"Run\",\r\n    \"애플리케이션.Map.executor\": \"Run\",\r\n    \"애플리케이션.ServerMain.executor\": \"Run\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\" selected=\"애플리케이션.ServerMain\">\r\n    <configuration name=\"Main1\" type=\"Application\" factoryName=\"Application\" singleton=\"false\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.Main1\" />\r\n      <module name=\"mainmain\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Map\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.Map\" />\r\n      <module name=\"mainmain\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ServerMain\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.chat.server.ServerMain\" />\r\n      <module name=\"mainmain\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.chat.server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"애플리케이션.Main1\" />\r\n      <item itemvalue=\"애플리케이션.Map\" />\r\n      <item itemvalue=\"애플리케이션.ServerMain\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"애플리케이션.ServerMain\" />\r\n        <item itemvalue=\"애플리케이션.Main1\" />\r\n        <item itemvalue=\"애플리케이션.Map\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"애플리케이션 수준\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"디폴트 작업\">\r\n      <changelist id=\"b618394f-11ec-4234-96e0-3d69f4759c35\" name=\"변경\" comment=\"\" />\r\n      <created>1742909774955</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1742909774955</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"ㅁㅁ\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1742978484939</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1742978484939</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"ㅁㅁ\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"ㅁㅁ\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <breakpoint type=\"java-exception\">\r\n          <properties class=\"java.net.ConnectException\" package=\"java.net\" />\r\n          <option name=\"timeStamp\" value=\"1\" />\r\n        </breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/.idea/workspace.xml	(date 1743120661874)
+@@ -1,13 +1,26 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="ArtifactsWorkspaceSettings">
++    <artifacts-to-build>
++      <artifact name="mainmain:jar" />
++    </artifacts-to-build>
++  </component>
+   <component name="AutoImportSettings">
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="b618394f-11ec-4234-96e0-3d69f4759c35" name="변경" comment="ㅁㅁ">
+-      <change beforePath="$PROJECT_DIR$/src/Service/AdminMenu1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdminMenu1.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Service/ticketGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ticketGUI.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/chat/server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/ServerMain.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/artifacts/mainmain_jar.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/libraries/lombok.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/DAO/ReservationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/ReservationDAO.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/DAO/SuperDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DAO/SuperDAO.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Service/MemTicketS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemTicketS.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/chat/gui/ChatGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/gui/ChatGUI.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/chat/server/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/CommandManager.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/chat/server/CommandManagerV2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/CommandManagerV2.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/chat/server/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/Session.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -51,24 +64,38 @@
+   <component name="ProjectViewState">
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "git-widget-placeholder": "main",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "C:/Users/hu-07/Desktop/mainmain/lib/mariadb-java-client-3.5.2.jar",
+-    "project.structure.last.edited": "모듈",
+-    "project.structure.proportion": "0.15",
+-    "project.structure.side.proportion": "0.2",
+-    "settings.editor.selected.configurable": "preferences.pluginManager",
+-    "애플리케이션.Main1.executor": "Run",
+-    "애플리케이션.Map.executor": "Run",
+-    "애플리케이션.ServerMain.executor": "Run"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/hu-07/Desktop/mainmain/resource&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;프로젝트&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
++    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.Main1.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.Map.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.ServerMain.executor&quot;: &quot;Run&quot;
+   }
+-}]]></component>
+-  <component name="RunManager" selected="애플리케이션.ServerMain">
++}</component>
++  <component name="RunManager" selected="애플리케이션.Main">
++    <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="javaproject.Main" />
++      <module name="mainmain" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="javaproject.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
+     <configuration name="Main1" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="javaproject.Main1" />
+       <module name="mainmain" />
+@@ -109,12 +136,14 @@
+       </method>
+     </configuration>
+     <list>
++      <item itemvalue="애플리케이션.Main" />
+       <item itemvalue="애플리케이션.Main1" />
+       <item itemvalue="애플리케이션.Map" />
+       <item itemvalue="애플리케이션.ServerMain" />
+     </list>
+     <recent_temporary>
+       <list>
++        <item itemvalue="애플리케이션.Main" />
+         <item itemvalue="애플리케이션.ServerMain" />
+         <item itemvalue="애플리케이션.Main1" />
+         <item itemvalue="애플리케이션.Map" />
+@@ -138,7 +167,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1742978484939</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="ㅁㅁ">
++      <option name="closed" value="true" />
++      <created>1743057124876</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1743057124876</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
+Index: .idea/libraries/lombok.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/lombok.xml b/.idea/libraries/lombok.xml
+new file mode 100644
+--- /dev/null	(date 1743057247161)
++++ b/.idea/libraries/lombok.xml	(date 1743057247161)
+@@ -0,0 +1,10 @@
++<component name="libraryTable">
++  <library name="lombok">
++    <CLASSES>
++      <root url="jar://$PROJECT_DIR$/lib/lombok.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/" />
++    </CLASSES>
++    <JAVADOC />
++    <SOURCES />
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/0324-1.iml\" filepath=\"$PROJECT_DIR$/0324-1.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision 742a745268fc0be3d69ea1e83636ec7a4af4e5b9)
++++ b/.idea/modules.xml	(date 1743057212696)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/0324-1.iml" filepath="$PROJECT_DIR$/0324-1.iml" />
++      <module fileurl="file://$PROJECT_DIR$/mainmain.iml" filepath="$PROJECT_DIR$/mainmain.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file

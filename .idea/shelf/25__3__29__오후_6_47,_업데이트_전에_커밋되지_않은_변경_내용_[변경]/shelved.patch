@@ -1,0 +1,382 @@
+Index: src/urlTool.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject;\r\n\r\nimport javax.imageio.ImageIO;\r\nimport javax.swing.*;\r\nimport java.awt.image.BufferedImage;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\n\r\npublic class urlTool {\r\n    public ImageIcon getImageIcon(String url) {\r\n        InputStream is = getClass().getResourceAsStream(url);\r\n        BufferedImage img = null;\r\n        try {\r\n            img = ImageIO.read(is);\r\n        } catch (IOException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n        return new ImageIcon(img);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/urlTool.java b/src/urlTool.java
+--- a/src/urlTool.java	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ b/src/urlTool.java	(date 1743146285349)
+@@ -2,6 +2,7 @@
+ 
+ import javax.imageio.ImageIO;
+ import javax.swing.*;
++import java.awt.*;
+ import java.awt.image.BufferedImage;
+ import java.io.IOException;
+ import java.io.InputStream;
+@@ -9,9 +10,11 @@
+ public class urlTool {
+     public ImageIcon getImageIcon(String url) {
+         InputStream is = getClass().getResourceAsStream(url);
+-        BufferedImage img = null;
++        //BufferedImage img = null;
++        Image img = null;
+         try {
+-            img = ImageIO.read(is);
++            //img = ImageIO.read(is);
++            img= Toolkit.getDefaultToolkit().createImage(org.apache.commons.io.IOUtils.toByteArray(is));
+         } catch (IOException e) {
+             throw new RuntimeException(e);
+         }
+Index: src/chat/server/Session.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.server;\r\n\r\nimport lombok.Getter;\r\nimport lombok.Setter;\r\nimport lombok.SneakyThrows;\r\n\r\nimport java.io.DataInputStream;\r\nimport java.io.DataOutputStream;\r\nimport java.io.IOException;\r\nimport java.net.Socket;\r\nimport java.util.Scanner;\r\n\r\nimport static javaproject.chat.util.MyLogger.log;\r\nimport static javaproject.chat.util.MyLogger.log1;\r\nimport static javaproject.chat.util.SocketCloseUtil.closeAll;\r\n\r\n@Getter\r\n@Setter\r\npublic class Session implements Runnable {\r\n    Scanner in = new Scanner(System.in);\r\n    private final Socket socket;\r\n    private final DataInputStream input;\r\n    private final DataOutputStream output;\r\n    private final CommandManager commandManager;\r\n    private SessionManager sessionManager;\r\n\r\n    private boolean closed = false;\r\n\r\n    private String username;\r\n    private Session adminSession;\r\n    private String role;//역할\r\n    @Setter\r\n    private Session matchedSession;\r\n    private String name;\r\n    private String type;\r\n    private boolean flag = true;\r\n\r\n    @SneakyThrows\r\n    public Session(Socket socket, CommandManager commandManager, SessionManager sessionManager) {\r\n        this.socket = socket;\r\n        this.input = new DataInputStream(socket.getInputStream());\r\n        this.output = new DataOutputStream(socket.getOutputStream());\r\n        this.commandManager = commandManager;\r\n        this.sessionManager = sessionManager;\r\n\r\n    }\r\n\r\n    @Override\r\n    public void run() throws RuntimeException {\r\n        try {\r\n\r\n\r\n            role = input.readUTF();\r\n\r\n            name = input.readUTF();\r\n\r\n            type = input.readUTF();\r\n\r\n            sessionManager.add(this);\r\n\r\n            while (true) {\r\n                String received = input.readUTF();\r\n                log(\"클라 -> 서버 : \" + received);\r\n\r\n                    int command = commandManager.execute(received,this);\r\n                if (command==1) {\r\n\r\n                    if(matchedSession != null) {\r\n                       matchedSession.setFlag(true);\r\n                       matchedSession.setMatchedSession(null);\r\n                       sessionManager.matchCustomerToAdmin(matchedSession);\r\n\r\n                       send(\"님이 퇴장하셨습니다.\");\r\n                   }\r\n                    sessionManager.remove(this);\r\n                    close();\r\n                    Thread.sleep(5000);\r\n\r\n                } else if (command==2) {\r\n                    if(matchedSession != null && role.equals(\"상담사\")){\r\n                       try {\r\n                           send(\"강퇴입니다. 착하게 사십쇼\");\r\n                           matchedSession.getOutput().flush();\r\n                           matchedSession.getOutput().writeUTF(\"/강퇴\");\r\n                           matchedSession.getOutput().flush();\r\n                            matchedSession.close();\r\n                           sessionManager.remove(matchedSession);\r\n                           this.setMatchedSession(null);\r\n                           sessionManager.matchCustomerToAdmin(this);\r\n                           this.setFlag(true);\r\n\r\n                       }catch (IOException e){\r\n                           log(\"강퇴중 오류 : \"+e);\r\n                       }\r\n                    }\r\n                } else {\r\n                    send(received);\r\n                }\r\n            }\r\n\r\n        } catch (IOException e) {\r\n            log(e);\r\n        } catch (InterruptedException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    public void send(String message) throws IOException {\r\n        if (matchedSession != null) {  // 상대방이 매칭되었을 때만 메세지 전송\r\n            log(\"클라 - > 클라 : \" + message);\r\n            matchedSession.getOutput().writeUTF(log1() + \"[\" + name + \"]\" + message);\r\n            matchedSession.getOutput().flush();\r\n\r\n        } else {\r\n            log(\"서버 - > 클라 : \" + message);\r\n            output.writeUTF(message);\r\n            output.flush();\r\n\r\n        }\r\n    }\r\n\r\n    public void close() {\r\n        if (closed) {\r\n            return;\r\n        }\r\n        closeAll(socket, input, output);\r\n        closed = true;\r\n        log(\"연결 종료 : \" + socket);\r\n\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/server/Session.java b/src/chat/server/Session.java
+--- a/src/chat/server/Session.java	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ b/src/chat/server/Session.java	(date 1743235922256)
+@@ -48,38 +48,28 @@
+     @Override
+     public void run() throws RuntimeException {
+         try {
+-
+-
+             role = input.readUTF();
+-
+             name = input.readUTF();
+-
+             type = input.readUTF();
+-
+             sessionManager.add(this);
+-
+             while (true) {
+                 String received = input.readUTF();
+                 log("클라 -> 서버 : " + received);
+-
+                     int command = commandManager.execute(received,this);
+                 if (command==1) {
+-
+                     if(matchedSession != null) {
+                        matchedSession.setFlag(true);
+                        matchedSession.setMatchedSession(null);
+                        sessionManager.matchCustomerToAdmin(matchedSession);
+-
+                        send("님이 퇴장하셨습니다.");
+                    }
+                     sessionManager.remove(this);
+                     close();
+                     Thread.sleep(5000);
+-
+                 } else if (command==2) {
+                     if(matchedSession != null && role.equals("상담사")){
+                        try {
+-                           send("강퇴입니다. 착하게 사십쇼");
++                           send("====강퇴되었습니다.====");
+                            matchedSession.getOutput().flush();
+                            matchedSession.getOutput().writeUTF("/강퇴");
+                            matchedSession.getOutput().flush();
+@@ -88,7 +78,6 @@
+                            this.setMatchedSession(null);
+                            sessionManager.matchCustomerToAdmin(this);
+                            this.setFlag(true);
+-
+                        }catch (IOException e){
+                            log("강퇴중 오류 : "+e);
+                        }
+@@ -97,7 +86,6 @@
+                     send(received);
+                 }
+             }
+-
+         } catch (IOException e) {
+             log(e);
+         } catch (InterruptedException e) {
+Index: src/chat/gui/ChatClient.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.gui;\r\n\r\nimport javax.swing.*;\r\nimport java.awt.*;\r\nimport java.awt.event.*;\r\nimport java.io.*;\r\nimport java.net.Socket;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.Date;\r\n\r\npublic class ChatClient {\r\n\r\n\r\n    String serverAddress = \"192.168.0.18\"; // 서버 주소\r\n    int port = 4321; // 포트 번호\r\n    String role;\r\n\r\n    public ChatClient(String role) {\r\n        // GUI 초기화\r\n        this.role = role;\r\n        SwingUtilities.invokeLater(() -> new ChatGUI(serverAddress, port,role));\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/gui/ChatClient.java b/src/chat/gui/ChatClient.java
+--- a/src/chat/gui/ChatClient.java	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ b/src/chat/gui/ChatClient.java	(date 1743236829676)
+@@ -11,7 +11,7 @@
+ public class ChatClient {
+ 
+ 
+-    String serverAddress = "192.168.0.18"; // 서버 주소
++    String serverAddress = "localhost"; // 서버 주소
+     int port = 4321; // 포트 번호
+     String role;
+ 
+Index: src/chat/server/SessionManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package javaproject.chat.server;\r\n\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport static javaproject.chat.util.MyLogger.log;\r\n\r\npublic class SessionManager {\r\n    private final List<Session> customerQueue = new ArrayList<>();\r\n    private final List<Session> adminQueue = new ArrayList<>();\r\n\r\n    public void add(Session session) {\r\n        try {\r\n            if (\"상담사\".equals(session.getRole())) {\r\n                // 상담사 대기열에 추가\r\n                if (adminQueue.size() <= 3) {\r\n                    adminQueue.add(session);\r\n                    session.send((\"상담사로 대기 중입니다.\"));\r\n                    session.send(session.getRole());\r\n                } else {\r\n                    session.send(\"현재 상담사는 모두 대기 중입니다. 나중에 다시 시도해 주세요.\");\r\n                }\r\n            } else if (\"고객\".equals(session.getRole())) {\r\n\r\n                customerQueue.add(session);\r\n                session.send(\"고객으로 대기 중입니다. 상담사와 매칭될 때까지 기다려 주세요.\");\r\n            }\r\n            matchCustomerToAdmin(session);\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void matchCustomerToAdmin(Session session) {\r\n        Session customer = null;\r\n        Session admin = null;\r\n        if (!customerQueue.isEmpty() && !adminQueue.isEmpty()) {\r\n            System.out.println(\"con\");\r\n            for (Session a : customerQueue) {\r\n                for (Session b : adminQueue) {\r\n                    System.out.println(\"2qksqhr\");\r\n                    if (a.getType().equals(b.getType()) && a.isFlag() && b.isFlag()) {\r\n                        System.out.println(\"통과\");\r\n                        customer = a;\r\n                        admin = b;\r\n                        customer.setFlag(false);\r\n                        admin.setFlag(false);\r\n                    }\r\n                }\r\n            }\r\n\r\n\r\n            if (customer != null) {\r\n                customer.setMatchedSession(admin);\r\n            }\r\n            if (admin != null) {\r\n                admin.setMatchedSession(customer);\r\n            }\r\n\r\n\r\n            try {\r\n                if (session.getMatchedSession() != null) {\r\n                    customer.send(\"고객이 매칭되었습니다. 이제 대화가 가능합니다.\");\r\n                    admin.send(\"상담사가 매칭되었습니다. 이제 대화가 가능합니다.\");\r\n                }\r\n            } catch (IOException e) {\r\n                log(e);\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    public void remove(Session session) {\r\n        if (\"상담사\".equals(session.getRole())) {\r\n            adminQueue.remove(session);\r\n\r\n        } else if (\"고객\".equals(session.getRole())) {\r\n            customerQueue.remove(session);\r\n        }\r\n    }\r\n\r\n    public synchronized void closeAll() {\r\n        for (Session session : adminQueue) {\r\n            session.close();\r\n        }\r\n        for (Session session : customerQueue) {\r\n            session.close();\r\n        }\r\n        adminQueue.clear();\r\n        customerQueue.clear();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/chat/server/SessionManager.java b/src/chat/server/SessionManager.java
+--- a/src/chat/server/SessionManager.java	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ b/src/chat/server/SessionManager.java	(date 1743150434704)
+@@ -37,12 +37,12 @@
+         Session customer = null;
+         Session admin = null;
+         if (!customerQueue.isEmpty() && !adminQueue.isEmpty()) {
+-            System.out.println("con");
++
+             for (Session a : customerQueue) {
+                 for (Session b : adminQueue) {
+-                    System.out.println("2qksqhr");
++
+                     if (a.getType().equals(b.getType()) && a.isFlag() && b.isFlag()) {
+-                        System.out.println("통과");
++
+                         customer = a;
+                         admin = b;
+                         customer.setFlag(false);
+Index: src/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Main.java b/src/Main.java
+deleted file mode 100644
+--- a/src/Main.java	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ /dev/null	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
+@@ -1,14 +0,0 @@
+-package javaproject;
+-import javaproject.Service.LoginS;
+-
+-import java.awt.event.KeyEvent;
+-import java.awt.event.KeyListener;
+-import java.io.IOException;
+-import java.sql.SQLException;
+-//TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
+-// 에디터 여백에 있는 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
+-public class Main {
+-    public static void main(String[] args) throws IOException {
+-        new LoginS();
+-    }
+-}
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_8\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ b/.idea/misc.xml	(date 1743146032028)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="corretto-18" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/main.iml\" filepath=\"$PROJECT_DIR$/main.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ b/.idea/modules.xml	(date 1743145998007)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/main.iml" filepath="$PROJECT_DIR$/main.iml" />
++      <module fileurl="file://$PROJECT_DIR$/mainmain.iml" filepath="$PROJECT_DIR$/mainmain.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/libraries/lib.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/lib.xml b/.idea/libraries/lib.xml
+new file mode 100644
+--- /dev/null	(date 1743143090161)
++++ b/.idea/libraries/lib.xml	(date 1743143090161)
+@@ -0,0 +1,10 @@
++<component name="libraryTable">
++  <library name="lib">
++    <CLASSES>
++      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/lombok.jar!/" />
++    </CLASSES>
++    <JAVADOC />
++    <SOURCES />
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"b618394f-11ec-4234-96e0-3d69f4759c35\" name=\"변경\" comment=\"ㅁㅁ\">\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/AdminMenu1.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/AdminMenu1.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Service/ticketGUI.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Service/ticketGUI.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/chat/server/ServerMain.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/chat/server/ServerMain.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"editable-svg\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;alex-1676&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/humanAmusementPark/humanAmusementParkProject.git&quot;,\r\n    &quot;accountId&quot;: &quot;6d2f6a3b-f242-4912-8638-ac6be81281e1&quot;\r\n  }\r\n}</component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/src/AdminMenu1.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n    <setting file=\"file://$PROJECT_DIR$/src/DAO/AdminDAO.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n  </component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2uoL2ZCQes2pOUYUdv8QpIiHSDN\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/hu-07/Desktop/mainmain/lib/mariadb-java-client-3.5.2.jar\",\r\n    \"project.structure.last.edited\": \"모듈\",\r\n    \"project.structure.proportion\": \"0.15\",\r\n    \"project.structure.side.proportion\": \"0.2\",\r\n    \"settings.editor.selected.configurable\": \"preferences.pluginManager\",\r\n    \"애플리케이션.Main1.executor\": \"Run\",\r\n    \"애플리케이션.Map.executor\": \"Run\",\r\n    \"애플리케이션.ServerMain.executor\": \"Run\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\" selected=\"애플리케이션.ServerMain\">\r\n    <configuration name=\"Main1\" type=\"Application\" factoryName=\"Application\" singleton=\"false\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.Main1\" />\r\n      <module name=\"mainmain\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Map\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.Map\" />\r\n      <module name=\"mainmain\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"ServerMain\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"javaproject.chat.server.ServerMain\" />\r\n      <module name=\"mainmain\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"javaproject.chat.server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"애플리케이션.Main1\" />\r\n      <item itemvalue=\"애플리케이션.Map\" />\r\n      <item itemvalue=\"애플리케이션.ServerMain\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"애플리케이션.ServerMain\" />\r\n        <item itemvalue=\"애플리케이션.Main1\" />\r\n        <item itemvalue=\"애플리케이션.Map\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"애플리케이션 수준\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"디폴트 작업\">\r\n      <changelist id=\"b618394f-11ec-4234-96e0-3d69f4759c35\" name=\"변경\" comment=\"\" />\r\n      <created>1742909774955</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1742909774955</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"ㅁㅁ\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1742978484939</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1742978484939</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"ㅁㅁ\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"ㅁㅁ\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <breakpoint type=\"java-exception\">\r\n          <properties class=\"java.net.ConnectException\" package=\"java.net\" />\r\n          <option name=\"timeStamp\" value=\"1\" />\r\n        </breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 0a0e6aa84599ce5a140aae2151a3e117990904ea)
++++ b/.idea/workspace.xml	(date 1743236837060)
+@@ -5,9 +5,17 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="b618394f-11ec-4234-96e0-3d69f4759c35" name="변경" comment="ㅁㅁ">
+-      <change beforePath="$PROJECT_DIR$/src/Service/AdminMenu1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdminMenu1.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Service/ticketGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ticketGUI.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/chat/server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/ServerMain.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/libraries/commons_io_2_18_0.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib2.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/chat/gui/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/gui/ChatClient.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/chat/server/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/Session.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/chat/server/SessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/SessionManager.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/urlTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/urlTool.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -51,24 +59,39 @@
+   <component name="ProjectViewState">
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "git-widget-placeholder": "main",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "C:/Users/hu-07/Desktop/mainmain/lib/mariadb-java-client-3.5.2.jar",
+-    "project.structure.last.edited": "모듈",
+-    "project.structure.proportion": "0.15",
+-    "project.structure.side.proportion": "0.2",
+-    "settings.editor.selected.configurable": "preferences.pluginManager",
+-    "애플리케이션.Main1.executor": "Run",
+-    "애플리케이션.Map.executor": "Run",
+-    "애플리케이션.ServerMain.executor": "Run"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/hu-07/Downloads/commons-io-2.18.0-bin/commons-io-2.18.0/commons-io-2.18.0.jar&quot;,
++    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/hu-07/Desktop/mainmain/src/Main.java&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;라이브러리&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
++    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.Main1.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.Map.executor&quot;: &quot;Run&quot;,
++    &quot;애플리케이션.ServerMain.executor&quot;: &quot;Run&quot;
+   }
+-}]]></component>
+-  <component name="RunManager" selected="애플리케이션.ServerMain">
++}</component>
++  <component name="RunManager" selected="애플리케이션.Main">
++    <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="javaproject.Main" />
++      <module name="mainmain" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="javaproject.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
+     <configuration name="Main1" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="javaproject.Main1" />
+       <module name="mainmain" />
+@@ -108,13 +131,24 @@
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
++    <configuration default="true" type="JetRunConfigurationType">
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
++      <option name="filePath" />
++      <method v="2" />
++    </configuration>
+     <list>
++      <item itemvalue="애플리케이션.Main" />
+       <item itemvalue="애플리케이션.Main1" />
+       <item itemvalue="애플리케이션.Map" />
+       <item itemvalue="애플리케이션.ServerMain" />
+     </list>
+     <recent_temporary>
+       <list>
++        <item itemvalue="애플리케이션.Main" />
+         <item itemvalue="애플리케이션.ServerMain" />
+         <item itemvalue="애플리케이션.Main1" />
+         <item itemvalue="애플리케이션.Map" />
+Index: .idea/libraries/lib2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/lib2.xml b/.idea/libraries/lib2.xml
+new file mode 100644
+--- /dev/null	(date 1743143184924)
++++ b/.idea/libraries/lib2.xml	(date 1743143184924)
+@@ -0,0 +1,10 @@
++<component name="libraryTable">
++  <library name="lib2">
++    <CLASSES>
++      <root url="jar://$PROJECT_DIR$/lib/mariadb-java-client-3.5.2.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/lombok.jar!/" />
++    </CLASSES>
++    <JAVADOC />
++    <SOURCES />
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/commons_io_2_18_0.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/commons_io_2_18_0.xml b/.idea/libraries/commons_io_2_18_0.xml
+new file mode 100644
+--- /dev/null	(date 1743146462131)
++++ b/.idea/libraries/commons_io_2_18_0.xml	(date 1743146462131)
+@@ -0,0 +1,9 @@
++<component name="libraryTable">
++  <library name="commons-io-2.18.0">
++    <CLASSES>
++      <root url="jar://$USER_HOME$/Downloads/commons-io-2.18.0-bin/commons-io-2.18.0/commons-io-2.18.0.jar!/" />
++    </CLASSES>
++    <JAVADOC />
++    <SOURCES />
++  </library>
++</component>
+\ No newline at end of file
