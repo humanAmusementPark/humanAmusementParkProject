@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 @Setter
 public class ChatGUI {
     private JRadioButton reservationButton;
@@ -53,8 +54,9 @@ public class ChatGUI {
             e.printStackTrace();
         }
     }
-    private  void addBadWord(String line){
-        if(line != null &&!line.trim().isEmpty()&&!badWords.contains(line)){
+
+    private void addBadWord(String line) {
+        if (line != null && !line.trim().isEmpty() && !badWords.contains(line)) {
             badWords.add(line);
         }
     }
@@ -232,7 +234,6 @@ public class ChatGUI {
     }
 
 
-
     private void connectToServer(String serverAddress, int port) {
         try {
             socket = new Socket(serverAddress, port);
@@ -256,10 +257,10 @@ public class ChatGUI {
                                 Thread.sleep(4000);
                                 frame.dispose();
                                 closeResources();
-//                                frame.dispose();
+                                frame.dispose();
                                 break;
 
-                            }else if (message.contains("고객이 매칭되었습니다. 이제 대화가 가능합니다.") ||
+                            } else if (message.contains("고객이 매칭되었습니다. 이제 대화가 가능합니다.") ||
                                     message.contains("상담사가 매칭되었습니다. 이제 대화가 가능합니다.")) { // 매칭 완료 메시지 감지
 
                                 SwingUtilities.invokeLater(() -> {
@@ -362,7 +363,7 @@ public class ChatGUI {
     private void sendMessage() {
         String name = nameField.getText().trim();
         String message = messageField.getText().trim();
-        boolean flag = false;
+
         if (closed) {
             message = "/exit";
         } else if (name.isEmpty() || role == null || inquiryType == null) {
@@ -374,32 +375,14 @@ public class ChatGUI {
         for (String badWord : badWords) {
             if (badword.contains(badWord)) {
                 badword = badword.replace(badWord, "**");
-                flag = true;
+
             }
         }
-
-
-
-        String timestamp = new SimpleDateFormat("HH:mm").format(new Date());
-        String formattedMessage = String.format("%s [%s]: %s", timestamp, name, message);
-        String formattedMessageBad = String.format("%s [%s]: %s", timestamp, name, badword);
-//        if(!flag) {
-//            chatArea.append(formattedMessage + "\n");
-//        } else if (flag) {
-//            chatArea.append(formattedMessageBad + "\n");
-//        }
         chatArea.setCaretPosition(chatArea.getDocument().getLength());
         messageField.setText("");
-
         try {
-//                if(!flag) {
-                    output.writeUTF(message);
-                    output.flush();
-//                } else if (flag) {
-//                    output.writeUTF(badword);
-//                    output.flush();
-
-//                }
+            output.writeUTF(message);
+            output.flush();
 
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -28,7 +28,7 @@ public class Server {
 
 
         running();
- }
+    }
 
     private void running() {
         try {

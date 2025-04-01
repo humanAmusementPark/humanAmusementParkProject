@@ -16,6 +16,7 @@ public class CommandManagerV2 implements CommandManager{
     @Getter
     private ArrayList<String> badWords = new ArrayList<>();
 
+
     public CommandManagerV2(SessionManager sessionManager) { //욕설 파일
         this.sessionManager = sessionManager;
         loadBadWordsFile("src/badwords.txt");

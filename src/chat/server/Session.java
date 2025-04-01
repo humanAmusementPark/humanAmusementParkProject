@@ -49,6 +49,7 @@ public class Session implements Runnable {
         this.sessionManager = sessionManager;
 
     }
+
     @Override
     public void run() throws RuntimeException {
         try {
@@ -59,16 +60,15 @@ public class Session implements Runnable {
             while (true) {
                 String received = input.readUTF();
                 log("클라 -> 서버 : " + received);
-                    int command = commandManager.execute(received,this);
+                int command = commandManager.execute(received, this);
 
-                if (command==1) {
+                if (command == 1) {
                     exit();
-                } else if (command==2) {
+                } else if (command == 2) {
                     kickCustomer();
-                }else if(command==3){
+                } else if (command == 3) {
                     languageWarning(received);
-                }
-                else {
+                } else {
                     send(received);
                 }
             }
@@ -88,59 +88,61 @@ public class Session implements Runnable {
                 if (received.contains(badWord)) {
                     received = received.replace(badWord, "**");
                     String timestamp = new SimpleDateFormat("HH:mm").format(new Date());
-                     formattedMessage = String.format("%s [%s]: %s", timestamp, name, received);
+                    formattedMessage = String.format("%s [%s]: %s", timestamp, name, received);
                 }
             }
         }
         matchedSession.getOutput().writeUTF(formattedMessage);
         matchedSession.getOutput().flush();
         output.writeUTF(formattedMessage);
-        output.writeUTF("[욕설경고] "+ this.badWordCnt + "회\n 욕설 3회 이상시 강제퇴장입니다.");
+        output.writeUTF("[욕설경고] " + this.badWordCnt + "회\n 욕설 3회 이상시 강제퇴장입니다.");
         output.flush();
 
-        if(this.badWordCnt>=3){
-            try{
-                matchedSession.getOutput().writeUTF(matchedSession.getName() + "을 강퇴하였습니다.");
+        if (this.badWordCnt >= 3) {
+            try {
+                matchedSession.getOutput().writeUTF(this.getName() + "을 강퇴하였습니다.");
                 matchedSession.setMatchedSession(null);
                 matchedSession.setFlag(true);
                 sessionManager.matchCustomerToAdmin(matchedSession);
                 output.writeUTF("3회 욕설로 강제종료됩니다.");
-                output.flush();
+//                output.flush();
                 output.writeUTF("/강퇴");
                 output.flush();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void kickCustomer() {         //강제퇴장
-        if(matchedSession != null && role.equals("상담사")){
+        if (matchedSession != null && role.equals("상담사")) {
             try {
-                send("====강퇴되었습니다.====");
-
+//                send("====강퇴되었습니다.====");
+                matchedSession.getOutput().writeUTF("====강퇴되었습니다.====");
+//                matchedSession.getOutput().flush();
                 matchedSession.getOutput().writeUTF("/강퇴");
                 matchedSession.getOutput().flush();
                 matchedSession.close();
                 sessionManager.remove(matchedSession);
-                output.writeUTF(matchedSession.getName()+"을 강퇴하였습니다.");
+                output.writeUTF(matchedSession.getName() + "을 강퇴하였습니다.");
                 output.flush();
                 this.setMatchedSession(null);
-                this.setFlag(true);
+//                this.setFlag(true);
+                this.setStartflag(true);
                 sessionManager.matchCustomerToAdmin(this);
-            }catch (IOException e){
-                log("강퇴중 오류 : "+e);
+            } catch (IOException e) {
+                log("강퇴중 오류 : " + e);
             }
         }
     }
 
     private void exit() throws IOException, InterruptedException {      //자기  클라이언트 종료
-        if(matchedSession != null) {
-           matchedSession.setFlag(true);
-           matchedSession.setMatchedSession(null);
-           sessionManager.matchCustomerToAdmin(matchedSession);
-           send("님이 퇴장하셨습니다.");
-       }
+        if (matchedSession != null) {
+            matchedSession.setFlag(true);
+            matchedSession.setMatchedSession(null);
+            sessionManager.matchCustomerToAdmin(matchedSession);
+            send("님이 퇴장하셨습니다.");
+        }
         sessionManager.remove(this);
         close();
         Thread.sleep(5000);
@@ -149,12 +151,16 @@ public class Session implements Runnable {
 
     public void send(String message) throws IOException {
         if (matchedSession != null) {  // 상대방이 매칭되었을 때만 메세지 전송
-
+            if (startflag) {
+                matchedSession.getOutput().writeUTF(log1() + "[" + name + "]" + message);
+                matchedSession.getOutput().flush();
+                startflag = false;
+            }else {
                 matchedSession.getOutput().writeUTF(log1() + "[" + name + "]" + message);
                 matchedSession.getOutput().flush();
                 output.writeUTF(log1() + "[" + name + "]" + message);
                 output.flush();
-
+            }
 
         } else {
             log("서버 - > 클라 : " + message);
