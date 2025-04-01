@@ -10,15 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42c61ecd-fdd4-4c5d-89aa-f62a03fac6a9" name="변경" comment="0401">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/commons_io_2_18_0_sources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/AdMenuS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/AdMenuS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/MemMenuS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/MemMenuS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/gui/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/gui/ChatClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chat/gui/ChatGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/gui/ChatGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/server/CommandManagerV2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/CommandManagerV2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/ServerMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chat/server/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/Session.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chat/server/SessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/server/SessionManager.java" afterDir="false" />
     </list>
@@ -191,7 +184,7 @@
       <workItem from="1743209801809" duration="5398000" />
       <workItem from="1743215806429" duration="12942000" />
       <workItem from="1743385383282" duration="20007000" />
-      <workItem from="1743464831403" duration="15725000" />
+      <workItem from="1743464831403" duration="18906000" />
     </task>
     <task id="LOCAL-00001" summary="ㅁㅁㅁ">
       <option name="closed" value="true" />
@@ -265,7 +258,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743470978602</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="0401">
+      <option name="closed" value="true" />
+      <created>1743485067919</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1743485067919</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

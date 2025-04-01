@@ -14,7 +14,8 @@ public class SessionManager {
     public void add(Session session) {
         try {
             if ("상담사".equals(session.getRole())) {
-                // 상담사 대기열에 추가
+
+                adminQueue.add(session);// 상담사 대기열에 추가
                 session.send(("상담사로 대기 중입니다."));
             } else if ("고객".equals(session.getRole())) {
                 customerQueue.add(session);

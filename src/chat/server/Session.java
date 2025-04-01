@@ -103,12 +103,11 @@ public class Session implements Runnable {
                 matchedSession.getOutput().writeUTF(this.getName() + "을 강퇴하였습니다.");
                 matchedSession.setMatchedSession(null);
                 matchedSession.setFlag(true);
+                matchedSession.setStartflag(true);
                 sessionManager.matchCustomerToAdmin(matchedSession);
                 output.writeUTF("3회 욕설로 강제종료됩니다.");
-//                output.flush();
                 output.writeUTF("/강퇴");
                 output.flush();
-                this.startflag = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -118,9 +117,7 @@ public class Session implements Runnable {
     private void kickCustomer() {         //강제퇴장
         if (matchedSession != null && role.equals("상담사")) {
             try {
-//                send("====강퇴되었습니다.====");
                 matchedSession.getOutput().writeUTF("====강퇴되었습니다.====");
-//                matchedSession.getOutput().flush();
                 matchedSession.getOutput().writeUTF("/강퇴");
                 matchedSession.getOutput().flush();
                 matchedSession.close();
@@ -128,7 +125,7 @@ public class Session implements Runnable {
                 output.writeUTF(matchedSession.getName() + "을 강퇴하였습니다.");
                 output.flush();
                 this.setMatchedSession(null);
-//                this.setFlag(true);
+                this.setFlag(true);
                 this.setStartflag(true);
                 sessionManager.matchCustomerToAdmin(this);
             } catch (IOException e) {

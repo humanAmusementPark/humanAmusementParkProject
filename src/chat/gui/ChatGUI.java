@@ -72,20 +72,20 @@ public class ChatGUI {
         frame.setBackground(new Color(255, 255, 255));
 
 
-//        JPanel headerPanel = new JPanel(new BorderLayout());
-//        headerPanel.setBackground(new Color(255, 229, 0)); // 카카오톡 노란색
-//        headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-//        headerPanel.setPreferredSize(new Dimension(400, 60));
-//
-//        JLabel titleLabel = new JLabel("정규랜드 고객센터 [" + role + "]", SwingConstants.CENTER);
-//        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-//        titleLabel.setForeground(Color.BLACK);
-//        headerPanel.add(titleLabel, BorderLayout.CENTER);
-//
-//        statusLabel = new JLabel("연결 대기중입니다", SwingConstants.CENTER);
-//        statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-//        statusLabel.setForeground(Color.GRAY);
-//        headerPanel.add(statusLabel, BorderLayout.SOUTH);
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(255, 229, 0)); // 카카오톡 노란색
+        headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        headerPanel.setPreferredSize(new Dimension(400, 60));
+
+        JLabel titleLabel = new JLabel("정규랜드 고객센터 [" + role + "]", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        titleLabel.setForeground(Color.BLACK);
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+
+        statusLabel = new JLabel("연결 대기중입니다", SwingConstants.CENTER);
+        statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+        statusLabel.setForeground(Color.GRAY);
+        headerPanel.add(statusLabel, BorderLayout.SOUTH);
 
         // 입력 패널 (이름, 문의 유형, 매칭 버튼)
         JPanel inputPanel = new JPanel();
@@ -204,8 +204,6 @@ public class ChatGUI {
                 closeResources();
             }
         });
-
-
         frame.setVisible(true);
     }
 
@@ -235,7 +233,6 @@ public class ChatGUI {
         radio.setFocusPainted(false);
     }
 
-
     private void connectToServer(String serverAddress, int port) {
         try {
             socket = new Socket(serverAddress, port);
@@ -253,21 +250,17 @@ public class ChatGUI {
                         while (true) {
                             String message = input.readUTF();
                             if (message.equals("/강퇴")) {
-
                                 chatArea.setCaretPosition(chatArea.getDocument().getLength());
                                 closed = true; // closed 플래그 설정
                                 Thread.sleep(4000);
                                 frame.dispose();
                                 closeResources();
-                                frame.dispose();
                                 break;
-
                             } else if (message.contains("고객이 매칭되었습니다. 이제 대화가 가능합니다.") ||
                                     message.contains("상담사가 매칭되었습니다. 이제 대화가 가능합니다.")) { // 매칭 완료 메시지 감지
 
                                 SwingUtilities.invokeLater(() -> {
                                     sendButton.setEnabled(true);
-
                                     messageField.setEditable(true);
                                     System.out.println("버튼 활성화 완료"); // 디버깅용
                                 });
@@ -372,22 +365,18 @@ public class ChatGUI {
             JOptionPane.showMessageDialog(frame, "이름, 역할, 문의 유형, 메시지를 모두 입력하세요.");
             return;
         }
-
-        String badword = message;
-        for (String badWord : badWords) {
-            if (badword.contains(badWord)) {
-                badword = badword.replace(badWord, "**");
-
-            }
-        }
+//        String badword = message;
+//        for (String badWord : badWords) {
+//            if (badword.contains(badWord)) {
+//                badword = badword.replace(badWord, "**");
+//
+//            }
+//        }
         chatArea.setCaretPosition(chatArea.getDocument().getLength());
         messageField.setText("");
         try {
             output.writeUTF(message);
             output.flush();
-
-
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
