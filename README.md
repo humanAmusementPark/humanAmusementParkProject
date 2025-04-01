@@ -1,4 +1,5 @@
 팀 이름: 정규랜드
+
 팀 소개: 김정규 강이영 정진 박호영
 
 wbs 주소 : https://docs.google.com/spreadsheets/d/1evdFJpsEuJXuJYbz9iu4J2kmxKr30Q354WBXq0DUjiY/edit?usp=sharing
