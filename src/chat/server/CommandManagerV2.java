@@ -12,13 +12,12 @@ import java.util.Objects;
 
 public class CommandManagerV2 implements CommandManager{
 
-    private final SessionManager sessionManager;
+
     @Getter
     private ArrayList<String> badWords = new ArrayList<>();
 
 
-    public CommandManagerV2(SessionManager sessionManager) { //욕설 파일
-        this.sessionManager = sessionManager;
+    public CommandManagerV2() { //욕설 파일
         loadBadWordsFile("src/badwords.txt");
 
     }

@@ -37,53 +37,55 @@ public class ChatGUI {
     private ArrayList<String> badWords = new ArrayList<>();//욕설 단어 저장
 
 
-    public ChatGUI(String serverAddress, int port, String role) {
+    public ChatGUI(String role) {
+        String serverAddress = "localhost";
+        int port = 4321;
         this.role = role;
-        initialize(serverAddress, port);
+        initialize();
         connectToServer(serverAddress, port);
-        loadBadWordsFile("src/badwords.txt");
+        //loadBadWordsFile("src/badwords.txt");
     }
 
-    private void loadBadWordsFile(String filename) { //욕설 파일 읽기
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                addBadWord(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void loadBadWordsFile(String filename) { //욕설 파일 읽기
+//        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                addBadWord(line);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private void addBadWord(String line) {
-        if (line != null && !line.trim().isEmpty() && !badWords.contains(line)) {
-            badWords.add(line);
-        }
-    }
+//    private void addBadWord(String line) {
+//        if (line != null && !line.trim().isEmpty() && !badWords.contains(line)) {
+//            badWords.add(line);
+//        }
+//    }
 
 
-    private void initialize(String serverAddress, int port) {
-        frame = new JFrame("정규랜드 고객센터");
+    private void initialize() {
+        frame = new JFrame("정규랜드 고객센터- "+role);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 700);
         frame.setLayout(new BorderLayout());
         frame.setBackground(new Color(255, 255, 255));
 
 
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(new Color(255, 229, 0)); // 카카오톡 노란색
-        headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        headerPanel.setPreferredSize(new Dimension(400, 60));
-
-        JLabel titleLabel = new JLabel("정규랜드 고객센터 [" + role + "]", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-        titleLabel.setForeground(Color.BLACK);
-        headerPanel.add(titleLabel, BorderLayout.CENTER);
-
-        statusLabel = new JLabel("연결 대기중입니다", SwingConstants.CENTER);
-        statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        statusLabel.setForeground(Color.GRAY);
-        headerPanel.add(statusLabel, BorderLayout.SOUTH);
+//        JPanel headerPanel = new JPanel(new BorderLayout());
+//        headerPanel.setBackground(new Color(255, 229, 0)); // 카카오톡 노란색
+//        headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+//        headerPanel.setPreferredSize(new Dimension(400, 60));
+//
+//        JLabel titleLabel = new JLabel("정규랜드 고객센터 [" + role + "]", SwingConstants.CENTER);
+//        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+//        titleLabel.setForeground(Color.BLACK);
+//        headerPanel.add(titleLabel, BorderLayout.CENTER);
+//
+//        statusLabel = new JLabel("연결 대기중입니다", SwingConstants.CENTER);
+//        statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//        statusLabel.setForeground(Color.GRAY);
+//        headerPanel.add(statusLabel, BorderLayout.SOUTH);
 
         // 입력 패널 (이름, 문의 유형, 매칭 버튼)
         JPanel inputPanel = new JPanel();
@@ -383,6 +385,8 @@ public class ChatGUI {
         try {
             output.writeUTF(message);
             output.flush();
+
+
 
         } catch (IOException ex) {
             ex.printStackTrace();

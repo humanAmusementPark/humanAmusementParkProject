@@ -108,6 +108,7 @@ public class Session implements Runnable {
 //                output.flush();
                 output.writeUTF("/강퇴");
                 output.flush();
+                this.startflag = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -139,9 +140,11 @@ public class Session implements Runnable {
     private void exit() throws IOException, InterruptedException {      //자기  클라이언트 종료
         if (matchedSession != null) {
             matchedSession.setFlag(true);
+            matchedSession.setStartflag(true);
             matchedSession.setMatchedSession(null);
             sessionManager.matchCustomerToAdmin(matchedSession);
             send("님이 퇴장하셨습니다.");
+
         }
         sessionManager.remove(this);
         close();

@@ -15,15 +15,8 @@ public class SessionManager {
         try {
             if ("상담사".equals(session.getRole())) {
                 // 상담사 대기열에 추가
-                if (adminQueue.size() <= 3) {
-                    adminQueue.add(session);
-                    session.send(("상담사로 대기 중입니다."));
-//                    session.send(session.getRole());
-                } else {
-                    session.send("현재 상담사는 모두 대기 중입니다. 나중에 다시 시도해 주세요.");
-                }
+                session.send(("상담사로 대기 중입니다."));
             } else if ("고객".equals(session.getRole())) {
-
                 customerQueue.add(session);
                 session.send("고객으로 대기 중입니다. 상담사와 매칭될 때까지 기다려 주세요.");
             }
@@ -50,8 +43,6 @@ public class SessionManager {
                     }
                 }
             }
-
-
             if (customer != null) {
                 customer.setMatchedSession(admin);
             }
@@ -75,7 +66,6 @@ public class SessionManager {
     public void remove(Session session) {
         if ("상담사".equals(session.getRole())) {
             adminQueue.remove(session);
-
         } else if ("고객".equals(session.getRole())) {
             customerQueue.remove(session);
         }

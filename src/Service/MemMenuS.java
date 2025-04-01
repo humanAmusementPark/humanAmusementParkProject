@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
+import javaproject.chat.gui.ChatGUI;
 import javaproject.urlTool;
 
 
@@ -134,7 +135,7 @@ public class MemMenuS extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("연결해야댐");
-                new ChatClient("고객");
+                new ChatGUI("고객");
             }
         });
         jpImage.add(cbnt);

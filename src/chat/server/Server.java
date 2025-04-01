@@ -26,7 +26,6 @@ public class Server {
         serverSocket = new ServerSocket(port);
         log("서버 소켓 시작- 리스닝 포트 : " + port);
 
-
         running();
     }
 

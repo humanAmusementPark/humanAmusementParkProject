@@ -1,6 +1,7 @@
 package javaproject.Service;
 
 import javaproject.chat.gui.ChatClient;
+import javaproject.chat.gui.ChatGUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -138,7 +139,7 @@ public class AdMenuS extends JFrame {
 
     private void chatClick() {
         System.out.println("연결");
-        new ChatClient("상담사");
+        new ChatGUI("상담사");
     }
 
     private void attractClick() {
